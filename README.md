@@ -5,6 +5,11 @@ fwefwe
 ## EEG_Master_Script_Dynamic_Thresholding.m
 Run this script for the EEG & Tactile Detection Task, which includes:
 
+1. Dipole Creation (6 mins.)
+2. Training Blocks (2.5 mins)
+3. PEST Convergence Procedure (3 mins.)
+4. Tactile Detection Task (20 mins.)
+
 
 
 ## Experimenter Inputs
