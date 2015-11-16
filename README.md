@@ -1,5 +1,6 @@
 # Task-Code
 eeg group task code
+
 1. [EEG_Master_Script](https://github.com/EmbodiedResearchLab/Vitality-Tactile-Detection#eeg_master_scriptm)
 2. [Experimenter Inputs](https://github.com/EmbodiedResearchLab/Vitality-Tactile-Detection#experimenter-inputs)
 3. [Experiment Setup](https://github.com/EmbodiedResearchLab/Vitality-Tactile-Detection#experiment-setup)
