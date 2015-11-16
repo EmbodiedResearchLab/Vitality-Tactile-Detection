@@ -1,6 +1,9 @@
 # Task-Code
 eeg group task code
 fwefwe
+[EEG_Master_Script](https://github.com/EmbodiedResearchLab/Vitality-Tactile-Detection#eeg_master_scriptm)
+[Experimenter Inputs](https://github.com/EmbodiedResearchLab/Vitality-Tactile-Detection#experimenter-inputs)
+[Experiment Setup](https://github.com/EmbodiedResearchLab/Vitality-Tactile-Detection#experiment-setup)
 
 ## EEG_Master_Script.m
 Run this script for the EEG & Tactile Detection Task, which includes:
