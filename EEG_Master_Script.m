@@ -30,6 +30,22 @@ global SoundHandle
 subjectID = input('Subject ID: ','s'); % Identify Subject ID for to save data
 medTraining = input('Press "0" if this is before meditation training.  Otherwise, Press "1": ');  % 0 if pre-training, 1 if post
 Directory = pwd; % Finds the directory to save into
+% makes directories into strings
+premed = strcat(Directory,'Pre-Med Training');
+postmed = strcat(Directory,'Post-Med Training');
+medit = strcat(Directory,'Meditators');
+testing = strcat(Directory,'Testing');
+
+% Makes the proper director if it doesn't already exist.
+if exist(premed) ~= 7
+    mkdir('Pre-Med Training');
+elseif exist(postmed) ~= 7
+    mkdir('Post-Med Training');
+elseif exist(medit) ~= 7
+    mkdir('Meditators');
+elseif exist(testing) ~= 7
+    mkdir('Testing');
+end
 
 % I do global SoundHandle on each and every function, is that alright?  
 % Or is it bad in terms of global variables?
@@ -206,4 +222,8 @@ elseif medTraining == 1
 elseif medTraining == 2
     saveDir = strcat(Directory,'/Meditators/Participant_', subjectID);
     save(fullfile(saveDir),'subjectID','detection_threshold_left','detection_threshold_right','output_array_tactile_detection_1','final_left_threshold','final_right_threshold')
+elseif medTraining == 3
+    saveDir = strcat(Directory,'/Testing/Participant_', subjectID);
+    save(fullfile(saveDir),'subjectID','detection_threshold_left','detection_threshold_right','output_array_tactile_detection_1','final_left_threshold','final_right_threshold')
 end
+
