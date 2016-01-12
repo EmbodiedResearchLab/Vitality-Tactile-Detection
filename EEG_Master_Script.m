@@ -36,7 +36,7 @@ postmed = strcat(Directory,'Post-Med Training');
 medit = strcat(Directory,'Meditators');
 testing = strcat(Directory,'Testing');
 
-% Makes the proper director if it doesn't already exist.
+% Makes the proper directory if it doesn't already exist.
 if exist(premed) ~= 7
     mkdir('Pre-Med Training');
 elseif exist(postmed) ~= 7
