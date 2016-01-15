@@ -8,7 +8,7 @@
 % 2) PEST - 3 min
 % 3) Tacti1leDetection Task - 20 min
 
-%Clean up - 20 min
+% Clean up - 20 min
 % then repeat for the two control conditions
 %
 %
