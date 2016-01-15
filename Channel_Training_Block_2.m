@@ -101,7 +101,7 @@ for (i = 1:num_intensities*num_trials)
         Screen(windowPtr,'Flip');
 
         % ADDED .5s
-        WaitSecs(delay_time;
+        WaitSecs(delay_time);
         
         %Deliver Stimulus
         time = GetSecs() - initial_time;

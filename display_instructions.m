@@ -7,7 +7,7 @@ quit_to_tACS = false;
 
 if (instruction_screen == 0)
 
-    instructions_0 = imread(Alpha_Intructions_1.png);
+    instructions_0 = imread('Alpha_Instructions_1.png');
     instructions_screen_0 = Screen('MakeTexture', windowPtr, instructions_0);
 
     Screen(windowPtr,'Flip');

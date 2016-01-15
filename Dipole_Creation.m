@@ -8,6 +8,7 @@ subject_quit = false;
 % reading the image for the training block
 display_instructions(windowPtr,0);
 
+solid_black = imread('solid_black.png');
 solid_black_screen = Screen('MakeTexture',windowPtr,solid_black);
 
 WaitSecs(3);
@@ -30,13 +31,14 @@ for(i = 1:120)
     % the left hand will be tapped 60 times, 
     % and then the right hand will be tapped 60 times.
     if (i < 61)
-        hand = 'Left'
+        hand = 'Left';
     else
-        hand = 'Right'
+        hand = 'Right';
     end
 
     t = GetSecs();
     ChannelBeeper(100, 1, .01, hand);
+    sprintf('Hand: %s.', hand) 
 
     data = [i, t];
     time_list = cat(1,time_list,data);

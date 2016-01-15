@@ -98,11 +98,9 @@ if (subject_quit_dipole_creation)
     return
 end
 
-%% Round 1 -
-
 
 %% 1) Display Instructions + Training Block (expected time: 4 minutes)
-
+sprintf('Display Instructions and Training Block')
 not_understand_task_1 = true;
 not_understand_task_2 = true;
 
@@ -155,7 +153,7 @@ display_instructions(windowPtr,3.5);
 % The PEST Convergence Procedure should be done for each hand, so how would we do that?
 
 %first we do PEST on the left side
-
+sprintf('PEST Convergence Procedure')
 [detection_threshold_left,output_array_PEST_left,subject_quit_PEST] = PEST_Convergence_Procedure(windowPtr, 'Left');
 
 if (subject_quit_PEST)
@@ -194,6 +192,7 @@ save('detection_threshold_right.mat');
 
 %% 3) Tactile Detection Task
 % also, is this correct MATLAB formatting w/ the ellipsis?
+sprintf('Tactile Detection Task')
 [tactile_detection_task_data,subject_quit_tactile_detection,final_left_threshold, final_right_threshold] = ...
     Channel_Dynamic_Thresholding(windowPtr,detection_threshold_left, detection_threshold_right);
 
