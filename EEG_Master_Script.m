@@ -28,13 +28,13 @@ global SoundHandle
 
 %% Prep for Save.  Experimenter Inputs
 subjectID = input('Subject ID: ','s'); % Identify Subject ID for to save data
-medTraining = input('Press "0" if this is before meditation training.  Otherwise, Press "1": ');  % 0 if pre-training, 1 if post
+medTraining = input('0 - PreMeditation Training.\n1 - PostMeditation Training.\n2 - Meditators.\n3 - Debugging: '); %Press "0" if this is before meditation training.  Otherwise, Press "1": ');  % 0 if pre-training, 1 if post
 Directory = pwd; % Finds the directory to save into
 % makes directories into strings
-premed = strcat(Directory,'Pre-Med Training');
-postmed = strcat(Directory,'Post-Med Training');
-medit = strcat(Directory,'Meditators');
-testing = strcat(Directory,'Testing');
+premed = strcat(Directory,'/Pre-Med Training');
+postmed = strcat(Directory,'/Post-Med Training');
+medit = strcat(Directory,'/Meditators');
+testing = strcat(Directory,'/Testing');
 
 % Makes the proper directory if it doesn't already exist.
 if exist(premed) ~= 7
@@ -93,7 +93,7 @@ Screen('Preference','SyncTestSettings',[.005],[50],[.5],[5]);
 
 % Expected time: 6 minutes + 10 seconds
 
-[subject_quit_dipole_creation, initial_time_dipole_creation, time_list] = Dipole_Creation(windowPtr);
+2[subject_quit_dipole_creation, initial_time_dipole_creation, time_list] = Dipole_Creation(windowPtr);
 if (subject_quit_dipole_creation)
     return
 end
@@ -209,9 +209,7 @@ end
 
 display_instructions(windowPtr,7);
 
-Screen('CloseAll')
-
-
+%% Saving Protocols
 if medTraining == 0 % Before Meditation
     saveDir = strcat(Directory,'/Pre-Med Training/Participant_', subjectID);
     save(fullfile(saveDir),'subjectID','detection_threshold_left','detection_threshold_right','output_array_tactile_detection_1','final_left_threshold','final_right_threshold')
@@ -226,3 +224,4 @@ elseif medTraining == 3
     save(fullfile(saveDir),'subjectID','detection_threshold_left','detection_threshold_right','output_array_tactile_detection_1','final_left_threshold','final_right_threshold')
 end
 
+sca;

@@ -38,7 +38,7 @@ for(i = 1:120)
 
     t = GetSecs();
     ChannelBeeper(100, 1, .01, hand);
-    sprintf('Hand: %s.', hand) 
+    sprintf('%s Hand.\n%d of 120 stims completed.', hand, i) 
 
     data = [i, t];
     time_list = cat(1,time_list,data);

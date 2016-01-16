@@ -11,6 +11,8 @@ if (instruction_screen == 0)
     instructions_screen_0 = Screen('MakeTexture', windowPtr, instructions_0);
 
     Screen(windowPtr,'Flip');
+    
+    fprintf('Starting Dipole Creation.  Press anykey when you are ready to advance.');
     [wait_1, wait_2, wait_3] = KbWait([], 2, GetSecs()+600);
 
 
