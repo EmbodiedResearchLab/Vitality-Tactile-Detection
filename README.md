@@ -16,7 +16,7 @@ eeg group task code
 6. Connect the number pad to the computer via USB port.
 7. Plug power adapter into wall outlet.  Plug other end into the amplifier. (You might hear a hissing sound from the stimulator at this point.)
 8. Make sure that computer volume is all the way up before starting the experiment.
-9. [optional] You can sound check by playing music through the stimulator.  If all of the connections are right, you should the song you’re playing.
+9. [optional] You can sound check by playing music through the stimulator.  If all of the connections are right, you should hear the song you’re playing.
 
 ## EEG_Master_Script.m
 Run this script for the EEG & Tactile Detection Task, which includes:
