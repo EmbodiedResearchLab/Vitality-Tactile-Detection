@@ -93,7 +93,7 @@ Screen('Preference','SyncTestSettings',[.005],[50],[.5],[5]);
 
 % Expected time: 6 minutes + 10 seconds
 
-2[subject_quit_dipole_creation, initial_time_dipole_creation, time_list] = Dipole_Creation(windowPtr);
+[subject_quit_dipole_creation, initial_time_dipole_creation, time_list] = Dipole_Creation(windowPtr);
 if (subject_quit_dipole_creation)
     return
 end
@@ -221,7 +221,8 @@ elseif medTraining == 2
     save(fullfile(saveDir),'subjectID','detection_threshold_left','detection_threshold_right','output_array_tactile_detection_1','final_left_threshold','final_right_threshold')
 elseif medTraining == 3
     saveDir = strcat(Directory,'/Testing/Participant_', subjectID);
-    save(fullfile(saveDir),'subjectID','detection_threshold_left','detection_threshold_right','output_array_tactile_detection_1','final_left_threshold','final_right_threshold')
+    save(fullfile(saveDir),'initial_time','subjectID','detection_threshold_left','detection_threshold_right','output_array_tactile_detection_1','final_left_threshold','final_right_threshold')
 end
 
 sca;
+fprintf('Ready for next participant!\n')

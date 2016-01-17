@@ -10,6 +10,7 @@ global SoundChannel
 subject_quit = false;
 %Initialize crosshair images and screens
 green_cross = imread('crosshair_green.png');
+white_cross = imread('crosshair_white.png');
 red_cross = imread('crosshair_red.png');
 solid_black = imread('solid_black.png');
 left_arrow = imread('left_arrow.png');
@@ -17,6 +18,7 @@ right_arrow = imread('right_arrow.png');
 square = imread('square.png');
 
 green_cross_screen = Screen('MakeTexture',windowPtr,green_cross);
+white_cross_screen = Screen('MakeTexture',windowPtr,white_cross);
 red_cross_screen = Screen('MakeTexture',windowPtr,red_cross);
 solid_black_screen = Screen('MakeTexture',windowPtr,solid_black);
 left_arrow_screen = Screen('MakeTexture',windowPtr,left_arrow);
@@ -166,7 +168,7 @@ end
 
 if (error_screen)
     
-    fprintf('Training 1 was incorrectly done.');
+    fprintf('Training 1 was incorrectly done.  Check connections, Power Supply, and Volume Settings.');
     
 end
 

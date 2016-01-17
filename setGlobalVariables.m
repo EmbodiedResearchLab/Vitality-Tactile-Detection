@@ -8,7 +8,7 @@ function setGlobalVariables()
 	screens = 1;
 
 	initial_time = GetSecs();
-	save('initial_time')
+	%save('initial_time')
 
 
 
