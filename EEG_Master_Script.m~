@@ -16,17 +16,14 @@ clear all; %#ok<CLALL>
 close all;
 sca;
 global stimulators
-global screens
 global windowPtr
 
+t_start_subject = tic;
 
 %% Prep for Save.  Experimenter Inputs
 subjectID = input('Subject ID: ','s'); % Identify Subject ID for to save data
 medTraining = input('0 - PreMeditation Training.\n1 - PostMeditation Training.\n2 - Meditators.\n3 - Debugging: '); %Press "0" if this is before meditation training.  Otherwise, Press "1": ');  % 0 if pre-training, 1 if post
 
-% Screens = 1 if using a second screen or 0 if using the same computer
-% screen that is running the script.
-screens = 1;
 stimulators = 0;
 
 % You can change the limitations of the while statements if you're using
@@ -67,6 +64,10 @@ elseif exist(testing,'dir') ~= 7
 end
 
 %% Initializing Psychtoolbox functions
+ChannelBeeper(440, 0, .1);
+
+setGlobalVariables()
+
 %Initialize Parameters so screen() doesn't crash
 %
 % Screen('Preference','SyncTestSettings' [, maxStddev=0.001 secs][, minSamples=50][, maxDeviation=0.1][, maxDuration=5 secs]);
@@ -100,12 +101,9 @@ Screen('Preference','SyncTestSettings', .005, 50, .5, 5);
 %Open first screen, solid black
 [windowPtr, rect] = Screen('OpenWindow',screens,[0 0 0]);
 
-setGlobalVariables()
-
 %% Establishing the dipole movement
 
 % Expected time: 6 minutes + 10 seconds
-t_start_subject = tic;
 
 [subject_quit_dipole_creation, initial_time_dipole_creation, time_list] = Dipole_Creation(windowPtr);
 if (subject_quit_dipole_creation)
