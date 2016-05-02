@@ -22,20 +22,15 @@ trials is 5 um. This process will take 3 minutes.
 %}
 
 global initial_time
+global white_cross_screen
 global green_cross_screen
-global red_cross_scree
+global solid_black_screen
+global trialtime
+global fixation_time
+
 %% 1) Setting up Psych Toolbox Audio and Visual
 
 subject_quit = false;
-
-%Initialize crosshair and instructions images and screens
-green_cross = imread('crosshair_green.png');
-red_cross = imread('crosshair_red.png');
-solid_black = imread('solid_black.png');
-green_cross_screen = Screen('MakeTexture',windowPtr,green_cross);
-red_cross_screen = Screen('MakeTexture',windowPtr,red_cross);
-solid_black_screen = Screen('MakeTexture',windowPtr,solid_black);
-
 
 %Display blank screen for 3 seconds as a precursor to trial
 Screen('DrawTexture',windowPtr,solid_black_screen);
@@ -66,7 +61,7 @@ repeat_000 = 0;
 
 %Delay times
 delay_times = [1.0 1.1 1.2 1.3 1.4];
-
+t = trialtime - fixation_time;
 %Index to keep track of loop
 count = 0;
 
@@ -77,6 +72,7 @@ output_array = [];
 
 %% 5) For loop of actual task
 while (threshold_not_reached)
+    t0 = tic;
     % 1) Present red crosshair
     % 2) Deliver stimulus with variable time delay
     % 3) Present green crosshair
@@ -90,22 +86,21 @@ while (threshold_not_reached)
     
     %% Delivery of Max stimulus
     %Draw red crosshair
-    Screen('DrawTexture',windowPtr,red_cross_screen);
+    Screen('DrawTexture',windowPtr,white_cross_screen);
     Screen(windowPtr,'Flip');
     WaitSecs(delay_time_1);
     
     %Max stimulus
     time_1 = GetSecs() - initial_time;
     ChannelBeeper(100, max_stim, .01, PEST_hand);
-    
-    WaitSecs(2 - delay_time_1 - .01)
+    WaitSecs(fixation_time - delay_time_1 - .01)
     
     %Draw green crosshair
     Screen('DrawTexture',windowPtr,green_cross_screen);
     Screen(windowPtr,'Flip');
-    [s_max, keyCode_max, delta_max] = KbWait(-3, 2, GetSecs()+1);
-    WaitSecs(1 - delta_max);
-    
+    [s_max, keyCode_max, ~] = KbWait(-3, 2, GetSecs()+t);
+    WaitSecs(t - s_max);
+    t_max = toc(t0);
     %% Delivery of Mid stimulus
     
     % Generate variable delay time
@@ -120,16 +115,14 @@ while (threshold_not_reached)
     %Mid stimulus
     time_2 = GetSecs() - initial_time;
     ChannelBeeper(100, mid_stim, .01, PEST_hand);
-
-    
-    WaitSecs(2 - delay_time_2 - .01)
+    WaitSecs(fixation_time - delay_time_2 - .01)
     
     %Draw green crosshair
     Screen('DrawTexture',windowPtr,green_cross_screen);
     Screen(windowPtr,'Flip');
-    [s_mid, keyCode_mid, delta_mid] = KbWait(-3, 2, GetSecs()+1);
-    WaitSecs(1 - delta_mid);
-    
+    [s_mid, keyCode_mid, ~] = KbWait(-3, 2, GetSecs()+t);
+    WaitSecs(t - s_mid);
+    t_mid = toc(t0);
     %% Delivery of Min stimulus
     
     % Generate variable delay time
@@ -144,16 +137,14 @@ while (threshold_not_reached)
     %Min stimulus
     time_3 = GetSecs() - initial_time;
     ChannelBeeper(100, min_stim, .01, PEST_hand);
-
-    
-    WaitSecs(2 - delay_time_3 - .01)
+    WaitSecs(fixation_time - delay_time_3 - .01)
     
     %Draw green crosshair
     Screen('DrawTexture',windowPtr,green_cross_screen);
     Screen(windowPtr,'Flip');
-    [s_min, keyCode_min, delta_min] = KbWait(-3, 2, GetSecs()+1);
-    WaitSecs(1 - delta_min);
-    
+    [s_min, keyCode_min, ~] = KbWait(-3, 2, GetSecs()+t);
+    WaitSecs(t - s_min);
+    t_min = toc(t0);
     %% Adjustment of weights
     % Keeps track of participant's response (1 is 30, 2 is 31)
     max_detected = keyCode_max(30);
@@ -163,13 +154,13 @@ while (threshold_not_reached)
     %Store trial information in array to output
     count = count + 3;
     
-    max_data = [(count - 2), time_1, delay_time_1, max_stim, max_detected];
-    mid_data = [(count - 1), time_2, delay_time_2, mid_stim, mid_detected];
-    min_data = [(count), time_3, delay_time_3, min_stim, min_detected];
+    max_data = [(count - 2), time_1, delay_time_1, max_stim, max_detected, t_max];
+    mid_data = [(count - 1), time_2, delay_time_2, mid_stim, mid_detected, t_mid];
+    min_data = [(count), time_3, delay_time_3, min_stim, min_detected, t_min];
     
     output_array = cat(1,output_array,max_data,mid_data,min_data);
     %Output each trial's results
-    output_array(count-2:count,:)
+    displayResponses(output_array)
     
     
     %% Changing Intensities
@@ -189,10 +180,10 @@ while (threshold_not_reached)
     
     % Check to see if threshold reached
     if (max_detected == 1 && (mid_stim - min_stim) <= delta_threshold)
-        detection_threshold = mid_stim
+        detection_threshold = mid_stim;
         threshold_not_reached = false;
         % display the output_array to the experimenter here
-        output_array
+        displayResponses(output_array,'All')
     end
     
     % If mid detected, move down, if not, move up

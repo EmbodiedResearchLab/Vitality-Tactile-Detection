@@ -1,8 +1,6 @@
 function [subject_quit, dipole_creation_beginning, time_list] = Dipole_Creation(windowPtr)
 
-
-global dipole_creation_beginning
-global SoundHandle
+global stimulators
 subject_quit = false;
 
 % reading the image for the training block
@@ -18,19 +16,23 @@ dipole_creation_beginning = GetSecs();
 Screen('DrawTexture',windowPtr,solid_black_screen);
 Screen(windowPtr,'Flip');
 
-%setting the hand to be hit
-hand = 'tbd'
-
 %data to return
-time_list = []
+time_list = [];
+ct = 1;
+
+if stimulators == 1
+    limit = 60;
+else
+    limit = 120;
+end
 
 
-for(i = 1:120)
+while ct < limit
 
     % determining which hand will be tapped.
     % the left hand will be tapped 60 times, 
     % and then the right hand will be tapped 60 times.
-    if (i < 61)
+    if ct < 61
         hand = 'Left';
     else
         hand = 'Right';
@@ -38,9 +40,9 @@ for(i = 1:120)
 
     t = GetSecs();
     ChannelBeeper(100, 1, .01, hand);
-    sprintf('%s Hand.\n%d of 120 stims completed.', hand, i) 
+    sprintf('%s Hand.\n%d of 120 stims completed.', hand, ct) 
 
-    data = [i, t];
+    data = [ct, t];
     time_list = cat(1,time_list,data);
 	% Checks for detection of a keypress, but waits only 2 seconds
     % function [secs, keyCode, deltaSecs] = KbWait(deviceNumber, forWhat, untilTime)
@@ -53,7 +55,7 @@ for(i = 1:120)
     % first keypress, then it will return.
     % If deviceNumber is -3, all keyboard and keypad devices will be checked.
     % by the way, "keyCode vector of keyboard state"
-    [s, keyCode, delta] = KbWait(-3, 2, GetSecs()+2.99 - .01);
+    [~, keyCode, ~] = KbWait(-3, 2, GetSecs()+2.99 - .01);
 
     if (keyCode(46) == 1)
         subject_quit = true;
@@ -65,4 +67,5 @@ for(i = 1:120)
         Screen('CloseAll');
         break
     end
+
 end

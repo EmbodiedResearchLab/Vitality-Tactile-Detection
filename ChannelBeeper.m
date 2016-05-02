@@ -4,7 +4,7 @@ function ChannelBeeper(frequency, fVolume, durationSec, channelDirection)
 
 global SoundHandle
 
-if ~exist(SoundHandle,'var')
+if isempty(SoundHandle)
     InitializePsychSound(1);
     SamplingFreq = 44100;
     NbChannels = 2;
@@ -21,31 +21,25 @@ if ~exist('fVolume', 'var')
     fVolume = 0.4;
 else
     % Clamp if necessary
-    if (fVolume > 1.0)
+    if fVolume > 1.0
         fVolume = 1.0;
-    elseif (fVolume < 0)
+    elseif fVolume < 0
         fVolume = 0;
     end
 end
 
-% SoundHandle is already global, but if need be,
-% the following 4 lines can be commented
-% InitializePsychSound();
-% SamplingFreq = 44100;
-% NbChannels = 2;
-% SoundHandle = PsychPortAudio('Open',[],[],2,SamplingFreq,NbChannels);
+%{
+rate=Snd('DefaultRate') returns the default sampling rate in Hz, which
+currently is 22254.5454545454 Hz on all platforms for the old style sound
+implementation, and the default device sampling rate if PsychPortAudio is
+used. This default may change in the future, so please either specify a
+rate, or use this function to get the default rate. (This default is
+suboptimal on any system except MacOS-9, but kept for backwards
+compatibility!)
 
-
-% rate=Snd('DefaultRate') returns the default sampling rate in Hz, which
-% currently is 22254.5454545454 Hz on all platforms for the old style sound
-% implementation, and the default device sampling rate if PsychPortAudio is
-% used. This default may change in the future, so please either specify a
-% rate, or use this function to get the default rate. (This default is
-% suboptimal on any system except MacOS-9, but kept for backwards
-% compatibility!)
-
-% function [beep,samplingRate] = MakeBeep(freq,duration,samplingRate)
-% [beep,samplingRate] = MakeBeep(freq,duration,[samplingRate])
+function [beep,samplingRate] = MakeBeep(freq,duration,samplingRate)
+[beep,samplingRate] = MakeBeep(freq,duration,[samplingRate])
+%}
 
 sound = MakeBeep(frequency, durationSec,[]) * fVolume; %creates a sound for 10 ms
 
@@ -55,7 +49,7 @@ if (strcmp(channelDirection, 'Left'))
     PsychPortAudio('Start', SoundHandle, 1, []);
 elseif (strcmp(channelDirection, 'Right'))
 	rightSound = [zeros(1,size(sound,2));sound]; % right stereo
-	PsychPortAudio('FillBuffer', SoundHandle, rightSound)
+	PsychPortAudio('FillBuffer', SoundHandle, rightSound);
     PsychPortAudio('Start', SoundHandle, 1, []);
 elseif (strcmp(channelDirection, 'Both'))
 	bothSound = [sound; sound]; % self explanatory

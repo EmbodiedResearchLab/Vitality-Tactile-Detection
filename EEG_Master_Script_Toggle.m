@@ -58,19 +58,6 @@ end
 % initializes screens to 1, which means it will always refer to the extra
 % monitor, not to the computer that has the code.
 [windowPtr, rect] = setGlobalVariables();
-%
-global SoundHandle
-if isempty(SoundHandle)
-    InitializePsychSound(1);
-    SamplingFreq = 44100;
-    NbChannels = 2;
-    SoundHandle = PsychPortAudio('Open', [], [], 2, SamplingFreq, NbChannels);
-end
-
-%Screen('Preference','SyncTestSettings', .005, 50, .5, 5);
-
-%Open first screen, solid black
-%[windowPtr, rect] = Screen('OpenWindow', screens, [0 0 0]);
 
 %% 1) Establishing the Dipole Movement
 % Delete Brackets to include dipole. Brackets is for debugging only.
@@ -90,6 +77,9 @@ if strcmp(initial_time_dipole_creation, 'dipole') == 1
         error('Delete Brackets in "EEG_Master_Script.m" to allow Dipole.')
     end
 end
+
+%% Script breaks into it's respective parts by how many stimulators are present...
+run('runSubScript.m')
 
 %% 2) display Instructions + Training Block (expected time: 4 minutes)
 %
@@ -142,7 +132,7 @@ end
 %}
 display_instructions(windowPtr,3.5);
 
-%% 2) Go into PEST Convergence Procedure
+%% 3) Go into PEST Convergence Procedure
 
 % The PEST Convergence Procedure should be done for each hand.
 
@@ -190,7 +180,7 @@ if stimulators == 2
     end
 end
 
-%% 3) Tactile Detection Task
+%% 4) Tactile Detection Task
 fprintf('Tactile Detection Task\n')
 
 %

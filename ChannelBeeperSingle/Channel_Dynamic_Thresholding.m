@@ -17,28 +17,10 @@ threshold will increase by .005 V.
 %% 1) Initialise Screens and other necessary variables
 
 global initial_time
-global green_cross
-global red_cross
-global solid_black
-global left_arrow
-global right_arrow
-global square
+global white_cross_screen
+global green_cross_screen
+global solid_black_screen
 subject_quit = false;
-%Initialize crosshair images and screens
-green_cross = imread('crosshair_green.png');
-red_cross = imread('crosshair_red.png');
-solid_black = imread('solid_black.png');
-left_arrow = imread('left_arrow.png');
-right_arrow = imread('right_arrow.png');
-square = imread('square.png');
-
-green_cross_screen = Screen('MakeTexture',windowPtr,green_cross);
-red_cross_screen = Screen('MakeTexture',windowPtr,red_cross);
-solid_black_screen = Screen('MakeTexture',windowPtr,solid_black);
-left_arrow_screen = Screen('MakeTexture',windowPtr,left_arrow);
-right_arrow_screen = Screen('MakeTexture',windowPtr, right_arrow);
-square_screen = Screen('MakeTexture', windowPtr, right_arrow);
-
 
 Screen('DrawTexture',windowPtr,solid_black_screen);
 Screen(windowPtr,'Flip');
