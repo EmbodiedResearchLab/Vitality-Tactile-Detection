@@ -24,11 +24,11 @@ function [windowPtr, rect] = setGlobalVariables()
     left_arrow = imread('left_arrow.png');
     right_arrow = imread('right_arrow.png');
     square = imread('square.png');
-    white_cross_screen = Screen('MakeTexture',windowPtr,white_cross);
-    green_cross_screen = Screen('MakeTexture',windowPtr,green_cross);
-    red_cross_screen = Screen('MakeTexture',windowPtr,red_cross);
-    solid_black_screen = Screen('MakeTexture',windowPtr,solid_black);
-    left_arrow_screen = Screen('MakeTexture',windowPtr,left_arrow);
+    white_cross_screen = Screen('MakeTexture',windowPtr, white_cross);
+    green_cross_screen = Screen('MakeTexture',windowPtr, green_cross);
+    red_cross_screen = Screen('MakeTexture',windowPtr, red_cross);
+    solid_black_screen = Screen('MakeTexture',windowPtr, solid_black);
+    left_arrow_screen = Screen('MakeTexture',windowPtr, left_arrow);
     right_arrow_screen = Screen('MakeTexture',windowPtr, right_arrow);
     square_screen = Screen('MakeTexture', windowPtr, square);
     

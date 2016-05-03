@@ -259,11 +259,3 @@ end
 %% Close Screens and Prep for next Participant
 sca;
 fprintf('Ready for next participant!\n')
-
-
-
-
-
-
-
-

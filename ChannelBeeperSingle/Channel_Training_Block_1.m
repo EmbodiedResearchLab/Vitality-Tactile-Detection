@@ -106,9 +106,9 @@ while ~isempty(stimulus_initial_values)
     % with the above line of code, keypress is normalized to how long it
     % took for the participant to respond
     WaitSecs(t - s);
-    
+    t1 = toc(t0);
     %keyCode(30) is up arrow)
-    if or((stimulus == intensity_1 && keyCode(30) == 1), (stimulus == intensity_2 && keyCode(30) == 0))
+    if or((stimulus == intensity(1) && keyCode(30) == 1), (stimulus == intensity(2) && keyCode(30) == 0))
         error_count = error_count + 1;
     end
         %46 is equals
@@ -125,7 +125,7 @@ while ~isempty(stimulus_initial_values)
     
     %Output data appropriately
     count = count + 1;
-    data = [count, time, delay_time, stimulus, keyCode(30), toc(t0)];
+    data = [count, time, delay_time, stimulus, keyCode(30), t1];
     
     if (error_count >= 3)
         error_screen = true;
@@ -138,8 +138,6 @@ while ~isempty(stimulus_initial_values)
 end
 
 if (error_screen)
-    
     fprintf('Training 1 was incorrectly done.  Check connections, Power Supply, and Volume Settings.');
-    
 end
-
+displayResponses(output_array,'All')

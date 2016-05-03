@@ -106,7 +106,7 @@ while ~isempty(stimulus_initial_values)
     WaitSecs(t - s);
     
     %keyCode(30) is up arrow)
-    if or((stimulus == intensity_1 && keyCode(30) == 1), (stimulus == intensity_2 && keyCode(30) == 0))
+    if or((stimulus == intensity(1) && keyCode(30) == 1), (stimulus == intensity(2) && keyCode(30) == 0))
         error_count = error_count + 1;
     end
         %46 is equals

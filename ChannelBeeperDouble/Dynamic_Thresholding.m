@@ -17,23 +17,14 @@ threshold will increase by .005 V.
 %% 1) Initialise Screens and other necessary variables
 
 global initial_time
-global SoundChannel
+global trialtime
+global fixation_time
+global solid_black_screen
+global green_cross_screen
+global left_arrow_screen
+global right_arrow_screen
+global square_screen
 subject_quit = false;
-%Initialize crosshair images and screens
-green_cross = imread('crosshair_green.png');
-red_cross = imread('crosshair_red.png');
-solid_black = imread('solid_black.png');
-left_arrow = imread('left_arrow.png');
-right_arrow = imread('right_arrow.png');
-square = imread('square.png');
-
-green_cross_screen = Screen('MakeTexture',windowPtr,green_cross);
-red_cross_screen = Screen('MakeTexture',windowPtr,red_cross);
-solid_black_screen = Screen('MakeTexture',windowPtr,solid_black);
-left_arrow_screen = Screen('MakeTexture',windowPtr,left_arrow);
-right_arrow_screen = Screen('MakeTexture',windowPtr, right_arrow);
-square_screen = Screen('MakeTexture', windowPtr, right_arrow);
-
 
 Screen('DrawTexture',windowPtr,solid_black_screen);
 Screen(windowPtr,'Flip');
@@ -65,8 +56,6 @@ trial_type_values = [repmat(is_both,1,both_trials), repmat(is_real,1,real_trials
 num_hands = 2;
 trials_per_hand = real_trials/num_hands;
 which_hand_values = [repmat('Left',1,trials_per_hand),repmat('Right',1,trials_per_hand)];
-
-
 
 % desired number of total trials
 

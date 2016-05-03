@@ -1,4 +1,4 @@
-function [detection_threshold, output_array,subject_quit] = PEST_Convergence_Procedure(windowPtr, PEST_hand)
+function [detection_threshold, output_array,subject_quit] = PEST_Convergence_Procedure_Mixed(windowPtr)
 %{
 From the IRB:
 This algorithm follows (Dai 1995) and (Jones 2007) in determining the
@@ -21,9 +21,9 @@ trials is 5 um. This process will take 3 minutes.
 global initial_time
 global trialtime
 global fixation_time
-global left_arrow_screen
-global right_arrow_screen
 global white_cross_screen
+%global left_arrow_screen
+%global right_arrow_screen
 global green_cross_screen
 global solid_black_screen
 
@@ -43,6 +43,10 @@ max_stim = .9; %the equivalent of 350 um
 mid_stim = max_stim/2;
 min_stim = 0;
 
+% Max trials for PEST
+max_trials = 50;
+which_hand_values = [repmat({'Left'},1,max_trials),repmat({'Right'},1,max_trials)];
+
 %Initialize variable to detect 5 um difference
 delta_threshold = .02; % the equivalent of 5 um
 
@@ -61,6 +65,7 @@ repeat_000 = 0;
 %Delay times
 delay_times = [1.0 1.1 1.2 1.3 1.4];
 t = trialtime - fixation_time;
+
 %Index to keep track of loop
 count = 0;
 
@@ -69,7 +74,7 @@ count = 0;
 output_array = [];
 
 %% 5) For loop of actual task
-while threshold_not_reached
+while threshold_not_reached || ~isempty(which_hand_values)
     % 1) Present red crosshair
     % 2) Deliver stimulus with variable time delay
     % 3) Present green crosshair
@@ -81,9 +86,14 @@ while threshold_not_reached
     rand_position_1 = randi([1 size(delay_times,2)]);
     delay_time_1 = delay_times(rand_position_1);
     
+    % Generate random hand to stimulate
+    PEST_hand_value = randi(numel(which_hand_values));
+    PEST_hand = which_hand_values(PEST_hand_value);
+    which_hand_values(PEST_hand_value) = [];
+    
     %% Delivery of Max stimulus
     %Draw red crosshair
-    Screen('DrawTexture',windowPtr,red_cross_screen);
+    Screen('DrawTexture',windowPtr,white_cross_screen);
     Screen(windowPtr,'Flip');
     WaitSecs(delay_time_1);
     
@@ -105,7 +115,7 @@ while threshold_not_reached
     delay_time_2 = delay_times(rand_position_2);
     
     %Draw red crosshair
-    Screen('DrawTexture',windowPtr,red_cross_screen);
+    Screen('DrawTexture',windowPtr,white_cross_screen);
     Screen(windowPtr,'Flip');
     WaitSecs(delay_time_2);
     
@@ -117,7 +127,7 @@ while threshold_not_reached
     %Draw green crosshair
     Screen('DrawTexture',windowPtr,green_cross_screen);
     Screen(windowPtr,'Flip');
-    [s_mid, keyCode_mid, delta_mid] = KbWait(-3, 2, GetSecs()+t);
+    [s_mid, keyCode_mid, ~] = KbWait(-3, 2, GetSecs()+t);
     WaitSecs(t - s_mid);
     
     %% Delivery of Min stimulus
@@ -127,7 +137,7 @@ while threshold_not_reached
     delay_time_3 = delay_times(rand_position_3);
     
     %Draw red crosshair
-    Screen('DrawTexture',windowPtr,red_cross_screen);
+    Screen('DrawTexture',windowPtr,white_cross_screen);
     Screen(windowPtr,'Flip');
     WaitSecs(delay_time_3);
     
