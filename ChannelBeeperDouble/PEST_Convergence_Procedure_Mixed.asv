@@ -93,16 +93,16 @@ while threshold_not_reached || ~isempty(which_hand_values)
     which_hand_values(PEST_hand_value) = [];
     
     if white
-        stim_screen = white_cross_screen;
+        pres_screen = white_cross_screen;
     elseif strcmp(PEST_hand, 'Left')
-        stim_screen = left_arrow_screen;
+        pres_screen = left_arrow_screen;
     elseif strcmp(PEST_hand, 'Right')
-        stim_screen = right_arrow_screen;
+        pres_screen = right_arrow_screen;
     end
     
     %% Delivery of Max stimulus
     %Draw red crosshair
-    Screen('DrawTexture',windowPtr,stim_screen);
+    Screen('DrawTexture',windowPtr,pres_screen);
     Screen(windowPtr,'Flip');
     WaitSecs(delay_time_1);
     
@@ -124,7 +124,7 @@ while threshold_not_reached || ~isempty(which_hand_values)
     delay_time_2 = delay_times(rand_position_2);
     
     %Draw red crosshair
-    Screen('DrawTexture',windowPtr,stim_screen);
+    Screen('DrawTexture',windowPtr,pres_screen);
     Screen(windowPtr,'Flip');
     WaitSecs(delay_time_2);
     
@@ -146,7 +146,7 @@ while threshold_not_reached || ~isempty(which_hand_values)
     delay_time_3 = delay_times(rand_position_3);
     
     %Draw red crosshair
-    Screen('DrawTexture',windowPtr,stim_screen);
+    Screen('DrawTexture',windowPtr,pres_screen);
     Screen(windowPtr,'Flip');
     WaitSecs(delay_time_3);
     

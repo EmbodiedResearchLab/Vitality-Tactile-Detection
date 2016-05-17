@@ -30,6 +30,7 @@ global solid_black_screen
 %% 1) Setting up Psych Toolbox Audio and Visual
 
 subject_quit = false;
+white = false;
 
 %Display blank screen for 3 seconds as a precursor to trial
 Screen('DrawTexture',windowPtr,solid_black_screen);
@@ -81,9 +82,18 @@ while threshold_not_reached
     rand_position_1 = randi([1 size(delay_times,2)]);
     delay_time_1 = delay_times(rand_position_1);
     
+    % Toggles presentation screen to arrows or white_cross_screen whether
+    % white is true or false.
+    if white
+        stim_screen = white_cross_screen;
+    elseif strcmp(PEST_hand, 'Left')
+        stim_screen = left_arrow_screen;
+    elseif strcmp(PEST_hand, 'Right')
+        stim_screen = right_arrow_screen;
+    end
     %% Delivery of Max stimulus
-    %Draw red crosshair
-    Screen('DrawTexture',windowPtr,red_cross_screen);
+    %Draw Stimulation Screen
+    Screen('DrawTexture',windowPtr,stim_screen);
     Screen(windowPtr,'Flip');
     WaitSecs(delay_time_1);
     
@@ -104,8 +114,8 @@ while threshold_not_reached
     rand_position_2 = randi([1 size(delay_times,2)]);
     delay_time_2 = delay_times(rand_position_2);
     
-    %Draw red crosshair
-    Screen('DrawTexture',windowPtr,red_cross_screen);
+    %Draw Stimulation Screen
+    Screen('DrawTexture',windowPtr,stim_screen);
     Screen(windowPtr,'Flip');
     WaitSecs(delay_time_2);
     
@@ -126,8 +136,8 @@ while threshold_not_reached
     rand_position_3 = randi([1 size(delay_times,2)]);
     delay_time_3 = delay_times(rand_position_3);
     
-    %Draw red crosshair
-    Screen('DrawTexture',windowPtr,red_cross_screen);
+    %Draw Stimulation Screen
+    Screen('DrawTexture',windowPtr,stim_screen);
     Screen(windowPtr,'Flip');
     WaitSecs(delay_time_3);
     
