@@ -1,4 +1,4 @@
-function [detection_threshold, output_array,subject_quit] = PEST_Convergence_Procedure_Mixed(windowPtr)
+function [detection_threshold, output_array, left, right, subject_quit] = PEST_Convergence_Procedure_Mixed(windowPtr)
 %{
 From the IRB:
 This algorithm follows (Dai 1995) and (Jones 2007) in determining the
@@ -60,8 +60,6 @@ detection_threshold = 1;
 %Variable to keep track of repeated trials (bc if repeated too many times
 %then want to restart)
 repeat_num = 0;
-repeat_111 = 0;
-repeat_000 = 0;
 
 %Delay times
 delay_times = [1.0 1.1 1.2 1.3 1.4];
@@ -69,10 +67,14 @@ t = trialtime - fixation_time;
 
 %Index to keep track of loop
 count = 0;
-
+ct = 1;
 %Stores and outputs: 1) trial number, 2) time delay of stimulus, 3)
 %magnitude of stimulus, 4) detected or not
 output_array = [];
+left(max_trials) = 0;
+right(max_trials) = 0;
+
+stimPres = white_cross_screen;
 
 %% 5) For loop of actual task
 while threshold_not_reached || ~isempty(which_hand_values)
@@ -83,14 +85,11 @@ while threshold_not_reached || ~isempty(which_hand_values)
     % 5) Repeat for other two intensities
     % 6) Update stimulation intensities
     
-    % Generate variable delay time
-    rand_position_1 = randi([1 size(delay_times,2)]);
-    delay_time_1 = delay_times(rand_position_1);
-    
     % Generate random hand to stimulate
     PEST_hand_value = randi(numel(which_hand_values));
     PEST_hand = which_hand_values(PEST_hand_value);
     which_hand_values(PEST_hand_value) = [];
+<<<<<<< HEAD
     
     if white
         stim_screen = white_cross_screen;
@@ -100,9 +99,33 @@ while threshold_not_reached || ~isempty(which_hand_values)
         stim_screen = right_arrow_screen;
     end
     
+=======
+
+    % Do we want to cue hands in PEST?  Would show a pattern of stimulation
+    % being shown in 3s according to this algorithm (always a hand
+    % stimulated at max, mid, and then min intensities).
+%{
+    % Change the screen presented to the participant by hand selected to be
+    % cued. 
+    if strcmp(PEST_hand, 'Left')
+        stimPres = left_arrow_screen;
+    else
+        stimPres = right_arrow_screen;
+    end
+%}    
+>>>>>>> origin/master
     %% Delivery of Max stimulus
+
+    % Generate variable delay time
+    rand_position_1 = randi([1 size(delay_times,2)]);
+    delay_time_1 = delay_times(rand_position_1);
+    
     %Draw red crosshair
+<<<<<<< HEAD
     Screen('DrawTexture',windowPtr,stim_screen);
+=======
+    Screen('DrawTexture',windowPtr,stimPres);
+>>>>>>> origin/master
     Screen(windowPtr,'Flip');
     WaitSecs(delay_time_1);
     
@@ -124,7 +147,11 @@ while threshold_not_reached || ~isempty(which_hand_values)
     delay_time_2 = delay_times(rand_position_2);
     
     %Draw red crosshair
+<<<<<<< HEAD
     Screen('DrawTexture',windowPtr,stim_screen);
+=======
+    Screen('DrawTexture',windowPtr,stimPres);
+>>>>>>> origin/master
     Screen(windowPtr,'Flip');
     WaitSecs(delay_time_2);
     
@@ -146,7 +173,11 @@ while threshold_not_reached || ~isempty(which_hand_values)
     delay_time_3 = delay_times(rand_position_3);
     
     %Draw red crosshair
+<<<<<<< HEAD
     Screen('DrawTexture',windowPtr,stim_screen);
+=======
+    Screen('DrawTexture',windowPtr,stimPres);
+>>>>>>> origin/master
     Screen(windowPtr,'Flip');
     WaitSecs(delay_time_3);
     
@@ -170,14 +201,14 @@ while threshold_not_reached || ~isempty(which_hand_values)
     %Store trial information in array to output
     count = count + 3;
     
-    max_data = [(count - 2), time_1, delay_time_1, max_stim, max_detected];
-    mid_data = [(count - 1), time_2, delay_time_2, mid_stim, mid_detected];
-    min_data = [(count), time_3, delay_time_3, min_stim, min_detected];
+    max_data = [(count - 2), time_1, delay_time_1, max_stim, max_detected, PEST_hand];
+    mid_data = [(count - 1), time_2, delay_time_2, mid_stim, mid_detected, PEST_hand];
+    min_data = [(count), time_3, delay_time_3, min_stim, min_detected, PEST_hand];
     
     output_array = cat(1,output_array,max_data,mid_data,min_data);
     %Output each trial's results
     displayResponses(output_array,'Threes')    
-    
+
     %% Changing Intensities
     % If max,mid,min = 0,0,0 then repeat trials up to 5 times, then quit
     if (max_detected == 0 && mid_detected == 0 && min_detected == 0)
@@ -215,7 +246,14 @@ while threshold_not_reached || ~isempty(which_hand_values)
         Screen('CloseAll')
         break;
     end
-
+    
+    % Divide the output array by hands
+    if strcmp(PEST_hand, 'Left')
+        left(ct) = struct('maximum', max_data, 'middle', mid_data, 'minimum', min_data, 'threshold', threshold_not_reached);
+    elseif strcmp(PEST_hand, 'Right')
+        right(ct) = struct('maximum', max_data, 'middle', mid_data, 'minimum', min_data, 'threshold', threshold_not_reached);
+    end
+    ct = ct + 1;
 end
 displayResponses(output_array,'All')
 
