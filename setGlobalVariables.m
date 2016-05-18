@@ -1,5 +1,5 @@
 function [windowPtr, rect] = setGlobalVariables()
-    addpath('Stimuli')
+    addpath('Stimuli') % Folder contains images of instructions, cues, etc.
     
 	global initial_time
     global white_cross_screen
@@ -34,13 +34,12 @@ function [windowPtr, rect] = setGlobalVariables()
     
     % Initializes PsychSounds as there is some issue with calling
     % ChannelBeeper on the very first trial.
-    ChannelBeeper(440,0,.1);
+    ChannelBeeper(440,0,.1); % Avoids a delay later on
     
     % Get initial time for the experiment
 	initial_time = GetSecs();
     
     % Trial Parameters
-    trialtime = 3;
-    fixation_time = 1.5;
-
+    trialtime = 3; % The length of time for each trial
+    fixation_time = 1.5; % Cross if 1 stimulator; Arrow if 2 stimulators.  Amount of time that cue/fixation is on the screen.  Consistent for every trial
 end

@@ -1,6 +1,8 @@
 function [detection_threshold, output_array, left, right, subject_quit] = PEST_Convergence_Procedure_Mixed(windowPtr)
 %{
 From the IRB:
+Parameter Estimation by Sequential Testing (PEST)
+
 This algorithm follows (Dai 1995) and (Jones 2007) in determining the
 tactile detection threshold.
 
@@ -68,6 +70,7 @@ t = trialtime - fixation_time;
 %Index to keep track of loop
 count = 0;
 ct = 1;
+
 %Stores and outputs: 1) trial number, 2) time delay of stimulus, 3)
 %magnitude of stimulus, 4) detected or not
 output_array = [];
@@ -89,7 +92,6 @@ while threshold_not_reached || ~isempty(which_hand_values)
     PEST_hand_value = randi(numel(which_hand_values));
     PEST_hand = which_hand_values(PEST_hand_value);
     which_hand_values(PEST_hand_value) = [];
-<<<<<<< HEAD
     
     if white
         stim_screen = white_cross_screen;
@@ -99,8 +101,6 @@ while threshold_not_reached || ~isempty(which_hand_values)
         stim_screen = right_arrow_screen;
     end
     
-=======
-
     % Do we want to cue hands in PEST?  Would show a pattern of stimulation
     % being shown in 3s according to this algorithm (always a hand
     % stimulated at max, mid, and then min intensities).
@@ -113,7 +113,6 @@ while threshold_not_reached || ~isempty(which_hand_values)
         stimPres = right_arrow_screen;
     end
 %}    
->>>>>>> origin/master
     %% Delivery of Max stimulus
 
     % Generate variable delay time
@@ -121,11 +120,8 @@ while threshold_not_reached || ~isempty(which_hand_values)
     delay_time_1 = delay_times(rand_position_1);
     
     %Draw red crosshair
-<<<<<<< HEAD
     Screen('DrawTexture',windowPtr,stim_screen);
-=======
     Screen('DrawTexture',windowPtr,stimPres);
->>>>>>> origin/master
     Screen(windowPtr,'Flip');
     WaitSecs(delay_time_1);
     
@@ -147,11 +143,8 @@ while threshold_not_reached || ~isempty(which_hand_values)
     delay_time_2 = delay_times(rand_position_2);
     
     %Draw red crosshair
-<<<<<<< HEAD
     Screen('DrawTexture',windowPtr,stim_screen);
-=======
     Screen('DrawTexture',windowPtr,stimPres);
->>>>>>> origin/master
     Screen(windowPtr,'Flip');
     WaitSecs(delay_time_2);
     
@@ -173,11 +166,8 @@ while threshold_not_reached || ~isempty(which_hand_values)
     delay_time_3 = delay_times(rand_position_3);
     
     %Draw red crosshair
-<<<<<<< HEAD
     Screen('DrawTexture',windowPtr,stim_screen);
-=======
     Screen('DrawTexture',windowPtr,stimPres);
->>>>>>> origin/master
     Screen(windowPtr,'Flip');
     WaitSecs(delay_time_3);
     

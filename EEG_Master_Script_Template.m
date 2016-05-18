@@ -60,6 +60,7 @@ end
 [windowPtr, rect] = setGlobalVariables();
 
 %% 1) Establishing the Dipole Movement
+%{
 % Delete Brackets to include dipole. Brackets is for debugging only.
 % Expected time: 6 minutes + 10 seconds
 initial_time_dipole_creation = 'dipole';
@@ -77,7 +78,7 @@ if strcmp(initial_time_dipole_creation, 'dipole') == 1
         error('Delete Brackets in "EEG_Master_Script.m" to allow Dipole.')
     end
 end
-
+%}
 %% Script breaks into it's respective parts by how many stimulators are present...
 run('runSubScript.m')
 

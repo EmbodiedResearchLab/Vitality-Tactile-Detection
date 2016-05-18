@@ -1,5 +1,7 @@
 function [subject_quit, dipole_creation_beginning, time_list] = Dipole_Creation(windowPtr)
-
+% Localization function.  Stimulates the left and right hands to localize
+% EEG recordings.  Toggle this script so that it does 60 if you're using
+% one stimulator.
 
 subject_quit = false;
 
