@@ -27,6 +27,7 @@ global green_cross_screen
 global solid_black_screen
 global trialtime
 global fixation_time
+global delay_times
 
 %% 1) Setting up Psych Toolbox Audio and Visual
 

@@ -11,6 +11,7 @@ function [windowPtr, rect] = setGlobalVariables()
     global square_screen
     global trialtime
     global fixation_time
+    global delay_times
     
     % Open first screen, solid black
     Screen('Preference','SyncTestSettings', .005, 50, .5, 5);
@@ -42,4 +43,5 @@ function [windowPtr, rect] = setGlobalVariables()
     % Trial Parameters
     trialtime = 3; % The length of time for each trial
     fixation_time = 1.5; % Cross if 1 stimulator; Arrow if 2 stimulators.  Amount of time that cue/fixation is on the screen.  Consistent for every trial
+    delay_times = 1:0.1:1.4;
 end

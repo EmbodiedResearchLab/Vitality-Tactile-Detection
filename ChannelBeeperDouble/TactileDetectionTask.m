@@ -53,18 +53,36 @@ WaitSecs(3);
 %% 3) Initialize necessary variables - NUM_TRIALS IS HERE!!
 
 %Desired number of trials per intensity
-num_trials = 80; 
+total_trials = 200;
+null = total_trials*.1;
+supra = total_trials*.2;
 
 %Initialize variables to store stimulus values
-num_intensities = 5;
-intensity_1 = 0;
-intensity_2 = detection_threshold;
-intensity_3 = detection_threshold*1.2;
-intensity_4 = detection_threshold*1.5;
-intensity_5 = detection_threshold*2;
+num_intensities = 3;
+intensity = [0 detection_threshold detection_threshold*1.5];
+
+if strcmp(channelDirection, 'Left')
+    if stimulus == intensity(1)
+        outputSingleScan(s, dec2binvec(1,8))
+    elseif stimulus == intensity(2)
+        outputSingleScan(s, dec2binvec(2,8))
+    elseif stimulus == intensity(3)
+        outputSingleScan(s, dec2binvec(3,8))
+    end
+elseif strcmp(channelDirection, 'Right')
+    if stimulus == intensity(1)
+        outputSingleScan(s, dec2binvec(4,8))
+    elseif stimulus == intensity(2)
+        outputSingleScan(s, dec2binvec(5,8))
+    elseif stimulus == intensity(3)
+        outputSingleScan(s, dec2binvec(6,8))
+    end
+end
+
+
 
 %array with num_trials of each stimulus (for a total of 3*num_trials trials)
-stimulus_initial_values = [repmat(intensity_1,1,num_trials),repmat(intensity_2,1,num_trials),repmat(intensity_3,1,num_trials),repmat(intensity_4,1,num_trials),repmat(intensity_5,1,num_trials)];
+stimulus_initial_values = [repmat(intensity(1),1,null),repmat(intensity(2),1,num_trials),repmat(intensity(3),1,supra)];
 
 %array with delay times
 delay_times = [.5 .6 .7 .8 .9 1 1.1 1.2 1.3 1.4 1.5];

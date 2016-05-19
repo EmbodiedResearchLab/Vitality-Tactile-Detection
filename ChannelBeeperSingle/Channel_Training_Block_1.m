@@ -14,6 +14,7 @@ global fixation_time
 global solid_black_screen
 global green_cross_screen
 global white_cross_screen
+global delay_times
 
 subject_quit = false;
 
@@ -30,9 +31,6 @@ intensity = [1 2]; %whatever 350 um is
 
 %array with num_trials of each stimulus (for a total of 3*num_trials trials)
 stimulus_initial_values = [repmat(intensity(1),1,8),repmat(intensity(2),1,2)];
-
-%array with delay times (in seconds) ADDED .5s
-delay_times = [1 1.1 1.2 1.3 1.4];
 
 %variables to keep track of output
 count =  0;

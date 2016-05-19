@@ -28,18 +28,6 @@ else
     end
 end
 
-%{
-rate=Snd('DefaultRate') returns the default sampling rate in Hz, which
-currently is 22254.5454545454 Hz on all platforms for the old style sound
-implementation, and the default device sampling rate if PsychPortAudio is
-used. This default may change in the future, so please either specify a
-rate, or use this function to get the default rate. (This default is
-suboptimal on any system except MacOS-9, but kept for backwards
-compatibility!)
-
-function [beep,samplingRate] = MakeBeep(freq,duration,samplingRate)
-[beep,samplingRate] = MakeBeep(freq,duration,[samplingRate])
-%}
 
 sound = MakeBeep(frequency, durationSec,[]) * fVolume; %creates a sound for 10 ms
 

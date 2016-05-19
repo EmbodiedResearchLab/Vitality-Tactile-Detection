@@ -1,4 +1,4 @@
-function ChannelBeeperTrigger (frequency, fVolume, durationSec, channelDirection)
+function ChannelBeeperTrigger(frequency, fVolume, durationSec, channelDirection)
 % this function right here takes in the frequency, volume, duration, and 
 % which channel the beeper should go to.  Then it follows the directions.
 
@@ -29,6 +29,11 @@ else
     end
 end
 
+
+%% Triggering
+
+
+%% Play Sound by Channel
 sound = MakeBeep(frequency, durationSec,[]) * fVolume; %creates a sound for 10 ms
 
 if (strcmp(channelDirection, 'Left'))
@@ -47,6 +52,5 @@ else
 	fprintf('Please put in a correct channelDirection')
 end
 
-% Triggers
 
 end
