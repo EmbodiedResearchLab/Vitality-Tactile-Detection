@@ -72,28 +72,28 @@ end
 %}
 
 %% 4) Tactile Detection Protocol
-detection_threshold = .375;
+detection_threshold = .38;
 % Call Dynamic Thresholding
-[output_array, subject_quit_tactile_detection, new_threshold, participant] = Channel_Dynamic_Thresholding(windowPtr, detection_threshold);
+[output_array, subject_quit_tactile_detection, new_threshold, tactile_task] = Channel_Dynamic_Thresholding(windowPtr, detection_threshold);
 
 %% 5) Saving Protocol
 
 if medTraining == 0
     saveDir = strcat(premed,'/Participant_',num2str(subjectID));
     save(fullfile(saveDir),'subjectID','detection_threshold',...
-        'new_threshold','output_array_PEST','output_array','participant')
+        'new_threshold','output_array_PEST','output_array','tactile_task')
 elseif medTraining == 1
     saveDir = strcat(postmed,'/Participant_',subjectID);
     save(fullfile(saveDir),'subjectID','detection_threshold',...
-        'new_threshold','output_array_PEST','output_array','participant')
+        'new_threshold','output_array_PEST','output_array','tactile_task')
 elseif medTraining == 2
     saveDir = strcat(medit,'/Participant_',subjectID);
     save(fullfile(saveDir),'subjectID','detection_threshold',...
-        'new_threshold','output_array_PEST','output_array','participant')
+        'new_threshold','output_array_PEST','output_array','tactile_task')
 elseif medTraining == 3
     saveDir = strcat(testing,'/Participant_',subjectID);
     save(fullfile(saveDir),'subjectID','detection_threshold',...
-        'new_threshold','output_array_PEST','output_array','participant')
+        'new_threshold','output_array_PEST','output_array','tactile_task')
 end
 
 

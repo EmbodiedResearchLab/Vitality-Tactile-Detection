@@ -97,7 +97,7 @@ while (threshold_not_reached)
     %Draw green crosshair
     Screen('DrawTexture',windowPtr,green_cross_screen);
     Screen(windowPtr,'Flip');
-    [~, keyCode_max, rt_max] = KbWait(-3, 2, GetSecs()+t);
+    [rt_max, keyCode_max, ~] = KbWait(-3, 2, GetSecs()+t);
     WaitSecs(t - rt_max);
     t_max = toc(t0);
     %% Delivery of Mid stimulus
@@ -119,7 +119,7 @@ while (threshold_not_reached)
     %Draw green crosshair
     Screen('DrawTexture',windowPtr,green_cross_screen);
     Screen(windowPtr,'Flip');
-    [~, keyCode_mid, rt_mid] = KbWait(-3, 2, GetSecs()+t);
+    [rt_mid, keyCode_mid, ~] = KbWait(-3, 2, GetSecs()+t);
     WaitSecs(t - rt_mid);
     t_mid = toc(t0);
     %% Delivery of Min stimulus
@@ -141,7 +141,7 @@ while (threshold_not_reached)
     %Draw green crosshair
     Screen('DrawTexture',windowPtr,green_cross_screen);
     Screen(windowPtr,'Flip');
-    [~, keyCode_min, rt_min] = KbWait(-3, 2, GetSecs()+t);
+    [rt_min, keyCode_min, ~] = KbWait(-3, 2, GetSecs()+t);
     WaitSecs(t - rt_min);
     t_min = toc(t0);
     %% Adjustment of weights

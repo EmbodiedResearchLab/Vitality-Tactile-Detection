@@ -58,10 +58,11 @@ for i = 1:num_intensities*num_trials
     % 9) repeats loop
     
     
-    %Choose random stimulus, and then erase it from initial array
+    % Choose random stimulus, and then erase it from initial array
     rand_position = randi([1 size(stimulus_initial_values,2)]);
     stimulus = stimulus_initial_values(rand_position);
-    %assigns a blank value to the rand_position
+    
+    % Assigns a blank value to the rand_position
     stimulus_initial_values(rand_position) = [];
     
     %Choose random delay time
@@ -74,8 +75,8 @@ for i = 1:num_intensities*num_trials
     % left hand
     if strcmp(which_hand,'Left')
         Screen('DrawTexture',windowPtr,left_arrow_screen);
-         %Flip front and back display surfaces in sync with vertical retrace and return
-        %completion timestamps.
+        % Flip front and back display surfaces in sync with vertical retrace and return
+        % completion timestamps.
         Screen(windowPtr,'Flip');
 
         % ADDED .5s
@@ -122,7 +123,8 @@ for i = 1:num_intensities*num_trials
     if or((stimulus == intensity(1) && keyCode(30) == 1), (stimulus == intensity(2) && keyCode(30) == 0))
         error_count = error_count + 1;
     end
-        %46 is equals
+    
+    %46 is equals
     if keyCode(46) == 1
         subject_quit = true;
         fprintf('The subject indicated they wanted to quit at Training Block 1.');
