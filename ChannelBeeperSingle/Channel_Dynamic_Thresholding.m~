@@ -100,7 +100,7 @@ for i = 1:total_trials
         rand_position_delay = randi([1 size(delay_times,2)]);
         delay_time = delay_times(rand_position_delay);
         
-        % 3) choose weighted random stimulus intensity
+        % 3) choose weighted random stimulus intensity for the hand in question
         %initialize the stimulus variable
         stim_values_random = randi([1 size(stim_values,2)]);
         if stim_values(stim_values_random) == intensity(2) % if this is a threshold trial
@@ -139,20 +139,24 @@ for i = 1:total_trials
         %% dynamic thresholding
         
         if stimulus == threshold_changing
-            threshold_output_array = cat(1,threshold_output_array,[keyCode(30),-1]);
+            threshold_output_array = cat(1,threshold_output_array,[key,-1]);
             count_threshold = count_threshold + 1;
             
             % And if it is detected, and previous threshold stimulus was
             % detected, then reduce threshold
             
-            % If participant responds "yes" 
-            if (keyCode(30)) 
+            % If participant responds "yes" and stimulus intensities
+            % are not 0 or 1.
+
+            cmp_stim = (stimulus == intensity);
+            if (keyCode(30)) && cmp_stim(2)
                 if (count_threshold > 1)
                     % so many possibilites of null pointer issues in the line
                     % below
-                    if (threshold_output_array(count_threshold-1) == 1)
+                    if (threshold_output_array(count_threshold-1) == 30)
                         threshold_changing = threshold_changing - change;
                         threshold_output_array = [];
+                        intensity(2) = threshold_changing;
                         count_threshold = 0;
                     end
                 end
@@ -166,6 +170,7 @@ for i = 1:total_trials
                     if (threshold_output_array(count_threshold-1) == 0 && threshold_output_array(count_threshold-2) == 0)
                         threshold_changing = threshold_changing + change;
                         threshold_output_array = [];
+                        intensity(2) = threshold_changing;
                         count_threshold = 0;
                     end
                 end
@@ -207,7 +212,7 @@ for i = 1:total_trials
     stim(i).delay_time = delay_time;
     stim(i).stimulus = stimulus;
     stim(i).reaction = rt;
-    stim(i).response = KbName(key);
+    stim(i).response = KbName(find(keyCode));
     
 end
 

@@ -80,9 +80,10 @@ while ~isempty(stimulus_initial_values)
     Screen(windowPtr,'Flip');
     
     % Waits for a keyPress for up to seconds.
-    [~, keyCode, s] = KbWait(-3, 2, GetSecs()+t);
-    WaitSecs(t - s);
+    [rt, keyCode, ~] = KbWait(-3, 2, GetSecs()+t);
+    WaitSecs(t - rt);
     
+    rt = rt - t0;
     t1 = toc(t0);
     
     %% Evaluating Response

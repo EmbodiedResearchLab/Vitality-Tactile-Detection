@@ -1,37 +1,29 @@
-%EEG Group Master Script - Dynamic Thresholding
+%% EEG Group Master Script w/ Stimulator Toggle
 
-%This script will contain the following procedure:
+% This script will contain the following procedure:
 
 % Set up - 30 min
 % 1) Dipole Creation -- 6 minutes, 10 seconds
 % 2) Training Blocks (1+2) -- 2.5 minutes
-% 2) PEST - 3 min
-% 3) Tacti1leDetection Task - 20 min
+% 3) PEST - 3 minutes
+% 4) Tactile Detection Task - 20 minutes
 
-% Clean up - 20 min
+% Clean up - 20 minutes
 % then repeat for the two control conditions
 
-%% Clear the workspace
+%% Clear Workspace
+% Clear the workspace
 clear all; %#ok<CLALL>
 close all;
-sca;
-global stimulators
-global screens
-%global windowPtr
+sca; % Screen('CloseAll')
 
+t_start_subject = tic;
 
-%% Prep for Save.  Experimenter Inputs
-subjectID = input('Subject ID: ','s'); % Identify Subject ID for to save data
-medTraining = input('0 - PreMeditation Training.\n1 - PostMeditation Training.\n2 - Meditators.\n3 - Debugging: '); %Press "0" if this is before meditation training.  Otherwise, Press "1": ');  % 0 if pre-training, 1 if post
+%% Prep for Save. Experimenter Inputs
+subjectID = input('SubjectID: ','s'); % Identify Subject ID as a string to save data.
+medTraining = input('0 - Premeditation Training.\n1 - PostMeditation Training.\n2 - Meditators.\n3 - Debugging: '); % If this is cross-sectional, just use "0".
 
-% Screens = 1 if using a second screen or 0 if using the same computer
-% screen that is running the script.
-screens = 1;
 stimulators = 0;
-
-% You can change the limitations of the while statements if you're using
-% more than two stimulators so long as there is an appropriate folder that
-% accomodates the number of stimulators desired.
 while ~ismember(stimulators, [1 2])
     stimulators = input('How many stimulators are being used? ');
     if ~ismember(stimulators, [1 2])
@@ -41,173 +33,92 @@ while ~ismember(stimulators, [1 2])
     end
 end
 
-% Changes the script that would run based on the number of stimulators
-% present as provided by the user.
+% Adds the appropriate experiment to path by the number of stimulators present
 if stimulators == 1
-    addpath('ChannelBeeperSingle')
+    experiment = strcat(pwd,'/ChannelBeeperSingle');
+    addpath(experiment);
 else
-    addpath('ChannelBeeperDouble')
+    experiment = strcat(pwd,'/ChannelBeeperDouble');
+    addpath(experiment);
 end
 
 % makes directories into strings
-data = strcat(pwd,'/Data');
+data = strcat(experiment,'/Data');
 premed = strcat(data,'/Pre-Med Training');
 postmed = strcat(data,'/Post-Med Training');
 medit = strcat(data,'/Meditators');
 testing = strcat(data,'/Testing');
+strings = {data, premed, postmed, medit, testing};
 
-% Makes the proper directory if it doesn't already exist.
-if exist('Data','dir' ~= 7
-    mkdir(data);
-elseif exist(premed,'dir') ~= 7
-    mkdir(premed);
-elseif exist(postmed,'dir') ~= 7
-    mkdir(postmed);
-elseif exist(medit,'dir') ~= 7
-    mkdir(medit);
-elseif exist(testing,'dir') ~= 7
-    mkdir(testing);
-end
-
-%% Initializing Psychtoolbox functions
-
-[windowPtr, ~] = setGlobalVariables();
-
-%% Establishing the dipole movement
-
-% Expected time: 6 minutes + 10 seconds
-t_start_subject = tic;
-%{
-[subject_quit_dipole_creation, initial_time_dipole_creation, time_list] = Dipole_Creation(windowPtr);
-if (subject_quit_dipole_creation)
-    return
-end
-%}
-
-%% 1) Display Instructions + Training Block (expected time: 4 minutes)
-sprintf('Display Instructions and Training Block')
-not_understand_task_1 = true;
-not_understand_task_2 = true;
-
-% whenever display_instructions is called, the screen will display an image
-% that has the instructions on it.
-display_instructions(windowPtr,1);
-display_instructions(windowPtr,2);
-%Training Blocks
-
-while (not_understand_task_1)
-    
-    % does the first block of training, which tests only right hand
-    [output_array_training_1,error_1,subject_quit_training_1] = Channel_Training_Block_1(windowPtr);
-    
-    if (error_1)
-        fprintf('Repeat Training 1');
-        display_instructions(windowPtr,4)
-    else
-        not_understand_task_1 = false;
-    end
-    
-    if (subject_quit_training_1)
-        return
+% Makes the proper directories if they do not exist
+for i = 1:length(strings)
+    j = char(strings(i));
+    if exist(j, 'dir') ~=7
+        mkdir(j)
     end
 end
 
-display_instructions(windowPtr,3);
+%% Initializing setGlobalVariables and Psychtoolbox functions
 
-%training task 2 is slightly quicker than training task 1, and it tests left hand
-while (not_understand_task_2)
-    [output_array_training_2,error_2,subject_quit_training_2] = Channel_Training_Block_2(windowPtr);
-    if (error_2)
-        fprintf('Repeat Training 2')
-        display_instructions(windowPtr,4)
-    else
-        not_understand_task_2 = false;
-        
-    end
-    
-    if (subject_quit_training_2)
-        return
-    end
-end
+[windowPtr, rect] = setGlobalVariables();
 
-display_instructions(windowPtr,3.5);
-
-
-%% 2) Go into PEST Convergence Procedure
-
-% The PEST Convergence Procedure should be done for each hand, so how would we do that?
-
-%first we do PEST on the left side
-sprintf('PEST Convergence Procedure')
-[detection_threshold_left,output_array_PEST_left,subject_quit_PEST] = PEST_Convergence_Procedure(windowPtr, 'Left');
-
-if (subject_quit_PEST)
-    return
-end
-
-while (detection_threshold_left == 1)
-    display_instructions(windowPtr,4)
-    [detection_threshold_left,output_array_PEST_left, subject_quit_PEST] = PEST_Convergence_Procedure(windowPtr, 'Left');
-
-    if (subject_quit_PEST)
-        return
-    end
-end
-
-save('detection_threshold_left.mat');
-
-% next we do PEST on the right side
-
-[detection_threshold_right,output_array_PEST_right,subject_quit_PEST] = PEST_Convergence_Procedure(windowPtr, 'Right');
-
-if (subject_quit_PEST)
-    return
-end
-
-while (detection_threshold_right == 1)
-    display_instructions(windowPtr,4)
-    [detection_threshold_right,output_array_PEST_right, subject_quit_PEST] = PEST_Convergence_Procedure(windowPtr, 'Right');
-
-    if (subject_quit_PEST)
-        return
-    end
-end
-
-save('detection_threshold_right.mat');
-
-%% 3) Tactile Detection Task
-% also, is this correct MATLAB formatting w/ the ellipsis?
-sprintf('Tactile Detection Task')
-[tactile_detection_task_data,subject_quit_tactile_detection,final_left_threshold, final_right_threshold] = ...
-    Channel_Dynamic_Thresholding(windowPtr,detection_threshold_left, detection_threshold_right);
-
-save('tactile_detection_task.mat');
-
-if (subject_quit_task_1)
-    
-    return
-    
-end
-%}
-
-
-
+%% Script breaks into it's respective parts by how many stimulators are present...
+run('runSubScript.m')
 display_instructions(windowPtr,7);
 
+t_elapsed_subject = toc(t_start_subject);
+min = floor(t_elapsed_subject/60);
+sec = t_elapsed_subject - min*60;
+fprintf('RunTime: %2.0f minutes and %2.3f seconds.\n', min, sec);
 %% Saving Protocols
-if medTraining == 0 % Before Meditation
-    saveDir = strcat(Directory,'/Pre-Med Training/Participant_', subjectID);
-    save(fullfile(saveDir),'subjectID','detection_threshold_left','detection_threshold_right','output_array_tactile_detection_1','final_left_threshold','final_right_threshold')
-elseif medTraining == 1
-    saveDir = strcat(Directory,'/Post-Med Training/Participant_', subjectID);
-    save(fullfile(saveDir),'subjectID','detection_threshold_left','detection_threshold_right','output_array_tactile_detection_1','final_left_threshold','final_right_threshold')
-elseif medTraining == 2
-    saveDir = strcat(Directory,'/Meditators/Participant_', subjectID);
-    save(fullfile(saveDir),'subjectID','detection_threshold_left','detection_threshold_right','output_array_tactile_detection_1','final_left_threshold','final_right_threshold')
-elseif medTraining == 3
-    saveDir = strcat(Directory,'/Testing/Participant_', subjectID);
-    save(fullfile(saveDir),'initial_time','subjectID','detection_threshold_left','detection_threshold_right','output_array_tactile_detection_1','final_left_threshold','final_right_threshold')
-end
 
+%
+if stimulators == 1
+    if medTraining == 0
+        saveDir = strcat(premed,'/Participant_',subjectID);
+        save(fullfile(saveDir),'subjectID','detection_threshold_left',...
+            'output_array_PEST_left','output_array')
+    elseif medTraining == 1
+        saveDir = strcat(postmed,'/Participant_',subjectID);
+        save(fullfile(saveDir),'subjectID','detection_threshold_left',...
+            'output_array_PEST_left','output_array')
+    elseif medTraining == 2
+        saveDir = strcat(medit,'/Participant_',subjectID);
+         save(fullfile(saveDir),'subjectID','detection_threshold_left',...
+            'output_array_PEST_left','output_array')
+    elseif medTraining == 3
+        saveDir = strcat(testing,'/Participant_',subjectID);
+        save(fullfile(saveDir),'subjectID','detection_threshold_left',...
+            'output_array_PEST_left','output_array')
+    end        
+elseif stimulators == 2
+    if medTraining == 0
+        saveDir = strcat(pwd,'/Pre-Med Training/Participant_',subjectID);
+        save(fullfile(saveDir),'subjectID','detection_threshold_left',...
+            'output_array_PEST_left','detection_threshold_right',...
+            'output_array_PEST_right','tactile_detection_task_data',...
+            'final_left_threshold','final_right_threshold')
+    elseif medTraining == 1
+        saveDir = strcat(pwd,'/Post-Med Training/Participant_',subjectID);
+        save(fullfile(saveDir),'subjectID','detection_threshold_left',...
+            'output_array_PEST_left','detection_threshold_right',...
+            'output_array_PEST_right','tactile_detection_task_data',...
+            'final_left_threshold','final_right_threshold')
+    elseif medTraining == 2
+        saveDir = strcat(pwd,'/Meditators/Participant_',subjectID);
+        save(fullfile(saveDir),'subjectID','detection_threshold_left',...
+            'output_array_PEST_left','detection_threshold_right',...
+            'output_array_PEST_right','tactile_detection_task_data',...
+            'final_left_threshold','final_right_threshold')
+    elseif medTraining == 3
+        saveDir = strcat(pwd,'/Testing/Participant_',subjectID);
+        save(fullfile(saveDir),'subjectID','detection_threshold_left',...
+            'output_array_PEST_left','detection_threshold_right',...
+            'output_array_PEST_right','tactile_detection_task_data',...
+            'final_left_threshold','final_right_threshold')
+    end
+end
+%}
+%% Close Screens and Prep for next Participant
 sca;
 fprintf('Ready for next participant!\n')
