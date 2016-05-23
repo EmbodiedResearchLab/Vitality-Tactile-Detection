@@ -49,24 +49,25 @@ else
     addpath('ChannelBeeperDouble')
 end
 
+data = strcat(pwd,'Data')
+
 % makes directories into strings
-data = strcat(pwd,'/Data');
-premed = strcat(data,'/Pre-Med Training');
-postmed = strcat(data,'/Post-Med Training');
-medit = strcat(data,'/Meditators');
-testing = strcat(data,'/Testing');
+premed = strcat(pwd,'/Pre-Med Training');
+postmed = strcat(pwd,'/Post-Med Training');
+medit = strcat(pwd,'/Meditators');
+testing = strcat(pwd,'/Testing');
 
 % Makes the proper directory if it doesn't already exist.
 if exist('Data','dir' ~= 7
-    mkdir(data);
+    mkdir('Data');
 elseif exist(premed,'dir') ~= 7
-    mkdir(premed);
+    mkdir('Pre-Med Training');
 elseif exist(postmed,'dir') ~= 7
-    mkdir(postmed);
+    mkdir('Post-Med Training');
 elseif exist(medit,'dir') ~= 7
-    mkdir(medit);
+    mkdir('Meditators');
 elseif exist(testing,'dir') ~= 7
-    mkdir(testing);
+    mkdir('Testing');
 end
 
 %% Initializing Psychtoolbox functions
