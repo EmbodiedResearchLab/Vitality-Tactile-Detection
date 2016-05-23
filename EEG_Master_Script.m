@@ -17,7 +17,7 @@ close all;
 sca;
 global stimulators
 global screens
-global windowPtr
+%global windowPtr
 
 
 %% Prep for Save.  Experimenter Inputs
@@ -33,7 +33,7 @@ stimulators = 0;
 % more than two stimulators so long as there is an appropriate folder that
 % accomodates the number of stimulators desired.
 while ~ismember(stimulators, [1 2])
-    stimuatlors = input('How many stimulators are being used? ');
+    stimulators = input('How many stimulators are being used? ');
     if ~ismember(stimulators, [1 2])
         fprintf('Stimulators must be an integer (1 or 2)\n')
     elseif stimulators == 1
@@ -67,51 +67,19 @@ elseif exist(testing,'dir') ~= 7
 end
 
 %% Initializing Psychtoolbox functions
-%Initialize Parameters so screen() doesn't crash
-%
-% Screen('Preference','SyncTestSettings' [, maxStddev=0.001 secs][, minSamples=50][, maxDeviation=0.1][, maxDuration=5 secs]);
-%
-% 'maxStddev' selects the amount of tolerable noisyness, the standard
-% deviation of measured timing samples from the computed mean. We default
-% to 0.001, ie., 1 msec.
-%
-% 'minSamples' controls the minimum amount of valid measurements to be
-% taken for successfull tests: We require at least 50 valid samples by
-% default.
-%
-% 'maxDeviation' sets a tolerance threshold for the maximum percentual
-% deviation of the measured video refresh interval duration from the
-% duration suggested by the operating system (the nominal value). Our
-% default setting of 0.1 allows for +/- 10% of tolerance between
-% measurement and expectation before we fail our tests.
-%
-% 'maxDuration' Controls the maximum duration of a single test run in
-% seconds. We default to 5 seconds per run, with 3 repetitions if
-% neccessary. A well working system will complete the tests in less than 1
-% second though.
-%
-% Empirically we've found that especially Microsoft Windows Vista and
-% Windows-7 may need some tweaking of these parameters, as some of those
-% setups do have rather noisy timing.
-% %
 
-Screen('Preference','SyncTestSettings', .005, 50, .5, 5);
-
-%Open first screen, solid black
-[windowPtr, rect] = Screen('OpenWindow',screens,[0 0 0]);
-
-setGlobalVariables()
+[windowPtr, ~] = setGlobalVariables();
 
 %% Establishing the dipole movement
 
 % Expected time: 6 minutes + 10 seconds
 t_start_subject = tic;
-
+%{
 [subject_quit_dipole_creation, initial_time_dipole_creation, time_list] = Dipole_Creation(windowPtr);
 if (subject_quit_dipole_creation)
     return
 end
-
+%}
 
 %% 1) Display Instructions + Training Block (expected time: 4 minutes)
 sprintf('Display Instructions and Training Block')

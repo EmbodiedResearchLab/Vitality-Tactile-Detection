@@ -22,6 +22,7 @@ threshold will increase by .005 V.
 global initial_time
 global trialtime
 global fixation_time
+global delay_times
 global solid_black_screen
 global green_cross_screen
 global left_arrow_screen
@@ -80,9 +81,6 @@ right_supra = right_threshold*2;
 left_initial_values = [repmat(0,1,trials_per_hand*.2),repmat(1,1,trials_per_hand*.7),repmat(2,1,trials_per_hand*.1)];
 right_initial_values = [repmat(0,1,trials_per_hand*.2),repmat(1,1,trials_per_hand*.7),repmat(2,1,trials_per_hand*.1)];
 
-
-% array with delay times
-delay_times = [1 1.1 1.2 1.3 1.4];
 
 %Initializing variables to keep track of output
 output_array = []; %overall output

@@ -8,6 +8,7 @@ response - so each trial is 2 seconds longer.
 global initial_time
 global trialtime
 global fixation_time
+global delay_times
 global green_cross_screen
 global left_arrow_screen
 global right_arrow_screen
@@ -32,7 +33,7 @@ intensity = [0 1];
 stimulus_initial_values = [repmat(intensity(1),1,num_trials),repmat(intensity(2),1,num_trials)];
 hand_values = {'Left', 'Right'};
 %array with delay times (in seconds)
-delay_times = [1 1.1 1.2 1.3 1.4] + .5;
+
 trialtime = trialtime + .5;
 t = trialtime - fixation_time;
 

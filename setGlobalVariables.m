@@ -2,6 +2,7 @@ function [windowPtr, rect] = setGlobalVariables()
     addpath('Stimuli') % Folder contains images of instructions, cues, etc.
     
 	global initial_time
+    global screens
     global white_cross_screen
     global green_cross_screen
     global red_cross_screen
@@ -14,6 +15,7 @@ function [windowPtr, rect] = setGlobalVariables()
     global delay_times
     
     % Open first screen, solid black
+    screens = 1;
     Screen('Preference','SyncTestSettings', .005, 50, .5, 5);
     [windowPtr, rect] = Screen('OpenWindow', screens, [0 0 0]);
     
@@ -31,7 +33,8 @@ function [windowPtr, rect] = setGlobalVariables()
     solid_black_screen = Screen('MakeTexture',windowPtr, solid_black);
     left_arrow_screen = Screen('MakeTexture',windowPtr, left_arrow);
     right_arrow_screen = Screen('MakeTexture',windowPtr, right_arrow);
-    square_screen = Screen('MakeTexture', windowPtr, square);
+    %square_screen = Screen('MakeTexture', windowPtr, square);
+    square_screen = 1; % Debugging.  Need to make a black screen with a white square.
     
     % Initializes PsychSounds as there is some issue with calling
     % ChannelBeeper on the very first trial.

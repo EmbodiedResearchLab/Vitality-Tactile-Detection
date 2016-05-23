@@ -14,6 +14,7 @@ global fixation_time
 global solid_black_screen
 global green_cross_screen
 global white_cross_screen
+global delay_times
 
 subject_quit = false;
 
@@ -26,18 +27,15 @@ Screen(windowPtr,'Flip');
 
 %Initialize variables to store stimulus values
 % 0 is a blank stimulus
-intensity = [1 2]; %whatever 350 um is
+intensity = [0 1]; %whatever 350 um is
 
 %array with num_trials of each stimulus (for a total of 3*num_trials trials)
-stimulus_initial_values = [repmat(intensity(1),1,8),repmat(intensity(2),1,2)];
-
-%array with delay times (in seconds)
-delay_times = [1 1.1 1.2 1.3 1.4];
+stimulus_initial_values = [repmat(intensity(1),1,2),repmat(intensity(2),1,8)];
 
 %variables to keep track of output
 count =  0;
 output_array = [];
-error_count = 0;
+Error_Count = 0;
 error_screen = false;
 t = trialtime-fixation_time;
 
@@ -67,52 +65,34 @@ while ~isempty(stimulus_initial_values)
     delay_time = delay_times(rand_position_delay);
 
     %% Delivering Stimuli
-
     Screen('DrawTexture', windowPtr, white_cross_screen);
     Screen(windowPtr,'Flip');
-
-    % ADDED .5s from above
-    WaitSecs(delay_time);
-        
-    %Deliver Stimulus
+    
+    % Deliver Stimulus
+    WaitSecs(delay_time); % Wait randomized delay_time
     time = GetSecs() - initial_time;
     ChannelBeeper(100,stimulus,.01,'Left');
-    
-    % Ensures that fixation_time elapses before changing the screen.
-    WaitSecs(fixation_time-delay_time-.01);
+    WaitSecs(fixation_time-delay_time-.01); % White_cross_screen displayed for lenght of fixation_time
     
     %Draw green crosshair
     Screen('DrawTexture', windowPtr, green_cross_screen);
     Screen(windowPtr,'Flip');
     
-    %{
-    % Checks for detection of a keypress, but waits only 2 seconds
-    % function [secs, keyCode, deltaSecs] = KbWait(deviceNumber, forWhat, untilTime)
-    %Waits until any key is down and optionally returns the time in seconds
-    %and the keyCode vector of keyboard states, just as KbCheck would do. Also
-    %allows to wait for release of all keys or for single keystrokes, see
-    %below.
-    % If you want to wait for a single keystroke, set the 'forWhat' value to 2.
-    % KbWait will then first wait until all keys are released, then for the
-    % first keypress, then it will return.
-    % If deviceNumber is -3, all keyboard and keypad devices will be checked.
-    % by the way, "keyCode vector of keyboard state"
-    %}
     % Waits for a keyPress for up to seconds.
-    [s, keyCode, ~] = KbWait(-3, 2, GetSecs()+t);
-    
-    % with the above line of code, keypress is normalized to how long it
-    % took for the participant to respond
+    [~, keyCode, s] = KbWait(-3, 2, GetSecs()+t);
     WaitSecs(t - s);
     
+    t1 = toc(t0);
+    
+    %% Evaluating Response
     %keyCode(30) is up arrow)
     if or((stimulus == intensity(1) && keyCode(30) == 1), (stimulus == intensity(2) && keyCode(30) == 0))
-        error_count = error_count + 1;
+        Error_Count = Error_Count + 1;
     end
         %46 is equals
     if (keyCode(46) == 1)
         subject_quit = true;
-        fprintf('The subject indicated they wanted to quit at Training Block 2.');
+        fprintf('The subject indicated they wanted to quit at Training Block 1.');
         %When flushed, as part of its exit sequence, Screen closes all its
         %windows, restores the screen's normal color table, and shows the cursor. Or you
         %can get just those effects, without flushing, by calling Screen('CloseAll')
@@ -123,21 +103,19 @@ while ~isempty(stimulus_initial_values)
     
     %Output data appropriately
     count = count + 1;
-    data = [count, time, delay_time, stimulus, keyCode(30), toc(t0)];
+    data = [count, time, delay_time, stimulus, keyCode(30), t1];
     
-    if (error_count >= 3)
+    if Error_Count >= 3
         error_screen = true;
     end
      
     output_array = cat(1,output_array,data);
     displayResponses(output_array)
-    error_count
+    fprintf('Error: %1.0f.\n', Error_Count)
 
 end
 
 if (error_screen)
-    
-    fprintf('Training 2 was incorrectly done.  Check connections, Power Supply, and Volume Settings.');
-    
+    fprintf('Training 1 was incorrectly done.  Check connections, Power Supply, and Volume Settings.');
 end
-
+displayResponses(output_array,'All')

@@ -23,6 +23,7 @@ trials is 5 um. This process will take 3 minutes.
 global initial_time
 global trialtime
 global fixation_time
+global delay_times
 global white_cross_screen
 global left_arrow_screen
 global right_arrow_screen
@@ -63,8 +64,6 @@ detection_threshold = 1;
 %then want to restart)
 repeat_num = 0;
 
-%Delay times
-delay_times = [1.0 1.1 1.2 1.3 1.4];
 t = trialtime - fixation_time;
 
 %Index to keep track of loop

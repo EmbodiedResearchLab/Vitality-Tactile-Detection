@@ -21,6 +21,7 @@ trials is 5 um. This process will take 3 minutes.
 global initial_time
 global trialtime
 global fixation_time
+global delay_times
 global left_arrow_screen
 global right_arrow_screen
 global white_cross_screen
@@ -59,8 +60,6 @@ repeat_num = 0;
 repeat_111 = 0;
 repeat_000 = 0;
 
-%Delay times
-delay_times = [1.0 1.1 1.2 1.3 1.4];
 t = trialtime - fixation_time;
 %Index to keep track of loop
 count = 0;

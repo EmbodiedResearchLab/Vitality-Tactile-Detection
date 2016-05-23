@@ -60,8 +60,6 @@ repeat_num = 0;
 repeat_111 = 0;
 repeat_000 = 0;
 
-%Delay times
-delay_times = [1.0 1.1 1.2 1.3 1.4];
 t = trialtime - fixation_time;
 %Index to keep track of loop
 count = 0;
@@ -86,7 +84,7 @@ while (threshold_not_reached)
     delay_time_1 = delay_times(rand_position_1);
     
     %% Delivery of Max stimulus
-    %Draw red crosshair
+    %Draw white crosshair
     Screen('DrawTexture',windowPtr,white_cross_screen);
     Screen(windowPtr,'Flip');
     WaitSecs(delay_time_1);
@@ -99,8 +97,8 @@ while (threshold_not_reached)
     %Draw green crosshair
     Screen('DrawTexture',windowPtr,green_cross_screen);
     Screen(windowPtr,'Flip');
-    [s_max, keyCode_max, ~] = KbWait(-3, 2, GetSecs()+t);
-    WaitSecs(t - s_max);
+    [~, keyCode_max, rt_max] = KbWait(-3, 2, GetSecs()+t);
+    WaitSecs(t - rt_max);
     t_max = toc(t0);
     %% Delivery of Mid stimulus
     
@@ -121,8 +119,8 @@ while (threshold_not_reached)
     %Draw green crosshair
     Screen('DrawTexture',windowPtr,green_cross_screen);
     Screen(windowPtr,'Flip');
-    [s_mid, keyCode_mid, ~] = KbWait(-3, 2, GetSecs()+t);
-    WaitSecs(t - s_mid);
+    [~, keyCode_mid, rt_mid] = KbWait(-3, 2, GetSecs()+t);
+    WaitSecs(t - rt_mid);
     t_mid = toc(t0);
     %% Delivery of Min stimulus
     
@@ -143,8 +141,8 @@ while (threshold_not_reached)
     %Draw green crosshair
     Screen('DrawTexture',windowPtr,green_cross_screen);
     Screen(windowPtr,'Flip');
-    [s_min, keyCode_min, ~] = KbWait(-3, 2, GetSecs()+t);
-    WaitSecs(t - s_min);
+    [~, keyCode_min, rt_min] = KbWait(-3, 2, GetSecs()+t);
+    WaitSecs(t - rt_min);
     t_min = toc(t0);
     %% Adjustment of weights
     % Keeps track of participant's response (1 is 30, 2 is 31)
@@ -204,4 +202,6 @@ while (threshold_not_reached)
     end
     
     %Screen('CloseAll')
+end
+
 end
