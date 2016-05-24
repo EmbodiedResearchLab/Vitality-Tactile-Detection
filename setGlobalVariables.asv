@@ -13,7 +13,7 @@ function [windowPtr, rect] = setGlobalVariables()
     global trialtime
     global fixation_time
     global delay_times
-    global s
+    global 
     
     % Open first screen, solid black
     screens = 1;
@@ -40,8 +40,6 @@ function [windowPtr, rect] = setGlobalVariables()
     % Initializes PsychSounds as there is some issue with calling
     % ChannelBeeper on the very first trial.
     ChannelBeeper(440,0,.1); % Avoids a delay later on
-    s = daq.createSession('ni');
-
     
     % Get initial time for the experiment
 	initial_time = GetSecs();
