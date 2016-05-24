@@ -1,11 +1,13 @@
 function nidaqTriggerInterface(option)
+global s
 
-
+if ~exist(s, 'var')
     s = daq.createSession('ni');
     % setup the session -- initialize the session-based interface to the NI-DAQ
     % device.
+end
 
-ch = addDigitalChannels(s, 'Dev1', 'Port2/Line0:7,', 'OutputOnly');
+ch = addDigitalChannel(s, 'Dev1', 'Port2/Line0:7', 'OutputOnly');
 % Setup an 8-bit range as a channel to which events can be written
 
 if strcmp(option, 'on')
