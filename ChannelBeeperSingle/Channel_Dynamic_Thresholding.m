@@ -115,6 +115,7 @@ for i = 1:total_trials
         Screen('DrawTexture',windowPtr,white_cross_screen);
         Screen(windowPtr,'Flip');
         nidaqTriggerInterface('off')
+
         
         % 5) wait the chosen delay time
         WaitSecs(delay_time);
@@ -122,8 +123,9 @@ for i = 1:total_trials
         % 6) deliver 10ms stimulus and wait duration of fixation time
         % before changing screens
         time = GetSecs() - initial_time;
+        % nidaqTriggerInterface('on')
         ChannelBeeper(100,stimulus,.01, 'Left');
-        
+        % nidaqTriggerInterface('off')
         % 7) Wait until fixation_time has elapsed.
         WaitSecs(fixation_time - delay_time - .01);
         

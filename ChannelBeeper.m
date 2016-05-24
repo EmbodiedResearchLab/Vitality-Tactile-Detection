@@ -46,3 +46,5 @@ elseif (strcmp(channelDirection, 'Both'))
 else
 	fprintf('Please put in a correct channelDirection')
 end
+
+end
