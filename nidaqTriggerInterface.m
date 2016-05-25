@@ -1,4 +1,4 @@
-function trig = nidaqTriggerInterface(status, vargin)
+function trig = nidaqTriggerInterface(status, varargin)
 % Creates a digital pulse to act as a trigger when collecting data.  
 % 
 % Status turns the the trigger 'on' or 'off'.
@@ -23,21 +23,24 @@ if isempty(ch)
 end
 
 % Determine trigger value by cue type.
-if nargin < 1
-    if strcmpi(vargin{1}, 'Left') || strcmp(vargin{1},'White')
+% Floor(trig/100)
+trig = 50;
+if nargin > 1
+    if strcmpi(varargin{1}, 'Left') || strcmpi(varargin{1},'White')
         trig = 100;
-    elseif strcmpi(vargin{1}, 'Right')
+    elseif strcmpi(varargin{1}, 'Right')
         trig = 200;
     end
 end
 
 % Determine trigger value by stimulus intensity
-if nargin < 2
-    if vargin{2} == 1
+% mod(floor(trig/10),10)
+if nargin > 2
+    if varargin{2} == 1
         trig = trig + 10;
-    elseif vargin{2} == 0;
+    elseif varargin{2} == 0;
         trig = trig + 30;
-    elseif vargin{2} > 0 && vargin{2} < 1
+    elseif varargin{2} > 0 && varargin{2} < 1
         trig = trig + 20;
     else
         trig = trig + 50;
@@ -45,11 +48,14 @@ if nargin < 2
 end
 
 % Determine trigger value by participant response.
-if nargin < 3
-    if vargin{3} == yes
+% mod(trig,2), mod(trig,3)
+if nargin > 3
+    if varargin{3} == yes
         trig = trig+1;
-    elseif vargin{3} == no
+    elseif varargin{3} == no
         trig = trig+2;
+    elseif varargin{3} == 0
+        trig = trig+3;
     end
 end
 

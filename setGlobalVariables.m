@@ -54,6 +54,14 @@ function [windowPtr, rect] = setGlobalVariables()
     delay_times = 1.0:0.1:1.4;
     
     % Determine responses
-    yes = 30;
-    no = 31;
+    fprintf('Press the "yes" key.\n')
+    %[~, keyCode, ~] = KbWait(-3, 2, GetSecs()+600);
+    %yes = find(keyCode);
+    
+    fprintf('Press the "no" key.\n')
+    %[~, keyCode, ~] = KbWait(-3, 2, GetSecs()+600);
+    %no = find(keyCode);
+    yes = 49;
+    no = 50;
+    
 end

@@ -39,8 +39,8 @@ WaitSecs(3);
 % according to the math, there will be 800 total trials, leading to 252 alpha-modulated data points for each hand
 total_trials = 400;
 
-square_trials = round(total_trials*.1);
-stim_trials = round(total_trials*.9);
+square_trials = round(total_trials*.0);
+stim_trials = round(total_trials*1);
 
 thresh_trials = round(stim_trials*.7);
 null_trials = round(stim_trials*.2);
@@ -111,6 +111,7 @@ for i = 1:total_trials
         stim_values(stim_values_random) = [];
         
         % 4) display the white crosshair to wait for incoming stimulus
+        time = GetSecs();
         nidaqTriggerInterface('on')
         Screen('DrawTexture',windowPtr,white_cross_screen);
         Screen(windowPtr,'Flip');
@@ -122,10 +123,10 @@ for i = 1:total_trials
         
         % 6) deliver 10ms stimulus and wait duration of fixation time
         % before changing screens
-        time = GetSecs() - initial_time;
-        % nidaqTriggerInterface('on')
-        ChannelBeeper(100,stimulus,.01, 'Left');
-        % nidaqTriggerInterface('off')
+        time_stim = GetSecs() - initial_time;
+        %nidaqTriggerInterface('on')
+        ChannelBeeperTrigger(100,stimulus,.01, 'Left');
+        %nidaqTriggerInterface('off')
         
         % 7) Wait until fixation_time has elapsed.
         WaitSecs(fixation_time - delay_time - .01);
@@ -137,10 +138,13 @@ for i = 1:total_trials
         % 8) give user up to 1 s for response y or n
         % Checks for detection, gives
         [rt, keyCode, ~] = KbWait(-3, 2, GetSecs()+t);
-        WaitSecs(t - rt);
         key = find(keyCode);
-        nidaqTriggerInterface('on','white',stimulus,key)
-        nidaqTriggerInterface('off')
+        if isempty(key);
+            key = 0;
+        end
+        nidaqTriggerInterface('on','white',stimulus,key);
+        nidaqTriggerInterface('off');
+        WaitSecs(trialtime - (rt-time)); % This is each trial is standardized to length of the trial
         rt = rt-t0;
         t1 = toc(t0);
         %% dynamic thresholding
@@ -203,7 +207,8 @@ for i = 1:total_trials
     end
     
     %Output data appropriately
-    data = [i, time, delay_time, stimulus, keyCode(30), t1];
+    reaction_time = rt-time_stim;
+    data = [i, reaction_time, delay_time, stimulus, keyCode(30), t1];
     
     output_array = cat(1,output_array,data);
     %Output data
@@ -213,8 +218,8 @@ for i = 1:total_trials
     stim(i).trial = i;
     stim(i).delay_time = delay_time;
     stim(i).stimulus = stimulus;
-    stim(i).reaction = rt;
-    stim(i).response = KbName(key);
+    stim(i).reaction = reaction_time;
+    stim(i).response = key;
     
 end
 

@@ -30,9 +30,9 @@ else
 end
 
 
-%% Triggering
+%% Triggering On
 
-
+nidaqTriggerInterface('on',channelDirection, fVolume)
 %% Play Sound by Channel
 sound = MakeBeep(frequency, durationSec,[]) * fVolume; %creates a sound for 10 ms
 
@@ -51,6 +51,9 @@ elseif (strcmp(channelDirection, 'Both'))
 else
 	fprintf('Please put in a correct channelDirection')
 end
+
+%% Trigger Off
+nidaqTriggerInterface('off')
 
 
 end
