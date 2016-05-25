@@ -126,6 +126,7 @@ for i = 1:total_trials
         % nidaqTriggerInterface('on')
         ChannelBeeper(100,stimulus,.01, 'Left');
         % nidaqTriggerInterface('off')
+        
         % 7) Wait until fixation_time has elapsed.
         WaitSecs(fixation_time - delay_time - .01);
         
@@ -135,9 +136,11 @@ for i = 1:total_trials
         
         % 8) give user up to 1 s for response y or n
         % Checks for detection, gives
-        [~, keyCode, rt] = KbWait(-3, 2, GetSecs()+t);
+        [rt, keyCode, ~] = KbWait(-3, 2, GetSecs()+t);
         WaitSecs(t - rt);
         key = find(keyCode);
+        nidaqTriggerInterface('on','white',stimulus,key)
+        nidaqTriggerInterface('off')
         rt = rt-t0;
         t1 = toc(t0);
         %% dynamic thresholding

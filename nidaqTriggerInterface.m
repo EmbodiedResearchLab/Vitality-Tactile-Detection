@@ -1,6 +1,15 @@
-function trig = nidaqTriggerInterface(status,vargin)
+function trig = nidaqTriggerInterface(status, vargin)
+% Creates a digital pulse to act as a trigger when collecting data.  
+% 
+% Status turns the the trigger 'on' or 'off'.
+% Cue takes whether the participant was cued left or right.
+% Intensity takes the volume from ChannelBeeper.
+% Response is adds based on 'yes' or 'no' responses.
+
 global s
 global ch
+global yes
+global no
 
 if isempty(s)
     s = daq.createSession('ni');
@@ -9,35 +18,50 @@ if isempty(s)
 end
 
 if isempty(ch)
-ch = addDigitalChannel(s, 'Dev1', 'Port2/Line0:7', 'OutputOnly');
-% Setup an 8-bit range as a channel to which events can be written
+    ch = addDigitalChannel(s, 'Dev1', 'Port2/Line0:7', 'OutputOnly');
+    % Setup an 8-bit range as a channel to which events can be written
 end
 
 % Determine trigger value by cue type.
-if strcmp(vargin{1}, 'Left')
-    trig = 100;
-elseif strcmp(vargin{1}, 'Right')
-    trig = 200;
+if nargin < 1
+    if strcmpi(vargin{1}, 'Left') || strcmp(vargin{1},'White')
+        trig = 100;
+    elseif strcmpi(vargin{1}, 'Right')
+        trig = 200;
+    end
 end
 
 % Determine trigger value by stimulus intensity
-if vargin{2} == 1
-    trig = trig + 10;
-elseif vargin{2} == 0;
-    trig = trig + 30;
-else
-    trig = trig + 20;
+if nargin < 2
+    if vargin{2} == 1
+        trig = trig + 10;
+    elseif vargin{2} == 0;
+        trig = trig + 30;
+    elseif vargin{2} > 0 && vargin{2} < 1
+        trig = trig + 20;
+    else
+        trig = trig + 50;
+    end
 end
-    
+
+% Determine trigger value by participant response.
+if nargin < 3
+    if vargin{3} == yes
+        trig = trig+1;
+    elseif vargin{3} == no
+        trig = trig+2;
+    end
+end
+
 % Changes the trigger by its status
-if strcmp(status, 'on')
+if strcmpi(status, 'on')
     outputSingleScan(s, dec2binvec(trig,8))
     % Immediately preceding or following a stimulus, set a non-zero value on
     % the 8 bit range from bit 0 through 7.  This sets the length of the
     % produced vector to 8, which is required.  Here, the values immediately following dec2binvec can be any
     % integer from 1 to 255.
     
-elseif strcmp(status,'off')
+elseif strcmpi(status,'off')
     outputSingleScan(s, zeros(1,8))
     % Reset port to zero.  This should be done within (1000/<EEG Sampling rate>
     % +2 milliseconds to ensure the port is ready for the next event (the code

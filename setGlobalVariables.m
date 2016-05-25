@@ -13,7 +13,8 @@ function [windowPtr, rect] = setGlobalVariables()
     global trialtime
     global fixation_time
     global delay_times
-    global s
+    global yes
+    global no
     
     % Open first screen, solid black
     screens = 1;
@@ -51,4 +52,8 @@ function [windowPtr, rect] = setGlobalVariables()
     trialtime = 3; % The length of time for each trial
     fixation_time = 1.5; % Cross if 1 stimulator; Arrow if 2 stimulators.  Amount of time that cue/fixation is on the screen.  Consistent for every trial
     delay_times = 1.0:0.1:1.4;
+    
+    % Determine responses
+    yes = 30;
+    no = 31;
 end
