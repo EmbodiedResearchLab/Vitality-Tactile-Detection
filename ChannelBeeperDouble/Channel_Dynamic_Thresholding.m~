@@ -192,11 +192,12 @@ for i = 1:total_trials
         % 8) wait 2-delayTime-.01 (so that there has been a total of 2 s since cue)
         WaitSecs(fixation_time - delay_time - .01);
         
+        
         %Draw green crosshair
         Screen('DrawTexture',windowPtr,green_cross_screen);
         Screen(windowPtr,'Flip');
         
-        % 9) give user up to t seconds for response y or n
+        % 9) give user up to t s for response y or n
         
         % Checks for detection, gives
         [rt, keyCode, ~] = KbWait(-3, 2, GetSecs()+t);

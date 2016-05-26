@@ -81,7 +81,7 @@ while ~isempty(stimulus_initial_values)
     
     % Waits for a keyPress for up to seconds.
     [rt, keyCode, ~] = KbWait(-3, 2, GetSecs()+t);
-    WaitSecs(t - rt);
+    WaitSecs(trialtime - (rt-time));
     
     rt = rt - t0;
     t1 = toc(t0);

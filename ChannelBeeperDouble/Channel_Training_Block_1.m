@@ -110,10 +110,10 @@ for i = 1:num_intensities*num_trials
     Screen(windowPtr,'Flip');
     
     % Records Participant's Response
-    [s, keyCode, ~] = KbWait(-3, 2, GetSecs()+t);
+    [rt, keyCode, ~] = KbWait(-3, 2, GetSecs()+t);
     
     % with the above line of code, keypress is standardized to 2 seconds
-    WaitSecs(t - s);
+    WaitSecs(trialtime - (rt-time));
     t1 = toc(t0);
     
     %% Output data appropriately

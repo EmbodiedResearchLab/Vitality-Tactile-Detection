@@ -73,19 +73,19 @@ threshold_changing = intensity(2);
 stim(stim_trials) = struct('trial',[],'time',[],'delay_time',[],'stimulus',[],'reaction',[],'response',[]);
 %% 4) Actual presentation of stimuli and input of participant response
 for i = 1:total_trials
-    
-    % 1) choose whether it's a real trial or a both (fake) trial
-    % THE FOLLOWING STEPS WILL ONLY TAKE ACCOUNT REAL TRIALS
-    % 2) choose the random delay time (from 1000 to 1400 ms in 100ms increments)
-    % 3) choose weighted random stimulus intensity for the hand in question
-    % 4) display the left or right arrow picture to direct which hand to modulate attention to
-    % 5) wait the chosen delay time
-    % 6) deliver 10ms stimulus
-    % 7) wait fixation_time-delayTime-.010 (so that there has been a total of 2 s since cue)
-    % 8) give user up to 1 s for response y or n
-    % 9) Checks to see if the threshold needs to be changed and does so
-    % 10) Outputs array of data
-    
+%{    
+    1) choose whether it's a real trial or a both (fake) trial
+    THE FOLLOWING STEPS WILL ONLY TAKE ACCOUNT REAL TRIALS
+    2) choose the random delay time (from 1000 to 1400 ms in 100ms increments)
+    3) choose weighted random stimulus intensity for the hand in question
+    4) display the left or right arrow picture to direct which hand to modulate attention to
+    5) wait the chosen delay time
+    6) deliver 10ms stimulus
+    7) wait fixation_time-delayTime-.010 (so that there has been a total of 2 s since cue)
+    8) give user up to 1 s for response y or n
+    9) Checks to see if the threshold needs to be changed and does so
+    10) Outputs array of data
+%}    
     
     % 1) choose whether it's a real trial or a both (fake) trial
     trial_validity_random = randi([1 size(trial_type_values,2)]);
@@ -112,10 +112,10 @@ for i = 1:total_trials
         
         % 4) display the white crosshair to wait for incoming stimulus
         time = GetSecs();
-        nidaqTriggerInterface('on')
+        nidaqTriggerInterface('on');
         Screen('DrawTexture',windowPtr,white_cross_screen);
         Screen(windowPtr,'Flip');
-        nidaqTriggerInterface('off')
+        nidaqTriggerInterface('off');
 
         
         % 5) wait the chosen delay time
@@ -135,7 +135,7 @@ for i = 1:total_trials
         Screen('DrawTexture',windowPtr,green_cross_screen);
         Screen(windowPtr,'Flip');
         
-        % 8) give user up to 1 s for response y or n
+        % 8) give user up to t s for response y or n
         % Checks for detection, gives
         [rt, keyCode, ~] = KbWait(-3, 2, GetSecs()+t);
         key = find(keyCode);
@@ -145,7 +145,8 @@ for i = 1:total_trials
         nidaqTriggerInterface('on','white',stimulus,key);
         nidaqTriggerInterface('off');
         WaitSecs(trialtime - (rt-time)); % This is each trial is standardized to length of the trial
-        rt = rt-t0;
+        
+        reaction_time = rt-time_stim;
         t1 = toc(t0);
         %% dynamic thresholding
         
@@ -207,7 +208,6 @@ for i = 1:total_trials
     end
     
     %Output data appropriately
-    reaction_time = rt-time_stim;
     data = [i, reaction_time, delay_time, stimulus, keyCode(30), t1];
     
     output_array = cat(1,output_array,data);

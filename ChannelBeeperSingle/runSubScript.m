@@ -2,7 +2,7 @@
 % Script runs after you deciding one stimulator will be used.
 
 %% 2) Display Instructions + Training Block (expected time: 4 minutes)
-%{
+%
 fprintf('==========\nDisplay Instructions and Training Block\n==========\n')
 not_understand_task = true;
 
@@ -54,7 +54,7 @@ display_instructions(windowPtr,3.5);
 
 %% 3) PEST Convergence Procedure
 % PEST is done on the left hand first
-%{
+%
 fprintf('==========\nPEST Convergence Procedure on LEFT Hand\n==========\n')
 detection_threshold = 1;
 

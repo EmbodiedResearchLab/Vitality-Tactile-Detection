@@ -1,6 +1,7 @@
 function trig = nidaqTriggerInterface(status, varargin)
 % Creates a digital pulse to act as a trigger when collecting data.  
-% 
+% trig = nidaqTriggerInterface(status, cue, intensity, response)
+
 % Status turns the the trigger 'on' or 'off'.
 % Cue takes whether the participant was cued left or right.
 % Intensity takes the volume from ChannelBeeper.
