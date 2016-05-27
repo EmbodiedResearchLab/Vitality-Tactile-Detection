@@ -1,4 +1,4 @@
-function [output_array,error_screen,subject_quit] = Channel_Training_Block_1(windowPtr)
+function [output_array,error_screen,subject_quit] = Channel_Training(windowPtr,train)
 %{
 %For timings add .5 s before each of the delay_times as well as .5 s after,
 so there is a total of 1s more of the red cross. Also add 1 more second for
@@ -13,6 +13,10 @@ global solid_black_screen
 global green_cross_screen
 global left_arrow_screen
 global right_arrow_screen
+
+if train == 1
+    trialtime = trialtime + .5;
+end
 
 subject_quit = false;
 
@@ -35,7 +39,6 @@ stimulus_initial_values = [repmat(intensity(1),1,num_trials),repmat(intensity(2)
 hand_values = {'Left', 'Right'};
 %array with delay times (in seconds)
 
-trialtime = trialtime + .5;
 t = trialtime - fixation_time;
 
 %variables to keep track of output
@@ -73,37 +76,26 @@ for i = 1:num_intensities*num_trials
 
     which_hand = hand_values(randi(2));
 
-    % left hand
-    if strcmp(which_hand,'Left')
+    % Left Hand
+    if strcmp(which_hand, 'Left')
         Screen('DrawTexture',windowPtr,left_arrow_screen);
-        % Flip front and back display surfaces in sync with vertical retrace and return
-        % completion timestamps.
         Screen(windowPtr,'Flip');
-
-        % ADDED .5s
         WaitSecs(delay_time);
         
         %Deliver Stimulus
         time = GetSecs() - initial_time;
-        % function ChannelBeeper(frequency, fVolume, durationSec, channelDirection);
         ChannelBeeper(100,stimulus,.01,'Left');
     % right hand
-    elseif strcmp(which_hand,'Right')
+    elseif strcmp(which_hand, 'Right')
         Screen('DrawTexture',windowPtr,right_arrow_screen);
-         %Flip front and back display surfaces in sync with vertical retrace and return
-        %completion timestamps.
         Screen(windowPtr,'Flip');
-
-        % ADDED .5s
         WaitSecs(delay_time);
         
         %Deliver Stimulus
         time = GetSecs() - initial_time;
-        % function ChannelBeeper(frequency, fVolume, durationSec, channelDirection);
         ChannelBeeper(100,stimulus,.01,'Right');
     end
-    % Ensure that the fixation screen is present for intended amount of
-    % time.
+    % Ensure that the fixation screen is present for 'fixation_time' secs
     WaitSecs(fixation_time - delay_time - .01)
     
     %Draw green crosshair
@@ -128,7 +120,7 @@ for i = 1:num_intensities*num_trials
     %46 is equals
     if keyCode(46) == 1
         subject_quit = true;
-        fprintf('The subject indicated they wanted to quit at Training Block 1.');
+        fprintf('The subject indicated they wanted to quit at Training Block %1.0f.\n');
         %When flushed, as part of its exit sequence, Screen closes all its
         %windows, restores the screen's normal color table, and shows the cursor. Or you
         %can get just those effects, without flushing, by calling Screen('CloseAll')
@@ -149,7 +141,7 @@ for i = 1:num_intensities*num_trials
 end
 
 if error_screen
-    fprintf('Training 1 was incorrectly done.  Check connections, Power Supply, and Volume Settings.\n');
+    fprintf('Training %1.0f was incorrectly done.  Check connections, Power Supply, and Volume Settings.\n',train);
 end
 
 displayResponses(output_array,'All')

@@ -1,50 +1,53 @@
-function [output_array,error_screen,subject_quit] = Channel_Training_Block_2(windowPtr)
+function [output_array,error_screen,subject_quit] = Channel_Training(windowPtr, train)
 %{
 %For timings add .5 s before each of the delay_times as well as .5 s after,
 so there is a total of 1s more of the red cross. Also add 1 more second for
 response - so each trial is 2 seconds longer.
 
+This is for 1 hand, so signal will be sent exclusively to the left hand.
+
 %}
+
 global initial_time
 global trialtime
 global fixation_time
-global delay_times
+global solid_black_screen
 global green_cross_screen
-global left_arrow_screen
-global right_arrow_screen
+global white_cross_screen
+global delay_times
+
+if train == 1
+    trialtime = trialtime + .5;
+end
 
 subject_quit = false;
+
+%Initialize crosshair images and screens
 
 Screen('DrawTexture',windowPtr,solid_black_screen);
 Screen(windowPtr,'Flip');
 
 %% 3) Initialize necessary variables - NUM_TRIALS IS HERE!!
 
-%Desired number of trials per intensity
-num_trials = 5;
-
 %Initialize variables to store stimulus values
-%% I believe that this would be different when we 
-num_intensities = 2;
 % 0 is a blank stimulus
-intensity = [0 1];
+intensity = [0 1]; %whatever 350 um is
 
 %array with num_trials of each stimulus (for a total of 3*num_trials trials)
-stimulus_initial_values = [repmat(intensity(1),1,num_trials),repmat(intensity(2),1,num_trials)];
-hand_values = {'Left', 'Right'};
-
-%array with delay times (in seconds)
-t = trialtime - fixation_time;
+stimulus_initial_values = [repmat(intensity(1),1,2),repmat(intensity(2),1,8)];
 
 %variables to keep track of output
 count =  0;
 output_array = [];
-error_count = 0;
+Error_Count = 0;
 error_screen = false;
+t = trialtime-fixation_time;
 
 %% 4) Actual presentation of stimuli and input of participant response
-for i = 1:num_intensities*num_trials
+while ~isempty(stimulus_initial_values)  
     t0 = tic;
+    RunTime = GetSecs() - initial_time;
+
     % 1) choose random stimulus intensity
     % 2) choose random delay time (from 500 ms to 1500 ms)
     % 3) choose which hand
@@ -60,7 +63,6 @@ for i = 1:num_intensities*num_trials
     %Choose random stimulus, and then erase it from initial array
     rand_position = randi([1 size(stimulus_initial_values,2)]);
     stimulus = stimulus_initial_values(rand_position);
-    %assigns a blank value to the rand_position
     stimulus_initial_values(rand_position) = [];
     
     %Choose random delay time
@@ -68,53 +70,36 @@ for i = 1:num_intensities*num_trials
     rand_position_delay = randi([1 size(delay_times,2)]);
     delay_time = delay_times(rand_position_delay);
 
-    which_hand = hand_values(randi(2));
-
-    % left hand
-    if strcmp(which_hand, 'Left')
-        Screen('DrawTexture',windowPtr,left_arrow_screen);
-        Screen(windowPtr,'Flip');
-        WaitSecs(delay_time);
-        
-        %Deliver Stimulus
-        time = GetSecs() - initial_time;
-        ChannelBeeper(100,stimulus,.01,'Left');
-    % right hand
-    elseif strcmp(which_hand, 'Right')
-        Screen('DrawTexture',windowPtr,right_arrow_screen);
-        Screen(windowPtr,'Flip');
-        WaitSecs(delay_time);
-        
-        %Deliver Stimulus
-        time = GetSecs() - initial_time;
-        ChannelBeeper(100,stimulus,.01,'Right');
-    end
-    WaitSecs(fixation_time - delay_time - .01)
-    
-    %Draw green crosshair
-    Screen('DrawTexture',windowPtr,green_cross_screen);
+    %% Delivering Stimuli
+    Screen('DrawTexture', windowPtr, white_cross_screen);
     Screen(windowPtr,'Flip');
     
-    % Records Participant's Response
-    [rt, keyCode, ~] = KbWait(-3, 2, GetSecs()+t);
+    % Deliver Stimulus
+    WaitSecs(delay_time); % Wait randomized delay_time
+    time_stim = GetSecs();
+    ChannelBeeper(100,stimulus,.01,'Left');
+    WaitSecs(fixation_time-delay_time-.01); % White_cross_screen displayed for length of fixation_time
     
-    % with the above line of code, keypress is standardized to 2 seconds
-    WaitSecs(trialtime - (rt-time));
+    %Draw green crosshair
+    Screen('DrawTexture', windowPtr, green_cross_screen);
+    Screen(windowPtr,'Flip');
+    
+    % Waits for a keyPress for up to seconds.
+    [rt, keyCode, ~] = KbWait(-3, 2, GetSecs()+t);
+    WaitSecs(trialtime - (rt-time_stim));
+    
+    rt = rt - t0;
     t1 = toc(t0);
     
-    %% Output data appropriately
-
-    if or((stimulus == intensity_1 && keyCode(30) == 1), (stimulus == intensity_2 && keyCode(30) == 0))
-        error_count = error_count + 1;
+    %% Evaluating Response
+    %keyCode(30) is up arrow)
+    if or((stimulus == intensity(1) && keyCode(30) == 1), (stimulus == intensity(2) && keyCode(30) == 0))
+        Error_Count = Error_Count + 1;
     end
-    
-    count = count + 1;
-    data = [count, time, delay_time, {which_hand}, stimulus, keyCode(30), t1, error_count];
-    
-    %46 is equals
-    if keyCode(46) == 1
+        %46 is equals
+    if (keyCode(46) == 1)
         subject_quit = true;
-        fprintf('The subject indicated they wanted to quit at Training Block 1.');
+        fprintf('The subject indicated they wanted to quit at Training Block %1.0f.', train);
         %When flushed, as part of its exit sequence, Screen closes all its
         %windows, restores the screen's normal color table, and shows the cursor. Or you
         %can get just those effects, without flushing, by calling Screen('CloseAll')
@@ -123,23 +108,23 @@ for i = 1:num_intensities*num_trials
         break;
     end
     
+    %Output data appropriately
+    count = count + 1;
+    data = [count, RunTime, delay_time, stimulus, keyCode(30), t1, Error_Count];
     
-    
-    if error_count >= 3
+    if Error_Count >= 3
         error_screen = true;
     end
-    
+     
     output_array = cat(1,output_array,data);
-   
-    %Output data
-    displayResponses(output_array, 'Error')
-    
+%    displayResponses(output_array)
+%    fprintf('Error: %1.0f.\n', Error_Count)
+    displayResponses(output_array,'Error')
 end
 
 if (error_screen)
-    fprintf('Training 1 was incorrectly done\n');
+    fprintf('Training %1.0f was incorrectly done.  Check connections, Power Supply, and Volume Settings.', train);
 end
+displayResponses(output_array,'All')
 
-
-displayRespsonses(output_array, 'All')
 end
