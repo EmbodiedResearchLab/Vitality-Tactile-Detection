@@ -42,6 +42,8 @@ t = trialtime-fixation_time;
 %% 4) Actual presentation of stimuli and input of participant response
 while ~isempty(stimulus_initial_values)  
     t0 = tic;
+    RunTime = GetSecs() - initial_time;
+
     % 1) choose random stimulus intensity
     % 2) choose random delay time (from 500 ms to 1500 ms)
     % 3) choose which hand
@@ -70,7 +72,8 @@ while ~isempty(stimulus_initial_values)
     
     % Deliver Stimulus
     WaitSecs(delay_time); % Wait randomized delay_time
-    time = GetSecs() - initial_time;
+    %time = GetSecs() - initial_time;
+    time_stim = GetSecs();
     ChannelBeeper(100,stimulus,.01,'Left');
     WaitSecs(fixation_time-delay_time-.01); % White_cross_screen displayed for lenght of fixation_time
     
@@ -80,7 +83,7 @@ while ~isempty(stimulus_initial_values)
     
     % Waits for a keyPress for up to seconds.
     [rt, keyCode, ~] = KbWait(-3, 2, GetSecs()+t);
-    WaitSecs(trialtime - (rt-time));
+    WaitSecs(trialtime - (rt-time_stim));
     
     t1 = toc(t0);
     
@@ -103,16 +106,16 @@ while ~isempty(stimulus_initial_values)
     
     %Output data appropriately
     count = count + 1;
-    data = [count, time, delay_time, stimulus, keyCode(30), t1];
+    data = [count, RunTime, delay_time, stimulus, keyCode(30), t1];
     
     if Error_Count >= 3
         error_screen = true;
     end
      
     output_array = cat(1,output_array,data);
-    displayResponses(output_array)
-    fprintf('Error: %1.0f.\n', Error_Count)
-
+    %displayResponses(output_array)
+    %fprintf('Error: %1.0f.\n', Error_Count)
+    displayResponses(output_array,'Error')
 end
 
 if (error_screen)

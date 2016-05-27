@@ -9,6 +9,7 @@ global initial_time
 global trialtime
 global fixation_time
 global delay_times
+global solid_black_screen
 global green_cross_screen
 global left_arrow_screen
 global right_arrow_screen
@@ -117,12 +118,12 @@ for i = 1:num_intensities*num_trials
     t1 = toc(t0);
     
     %% Output data appropriately
-    count = count + 1;
-    data = [count, time, delay_time, which_hand, stimulus, keyCode(30), t1];
-    
     if or((stimulus == intensity(1) && keyCode(30) == 1), (stimulus == intensity(2) && keyCode(30) == 0))
         error_count = error_count + 1;
     end
+    
+    count = count + 1;
+    data = [count, time, delay_time, {which_hand}, stimulus, keyCode(30), t1, error_count];
     
     %46 is equals
     if keyCode(46) == 1
@@ -143,7 +144,7 @@ for i = 1:num_intensities*num_trials
     output_array = cat(1,output_array,data);
     
     %Output data
-    displayResponses(output_array, 'Error', error_count) % Need to troubleshoot 'Error' modifier
+    displayResponses(output_array, 'Error') 
 
 end
 

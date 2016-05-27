@@ -32,6 +32,8 @@ elseif nargin == 2
         Intensity = output_array(:, 5);
         Response = output_array(:, 6);
         Trialtime = output_array(:, 7);
+        table(Trial, RunTime, Delay, Hand, Intensity, Response, Trialtime)
+        
     elseif strcmp(varargin{1}, 'Threes')
         Trial = output_array(end-2:end, 1);
         RunTime = output_array(end-2:end, 2);
@@ -40,22 +42,30 @@ elseif nargin == 2
         Intensity = output_array(end-2:end, 5);
         Response = output_array(end-2:end, 6);
         Trialtime = output_array(end-2:end, 7);
+        table(Trial, RunTime, Delay, Hand, Intensity, Response, Trialtime)
+    elseif strcmp(varargin{1}, 'Error')
+        if size(output_array,1) < 3
+            % Outputs trial data
+            Trial = output_array(end, 1);
+            RunTime = output_array(end, 2);
+            Delay = output_array(end, 3);
+            Hand = output_array(end, 4);
+            Intensity = output_array(end, 5);
+            Response = output_array(end, 6);
+            Trialtime = output_array(end, 7);
+            ErrorCount = output_array(end, 8);
+        else
+            Trial = output_array(end-2:end,1);
+            RunTime = output_array(end-2:end,2);
+            Delay = output_array(end-2:end,3);
+            Hand = output_array(end-2:end,4);
+            Intensity = output_array(end-2:end,5);
+            Response = output_array(end-2:end,6);
+            Trialtime = output_array(end-2:end,7);
+            ErrorCount = output_array(end-2:end,8);
+        end
+        table(Trial, RunTime, Delay, Hand, Intensity, Response, Trialtime, ErrorCount)
     end
     
-    table(Trial, RunTime, Delay, Hand, Intensity, Response, Trialtime)
-    
-elseif strcmp(varargin{1}, 'Error')
-    if size(output_array) < 3
-        % Outputs trial data
-        Trial = output_array(end, 1);
-        RunTime = output_array(end, 2);
-        Delay = output_array(end, 3);
-        Hand = output_array(end, 4);
-        Intensity = output_array(end, 5);
-        Response = output_array(end, 6);
-        Trialtime = output_array(end, 7);
-        ErrorCount = varargin{2};
-    end
-    table(Trial, Runtime, Delay, Hand, Intensity, Response, Trialtime, ErrorCount)
 end
 end

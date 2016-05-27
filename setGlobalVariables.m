@@ -15,6 +15,7 @@ function [windowPtr, rect] = setGlobalVariables()
     global delay_times
     global yes
     global no
+    global esc
     
     % Open first screen, solid black
     screens = 1;
@@ -41,9 +42,9 @@ function [windowPtr, rect] = setGlobalVariables()
     % Initializes PsychSounds as there is some issue with calling
     % ChannelBeeper on the very first trial.
     ChannelBeeper(440,0,.1); % Avoids a delay later on
-    nidaqTriggerInterface('on')
+    %nidaqTriggerInterface('on')
     WaitSecs(2);
-    nidaqTriggerInterface('off')
+    %nidaqTriggerInterface('off')
     
     % Get initial time for the experiment
 	initial_time = GetSecs();
@@ -54,13 +55,7 @@ function [windowPtr, rect] = setGlobalVariables()
     delay_times = 1.0:0.1:1.4;
     
     % Determine responses
-    fprintf('Press the "yes" key.\n')
-    %[~, keyCode, ~] = KbWait(-3, 2, GetSecs()+600);
-    %yes = find(keyCode);
-    
-    fprintf('Press the "no" key.\n')
-    %[~, keyCode, ~] = KbWait(-3, 2, GetSecs()+600);
-    %no = find(keyCode);
+    %[yes, no, esc] = checkKeyResponses();
     yes = 49;
     no = 50;
     

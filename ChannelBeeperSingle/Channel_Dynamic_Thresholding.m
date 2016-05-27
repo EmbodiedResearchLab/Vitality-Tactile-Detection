@@ -96,6 +96,7 @@ for i = 1:total_trials
     % if the trial is a null trial, I just need to wait 3 seconds
     if trial_validity == is_real
         t0 = tic;
+        RunTime = GetSecs()-initial_time;
         % 2) choose the random delay time (from 1000 to 1400 ms in 100ms increments)
         rand_position_delay = randi([1 size(delay_times,2)]);
         delay_time = delay_times(rand_position_delay);
@@ -123,10 +124,11 @@ for i = 1:total_trials
         
         % 6) deliver 10ms stimulus and wait duration of fixation time
         % before changing screens
-        time_stim = GetSecs() - initial_time;
-        %nidaqTriggerInterface('on')
+        time_stim = GetSecs(); %- initial_time;
+        nidaqTriggerInterface('on')
         ChannelBeeperTrigger(100,stimulus,.01, 'Left');
-        %nidaqTriggerInterface('off')
+        nidaqTriggerInterface('off')
+        %ChannelBeeper(100,stimulus,.01,'Left');
         
         % 7) Wait until fixation_time has elapsed.
         WaitSecs(fixation_time - delay_time - .01);
@@ -208,7 +210,7 @@ for i = 1:total_trials
     end
     
     %Output data appropriately
-    data = [i, reaction_time, delay_time, stimulus, keyCode(30), t1];
+    data = [i, RunTime, delay_time, stimulus, keyCode(30), t1];
     
     output_array = cat(1,output_array,data);
     %Output data

@@ -103,13 +103,15 @@ for i = 1:num_intensities*num_trials
     t1 = toc(t0);
     
     %% Output data appropriately
-    count = count + 1;
-    data = [count, time, delay_time, which_hand, stimulus, keyCode(30), t1];
 
     if or((stimulus == intensity_1 && keyCode(30) == 1), (stimulus == intensity_2 && keyCode(30) == 0))
         error_count = error_count + 1;
     end
-        %46 is equals
+    
+    count = count + 1;
+    data = [count, time, delay_time, {which_hand}, stimulus, keyCode(30), t1, error_count];
+    
+    %46 is equals
     if keyCode(46) == 1
         subject_quit = true;
         fprintf('The subject indicated they wanted to quit at Training Block 1.');
@@ -123,14 +125,14 @@ for i = 1:num_intensities*num_trials
     
     
     
-    if (error_count >= 3)
+    if error_count >= 3
         error_screen = true;
     end
     
     output_array = cat(1,output_array,data);
+   
     %Output data
-    displayResponses(output_array, 'Error', error_count)    
-    
+    displayResponses(output_array, 'Error')
     
 end
 
