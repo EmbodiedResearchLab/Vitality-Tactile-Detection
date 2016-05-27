@@ -24,9 +24,6 @@ global white_cross_screen
 global red_cross_screen
 global green_cross_screen
 global solid_black_screen
-global yes
-global no
-global esc
 subject_quit = false;
 
 Screen('DrawTexture',windowPtr,solid_black_screen);
@@ -163,7 +160,7 @@ for i = 1:total_trials
             % detected, then reduce threshold
             
             % If participant responds "yes" 
-            if key == yes 
+            if (keyCode(30)) 
                 if (count_threshold > 1)
                     % so many possibilites of null pointer issues in the line
                     % below
@@ -193,6 +190,7 @@ for i = 1:total_trials
         Screen('DrawTexture',windowPtr,red_cross_screen);
         Screen(windowPtr,'Flip');
         WaitSecs(3);
+        keyCode(46) = 0;
     end
     
     %% Output Array and breaks
@@ -202,8 +200,8 @@ for i = 1:total_trials
         display_instructions(windowPtr,6);
     end
     
-    % Check for quitting (= is to quit)
-    if key == esc
+    %Check for quitting (= is to quit)
+    if (keyCode(46) == 1)
         subject_quit = true;
         fprintf('The subject indicated they wanted to quit at Dynamic Thresholding.');
         Screen('CloseAll')
@@ -211,9 +209,9 @@ for i = 1:total_trials
     end
     
     %Output data appropriately
-    data = [i, RunTime, delay_time, stimulus, key, t1];
-    output_array = cat(1,output_array,data);
+    data = [i, RunTime, delay_time, stimulus, keyCode(30), t1];
     
+    output_array = cat(1,output_array,data);
     %Output data
     displayResponses(output_array)
     

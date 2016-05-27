@@ -15,7 +15,6 @@ global left_arrow_screen
 global right_arrow_screen
 global yes
 global no
-global esc
 
 if train == 1
     trialtime = trialtime + .5;

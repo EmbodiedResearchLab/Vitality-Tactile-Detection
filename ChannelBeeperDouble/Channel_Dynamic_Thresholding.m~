@@ -244,7 +244,7 @@ for i = 1:total_trials
                 
                 % And if it is detected, and previous threshold stimulus was
                 % detected, then reduce threshold
-                if key == yes
+                if (keyCode(30))
                     if (count_threshold > 1)
                         % so many possibilites of null pointer issues in the line
                         % below
@@ -277,7 +277,7 @@ for i = 1:total_trials
                 
                 % And if it is detected, and previous threshold stimulus was
                 % detected, then reduce threshold
-                if key == yes
+                if (keyCode(30))
                     if (count_threshold > 1)
                         % so many possibilites of null pointer issues in the line
                         % below

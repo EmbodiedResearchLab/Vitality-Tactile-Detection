@@ -2,7 +2,7 @@
 % Runs subscript after deciding two stimulators will be used.
 
 %% 2) Display Instructions + Training Block (expected time: 4 minutes)
-
+%{
 fprintf('==========\nDisplay Instructions and Training Block\n==========\n')
 not_understand_task = true;
 
@@ -15,7 +15,7 @@ display_instructions(windowPtr,2);
 while not_understand_task
         
     % does the first block of training, which tests d
-    [output_array_training_1, error_1, subject_quit_training_1] = Channel_Training_Block_1(windowPtr);
+    [output_array_training_1, error_1, subject_quit_training_1] = Channel_Training(windowPtr,1);
     
     if error_1
         fprintf('Repeat Training 1');
@@ -36,7 +36,7 @@ not_understand_task = true;
 while not_understand_task
     
     % does the second block of training
-    [output_array_training_2, error_2, subject_quit_training_1] = Channel_Training_Block_2(windowPtr);
+    [output_array_training_2, error_2, subject_quit_training_1] = Channel_Training_Block_2(windowPtr,2);
     
     if error_1
         fprintf('Repeat Training 2');
@@ -53,6 +53,7 @@ end
 display_instructions(windowPtr,3.5);
 
 %% 3) PEST Convergence Procedure
+%{
 % Pest Directed to one hand and then the other hand.
 fprintf('==========\nPEST Convergence Procedure on LEFT Hand\n==========\n')
 detection_threshold_left = 1;
@@ -79,9 +80,11 @@ while detection_threshold_right >= 1
         return        
     end
 end
-
+%}
 %% 4) Tactile Detection Protocol
-[output_array, subject_quit, new_left_threshold, new_right_threshold, left, right] = Channel_Dynamic_Threshold(windowPtr, left_threshold, right_threshold);
+left_threshold = .38;
+right_threshold = .38;
+[output_array, subject_quit, new_left_threshold, new_right_threshold, left, right] = Channel_Dynamic_Thresholding(windowPtr, left_threshold, right_threshold);
 
 %% 5) Saving Protocol
 
