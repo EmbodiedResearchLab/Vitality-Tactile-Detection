@@ -121,4 +121,13 @@ end
 %}
 %% Close Screens and Prep for next Participant
 sca;
+
+% Remove folders from path
+if stimulators == 1
+    rmpath('ChannelBeeperSingle')
+else
+    rmpath('ChannelBeeperDouble')
+end
+
 fprintf('Ready for next participant!\n')
+
