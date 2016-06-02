@@ -28,6 +28,9 @@ global green_cross_screen
 global left_arrow_screen
 global right_arrow_screen
 global square_screen
+global yes
+global no
+global esc
 
 subject_quit = false;
 
@@ -167,7 +170,7 @@ for i = 1:total_trials
             left_stim_values(stim_values_random) = [];
             
             % 4) Display the left or right arrow picture to direct which hand to modulate attention to
-            %nidaqTriggerInterface('on','Left'); % Turns on the square wave for digital trigger
+            nidaqTriggerInterface('on','Left'); % Turns on the square wave for digital trigger
             Screen('DrawTexture',windowPtr,left_arrow_screen);
             Screen(windowPtr,'Flip');
             
@@ -195,7 +198,7 @@ for i = 1:total_trials
             %}
             
             % 4) Display the left or right arrow picture to direct which hand to modulate attention to
-            %nidaqTriggerInterface('on','Right'); % Turns on the square wave for digital trigger
+            nidaqTriggerInterface('on','Right'); % Turns on the square wave for digital trigger
             Screen('DrawTexture',windowPtr,right_arrow_screen);
             Screen(windowPtr,'Flip');
         else
@@ -203,15 +206,15 @@ for i = 1:total_trials
             fprintf('which_hand_values: %d',which_hand_random)
             fprintf('which_hand: %s', which_hand)
         end
-        %nidaqTriggerInterface('off'); % Turns off the square wave for digital trigger
+        nidaqTriggerInterface('off'); % Turns off the square wave for digital trigger
         
         % 5) Wait the chosen delay time
         WaitSecs(delay_time);
         
         % 6) Deliver 10ms stimulus
         time_stim = GetSecs();
-        %ChannelBeeperTrigger(100,stimulus,.01, which_hand);
-        ChannelBeeper(100,stimulus,.01,which_hand);
+        ChannelBeeperTrigger(100,stimulus,.01, which_hand);
+        %ChannelBeeper(100,stimulus,.01,which_hand);
         
         % 7) Wait 2-delayTime-.01 (so that there has been a total of 2 s since cue)
         WaitSecs(fixation_time - delay_time - .01);
@@ -228,8 +231,8 @@ for i = 1:total_trials
         if isempty(key)
             key = 0;
         end
-        %nidaqTriggerInterface('on',which_hand,intensity,key);
-        %nidaqTriggerInterface('off');
+        nidaqTriggerInterface('on',which_hand,stimulus,key);
+        nidaqTriggerInterface('off');
         WaitSecs(trialtime - (rt-time));
         
         reaction_time = rt-time_stim;

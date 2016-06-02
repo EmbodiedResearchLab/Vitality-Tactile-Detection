@@ -72,7 +72,7 @@ sec = t_elapsed_subject - min*60;
 fprintf('RunTime: %2.0f minutes and %2.3f seconds.\n', min, sec);
 %% Saving Protocols
 
-%
+%{
 if stimulators == 1
     if medTraining == 0
         saveDir = strcat(premed,'/Participant_',subjectID);
@@ -131,3 +131,4 @@ end
 
 fprintf('Ready for next participant!\n')
 
+ 

@@ -18,7 +18,11 @@ function [windowPtr, rect] = setGlobalVariables()
     global esc
     
     % Open first screen, solid black
-    screens = 1;
+    if ismac %
+        screens = 1; % 0 - Same screen; 1 Monitor Screen
+    elseif ispc
+        screens = 2; % 0 - Shared screens; 1 Computer Screen; 2 Monitor Screen
+    end
     Screen('Preference','SyncTestSettings', .005, 50, .5, 5);
     [windowPtr, rect] = Screen('OpenWindow', screens, [0 0 0]);
     
@@ -56,7 +60,8 @@ function [windowPtr, rect] = setGlobalVariables()
     
     % Determine responses
     %[yes, no, esc] = checkKeyResponses();
-    yes = 49;
-    no = 50;
+    yes = 97;
+    no = 98;
+    esc = 109;
     
 end

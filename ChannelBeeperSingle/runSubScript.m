@@ -2,7 +2,7 @@
 % Script runs after you deciding one stimulator will be used.
 
 %% 2) Display Instructions + Training Block (expected time: 4 minutes)
-%
+%{
 fprintf('==========\nDisplay Instructions and Training Block\n==========\n')
 not_understand_task = true;
 
@@ -77,6 +77,10 @@ detection_threshold = .38;
 [output_array, subject_quit_tactile_detection, new_threshold, tactile_task] = Channel_Dynamic_Thresholding(windowPtr, detection_threshold);
 
 %% 5) Saving Protocol
+savVars = whos;
+compVars = {'subjectID','detection_threshold','new_threshold',...
+    'output_array_PEST','output_array','tactile_task'};
+varsToSave = saveData(savVars, compVars);
 
 if medTraining == 0
     saveDir = strcat(premed,'/Participant_',num2str(subjectID));
@@ -95,5 +99,15 @@ elseif medTraining == 3
     save(fullfile(saveDir),'subjectID','detection_threshold',...
         'new_threshold','output_array_PEST','output_array','tactile_task')
 end
+% Need to determine a way to remove all spaces from the cell array.  ALL
+% SPACES including lines, leading, and trailing spaces.
+for i = 1:length(varsToSave)
+    j = strtrim(char(varsToSave(i,:)));
+    
+    if ~exist(saveDir)
+        save(fullfile(saveDir),j)
+    else
+        save(fullfile(saveDir),j,'-append')
+    end
 
-
+end

@@ -40,7 +40,7 @@ WaitSecs(3);
 % out of these trials, .45 will go to each hand, and .1 will be specified as NOTHING (square)
 % when something is directed to a hand, 70% will be as expected (@ threshold), 20% will be null, and 10% will be double threshold
 % according to the math, there will be 800 total trials, leading to 252 alpha-modulated data points for each hand
-total_trials = 400;
+total_trials = 20; %400;
 
 square_trials = round(total_trials*.0);
 stim_trials = round(total_trials*1);
@@ -116,10 +116,10 @@ for i = 1:total_trials
         
         % 4) display the white crosshair to wait for incoming stimulus
         time = GetSecs();
-        nidaqTriggerInterface('on');
+        %nidaqTriggerInterface('on');
         Screen('DrawTexture',windowPtr,white_cross_screen);
         Screen(windowPtr,'Flip');
-        nidaqTriggerInterface('off');
+        %nidaqTriggerInterface('off');
 
         
         % 5) wait the chosen delay time
@@ -128,9 +128,9 @@ for i = 1:total_trials
         % 6) deliver 10ms stimulus and wait duration of fixation time
         % before changing screens
         time_stim = GetSecs(); %- initial_time;
-        nidaqTriggerInterface('on')
-        ChannelBeeperTrigger(100,stimulus,.01, 'Left');
-        nidaqTriggerInterface('off')
+        %nidaqTriggerInterface('on')
+        %ChannelBeeperTrigger(100,stimulus,.01, 'Left');
+        %nidaqTriggerInterface('off')
         %ChannelBeeper(100,stimulus,.01,'Left');
         
         % 7) Wait until fixation_time has elapsed.
@@ -147,8 +147,8 @@ for i = 1:total_trials
         if isempty(key);
             key = 0;
         end
-        nidaqTriggerInterface('on','white',stimulus,key);
-        nidaqTriggerInterface('off');
+        %nidaqTriggerInterface('on','white',stimulus,key);
+        %nidaqTriggerInterface('off');
         WaitSecs(trialtime - (rt-time)); % This is each trial is standardized to length of the trial
         
         reaction_time = rt-time_stim;
