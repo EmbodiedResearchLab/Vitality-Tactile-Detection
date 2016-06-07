@@ -77,29 +77,20 @@ detection_threshold = .38;
 [output_array, subject_quit_tactile_detection, new_threshold, tactile_task] = Channel_Dynamic_Thresholding(windowPtr, detection_threshold);
 
 %% 5) Saving Protocol
-
-savVars = whos; % Identifies all variables in the workspace
+savVars = whos;
 compVars = {'subjectID','detection_threshold','new_threshold',...
-    'output_array_PEST','output_array','tactile_task'}; % Identifies the variables of interest
-
-% Function that compares all variables in the workspace to the variables of
-% interest and places them into cell 'varsToSave'.
+    'output_array_PEST','output_array','tactile_task'};
 varsToSave = saveData(savVars, compVars);
 
-% Creates the path to save data based upon the kind of meditation training
-% determined in the EEG_Master_Script.
 if medTraining == 0
-    saveDir = fullfile(premed,strcat('Participant_',num2str(subjectID)));
+    saveDir = fullfile(premed,'Participant_',num2str(subjectID));
 elseif medTraining == 1
-    saveDir = fullfile(postmed,strcat('Participant_',num2str(subjectID)));
+    saveDir = fullfile(postmed,'Participant_',num2str(subjectID));
 elseif medTraining == 2
-    saveDir = fullfile(medit,strcat('Participant_',num2str(subjectID)));
+    saveDir = fullfile(medit,'Participant_',num2str(subjectID));
 elseif medTraining == 3
-    saveDir = fullfile(testing,strcat('Participant_',num2str(subjectID)));
+    saveDir = fullfile(testing,'Participant_',num2str(subjectID));
 end
-
-% Saves the variables in the appropriate location
-save(saveDir,varsToSave{:})
 %{
 if medTraining == 0
     saveDir = strcat(premed,'/Participant_',num2str(subjectID));
@@ -119,5 +110,15 @@ elseif medTraining == 3
         'new_threshold','output_array_PEST','output_array','tactile_task')
 end
 %}
+% Need to determine a way to remove all spaces from the cell array.  ALL
+% SPACES including lines, leading, and trailing spaces.
+for i = 1:length(varsToSave)
+    %j = strtrim(char(varsToSave(i,:)));
+    j = vars
+    if ~exist(saveDir,'dir')
+        save(fullfile(saveDir),j)
+    else
+        save(fullfile(saveDir),j,'-append')
+    end
 
-
+end

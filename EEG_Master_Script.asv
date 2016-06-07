@@ -42,9 +42,9 @@ else
     addpath(experiment);
 end
 
-% makes directories into strings for saving data later.  Save locations
-% should be stored some place more secure.  Tentatively, they have been 
-% placed in the same location as the experiment.  
+% makes directories into strings.  Save locations should be designated
+% here.  Tentatively, they have been placed in the same location as the
+% experiment.  
 data = fullfile(experiment,'Data');
 premed = fullfile(data,'Pre-Med Training');
 postmed = fullfile(data,'Post-Med Training');

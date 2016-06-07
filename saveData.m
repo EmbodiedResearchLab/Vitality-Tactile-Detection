@@ -1,4 +1,4 @@
-function varsToSave = saveData(savVars, compVars)
+function [varsToSave] = saveData(savVars, compVars)
 % saveData(saveDir, savVars, compVars) returns a string of variables
 % available to save at the end of the experiment.  Useful for when
 % participants quit experiments early and you would like to retain their
@@ -11,7 +11,7 @@ for i = 1:length(compVars)
         end
     end
 end
-varsToSave = char(varsToSave{:});
+%varsToSave = char(varsToSave{:});
 %save(fullfile(saveDir),Saving)
 
 end
