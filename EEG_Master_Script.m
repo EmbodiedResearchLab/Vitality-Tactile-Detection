@@ -36,16 +36,23 @@ end
 % Adds the appropriate experiment to path by the number of stimulators present
 if stimulators == 1
     experiment = fullfile(pwd,'ChannelBeeperSingle');
+    saveloc = experiment;
+    %saveloc = fullfile('path/to/secure/location','ChannelBeeperSingle'); 
+    % saveloc designates where data will be saved.  Change this to OSCAR, hardrive, or other secure location.
     addpath(experiment);
 else
     experiment = fullfile(pwd,'ChannelBeeperDouble');
+    saveloc = experiment;
+    %saveloc = fullfile('path/to/secure/location','ChannelBeeperDouble');
+    % saveloc designates where data will be saved.  Change this to OSCAR, hardrive, or other secure location.
     addpath(experiment);
 end
 
 % makes directories into strings for saving data later.  Save locations
 % should be stored some place more secure.  Tentatively, they have been 
 % placed in the same location as the experiment.  
-data = fullfile(experiment,'Data');
+
+data = fullfile(saveloc,'Data');
 premed = fullfile(data,'Pre-Med Training');
 postmed = fullfile(data,'Post-Med Training');
 medit = fullfile(data,'Meditators');
