@@ -25,7 +25,6 @@ global red_cross_screen
 global green_cross_screen
 global solid_black_screen
 global yes
-global no
 global esc
 subject_quit = false;
 
@@ -73,7 +72,7 @@ change = .01;
 
 %value to store the changing threshold
 threshold_changing = intensity(2);
-stim(stim_trials) = struct('trial',[],'time',[],'delay_time',[],'stimulus',[],'reaction',[],'response',[]);
+stim(stim_trials) = struct('trial',[],'time',[],'delay_time',[],'stimulus',[],'response',[],'runtime',[],'reaction',[]);
 %% 4) Actual presentation of stimuli and input of participant response
 for i = 1:total_trials
 %{    
@@ -119,7 +118,7 @@ for i = 1:total_trials
         %nidaqTriggerInterface('on');
         Screen('DrawTexture',windowPtr,white_cross_screen);
         Screen(windowPtr,'Flip');
-        %nidaqTriggerInterface('off');
+        nidaqTriggerInterface('off');
 
         
         % 5) wait the chosen delay time
@@ -128,9 +127,9 @@ for i = 1:total_trials
         % 6) deliver 10ms stimulus and wait duration of fixation time
         % before changing screens
         time_stim = GetSecs(); %- initial_time;
-        %nidaqTriggerInterface('on')
-        %ChannelBeeperTrigger(100,stimulus,.01, 'Left');
-        %nidaqTriggerInterface('off')
+        nidaqTriggerInterface('on')
+        ChannelBeeperTrigger(100,stimulus,.01, 'Left');
+        nidaqTriggerInterface('off')
         %ChannelBeeper(100,stimulus,.01,'Left');
         
         % 7) Wait until fixation_time has elapsed.
@@ -147,8 +146,8 @@ for i = 1:total_trials
         if isempty(key);
             key = 0;
         end
-        %nidaqTriggerInterface('on','white',stimulus,key);
-        %nidaqTriggerInterface('off');
+        nidaqTriggerInterface('on','white',stimulus,key);
+        nidaqTriggerInterface('off');
         WaitSecs(trialtime - (rt-time)); % This is each trial is standardized to length of the trial
         
         reaction_time = rt-time_stim;
@@ -211,18 +210,14 @@ for i = 1:total_trials
     end
     
     %Output data appropriately
-    data = [i, RunTime, delay_time, stimulus, key, t1];
+    data = [i, RunTime, delay_time, stimulus, key, t1, reaction_time];
     output_array = cat(1,output_array,data);
     
     %Output data
     displayResponses(output_array)
     
     %% Responses into Structs
-    stim(i).trial = i;
-    stim(i).delay_time = delay_time;
-    stim(i).stimulus = stimulus;
-    stim(i).reaction = reaction_time;
-    stim(i).response = key;
+    stim(i) = struct('trial',i,'time',RunTime,'delay_time',delay_time,'stimulus',stimulus,'response',key,'runtime',t1,'reaction',reaction_time);
     
 end
 

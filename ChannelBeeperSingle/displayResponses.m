@@ -10,6 +10,7 @@ if nargin == 1
         Intensity = output_array(end, 4);
         Response = output_array(end, 5);
         Trialtime = output_array(end, 6);
+        ReactionTime = output_array(end,7);
     else
         Trial = output_array(end-2:end, 1);
         RunTime = output_array(end-2:end, 2);
@@ -17,8 +18,9 @@ if nargin == 1
         Intensity = output_array(end-2:end, 4);
         Response = output_array(end-2:end, 5);
         Trialtime = output_array(end-2:end, 6);
+        ReactionTime = output_array(end-2:end,7);
     end
-    table(Trial, RunTime, Delay, Intensity, Response, Trialtime)
+    table(Trial, RunTime, Delay, Intensity, Response, ReactionTime, Trialtime)
 elseif strcmp(varargin{1}, 'All')
     % Outputs all of the data in output_array if noted.
     Trial = output_array(:,1);
@@ -27,9 +29,10 @@ elseif strcmp(varargin{1}, 'All')
     Intensity = output_array(:, 4);
     Response = output_array(:, 5);
     Trialtime = output_array(:, 6);
-    if size(output_array,2) == 7
-        Error_Count = output_array(:,7);
-        table(Trial, RunTime, Delay, Intensity, Response, Trialtime, Error_Count)
+    ReactionTime = output_array(:, 7);
+    if size(output_array,2) == 8
+        Error_Count = output_array(:,8);
+        table(Trial, RunTime, Delay, Intensity, Response, Trialtime, ReactionTime, Error_Count)
         %return
     end
 elseif strcmp(varargin{1}, 'Error')
@@ -41,7 +44,8 @@ elseif strcmp(varargin{1}, 'Error')
         Intensity = output_array(end,4);
         Response = output_array(end,5);
         Trialtime = output_array(end,6);
-        ErrorCount = output_array(end,7);
+        ReactionTime = output_array(end,7);
+        ErrorCount = output_array(end,8);
     else
         Trial = output_array(end-2:end,1);
         RunTime = output_array(end-2:end,2);
@@ -49,9 +53,10 @@ elseif strcmp(varargin{1}, 'Error')
         Intensity = output_array(end-2:end,4);
         Response = output_array(end-2:end,5);
         Trialtime = output_array(end-2:end,6);
-        ErrorCount = output_array(end-2:end,7);
+        ReactionTime = output_array(end-2:end,7);
+        ErrorCount = output_array(end-2:end,8);
     end
-    table(Trial, RunTime, Delay, Intensity, Response, Trialtime, ErrorCount)
+    table(Trial, RunTime, Delay, Intensity, Response, Trialtime, ReactionTime, ErrorCount)
     %return
 end
 

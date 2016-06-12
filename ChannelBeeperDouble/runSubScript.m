@@ -31,25 +31,6 @@ while not_understand_task
 end
 display_instructions(windowPtr,3);
 
-% Training Block 2 | Is slightly quicker than training task 1
-not_understand_task = true;
-while not_understand_task
-    
-    % does the second block of training
-    [output_array_training_2, error_2, subject_quit_training_1] = Channel_Training_Block_2(windowPtr,2);
-    
-    if error_1
-        fprintf('Repeat Training 2');
-        display_instructions(windowPtr,4)
-    else
-        not_understand_task = false;
-    end
-    
-    if subject_quit_training_1
-        return
-    end
-end
-%}
 display_instructions(windowPtr,3.5);
 
 %% 3) PEST Convergence Procedure
@@ -81,6 +62,26 @@ while detection_threshold_right >= 1
     end
 end
 %}
+
+%% Training Block 2 | Is slightly quicker than training task 1
+not_understand_task = true;
+while not_understand_task
+    
+    % does the second block of training
+    [output_array_training_2, error_2, subject_quit_training_1] = Channel_Training_Block_2(windowPtr,2);
+    
+    if error_1
+        fprintf('Repeat Training 2');
+        display_instructions(windowPtr,4)
+    else
+        not_understand_task = false;
+    end
+    
+    if subject_quit_training_1
+        return
+    end
+end
+%}
 %% 4) Tactile Detection Protocol
 left_threshold = .38;
 right_threshold = .38;
@@ -97,10 +98,6 @@ compVars = {'subjectID','detection_threshold_left',...
     'output_array_PEST_right','new_left_threshold','new_right_threshold',...
     'output_array_PEST','output_array','left','right'}; 
 
-% Function that compares all variables in the workspace to the variables of
-% interest and places them into cell 'varsToSave'.
-varsToSave = saveData(savVars, compVars);
-
 % Creates the path to save data based upon the kind of meditation training
 % determined in the EEG_Master_Script.
 if medTraining == 0
@@ -113,28 +110,8 @@ elseif medTraining == 3
     saveDir = fullfile(testing,strcat('Participant_',num2str(subjectID)));
 end
 
-% Saves the variables in the appropriate location
-save(saveDir,varsToSave{:})
-%{
-if medTraining == 0
-    saveDir = strcat(premed,'/Participant_',num2str(subjectID));
-    save(fullfile(saveDir),'subjectID','left_threshold','right_threshold',...
-        'new_left_threshold','new_right_threshold','output_array_PEST',...
-        'output_array','left','right')
-elseif medTraining == 1
-    saveDir = strcat(postmed,'/Participant_',num2str(subjectID));
-    save(fullfile(saveDir),'subjectID','left_threshold','right_threshold',...
-        'new_left_threshold','new_right_threshold','output_array_PEST',...
-        'output_array','left','right')
-elseif medTraining == 2
-    saveDir = strcat(medit,'/Participant_',num2str(subjectID));
-    save(fullfile(saveDir),'subjectID','left_threshold','right_threshold',...
-        'new_left_threshold','new_right_threshold','output_array_PEST',...
-        'output_array','left','right')
-elseif medTraining == 3
-    saveDir = strcat(testing,'/Participant_',num2str(subjectID));
-    save(fullfile(saveDir),'subjectID','left_threshold','right_threshold',...
-        'new_left_threshold','new_right_threshold','output_array_PEST',...
-        'output_array','left','right')
-end
-%}
+% Function that compares all variables in the workspace to the variables of
+% interest and places them into cell 'varsToSave'.
+saveData(savVars, compVars, saveDir);
+
+

@@ -14,7 +14,6 @@ global green_cross_screen
 global left_arrow_screen
 global right_arrow_screen
 global yes
-global no
 global esc
 
 if train == 1
@@ -107,7 +106,10 @@ for i = 1:num_intensities*num_trials
     
     % Records Participant's Response
     [rt, keyCode, ~] = KbWait(-3, 2, GetSecs()+t);
-    
+        key = find(keyCode, 1);
+        if isempty(key)
+            key = 0;
+        end
     % with the above line of code, keypress is standardized to 2 seconds
     WaitSecs(trialtime - (rt-time));
     t1 = toc(t0);
@@ -118,12 +120,12 @@ for i = 1:num_intensities*num_trials
     end
     
     count = count + 1;
-    data = [count, time, delay_time, which_hand, stimulus, keyCode(30), t1, error_count];
+    data = [count, time, delay_time, which_hand, stimulus, keyCode(30), t1,reaction_time, error_count];
     
     %46 is equals
     if key == esc
         subject_quit = true;
-        fprintf('The subject indicated they wanted to quit at Training Block %1.0f.\n');
+        fprintf('The subject indicated they wanted to quit at Training Block %1.0f.\n',train);
         %When flushed, as part of its exit sequence, Screen closes all its
         %windows, restores the screen's normal color table, and shows the cursor. Or you
         %can get just those effects, without flushing, by calling Screen('CloseAll')

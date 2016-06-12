@@ -1,7 +1,7 @@
 %% runSubScript
 % Script runs after you deciding one stimulator will be used.
 
-%% 2) Display Instructions + Training Block (expected time: 4 minutes)
+%% 2) Display Instructions + Training Block 1 (expected time: 4 minutes)
 %{
 fprintf('==========\nDisplay Instructions and Training Block\n==========\n')
 not_understand_task = true;
@@ -31,25 +31,7 @@ while not_understand_task
 end
 display_instructions(windowPtr,3);
 
-% Training Block 2 | Is slightly quicker than training task 1
-not_understand_task = true;
-while not_understand_task
-    
-    % does the second block of training
-    [output_array_training_2, error_2, subject_quit_training_1] = Channel_Training(windowPtr,2);
-    
-    if error_1
-        fprintf('Repeat Training 2');
-        display_instructions(windowPtr,4)
-    else
-        not_understand_task = false;
-    end
-    
-    if subject_quit_training_1
-        return
-    end
-end
-%}
+
 display_instructions(windowPtr,3.5);
 
 %% 3) PEST Convergence Procedure
@@ -71,6 +53,26 @@ while detection_threshold >= 1
 end
 %}
 
+%% Training Block 2 | Is slightly quicker than training task 1
+not_understand_task = true;
+while not_understand_task
+    
+    % does the second block of training
+    [output_array_training_2, error_2, subject_quit_training_1] = Channel_Training(windowPtr,2);
+    
+    if error_1
+        fprintf('Repeat Training 2');
+        display_instructions(windowPtr,4)
+    else
+        not_understand_task = false;
+    end
+    
+    if subject_quit_training_1
+        return
+    end
+end
+%}
+
 %% 4) Tactile Detection Protocol
 detection_threshold = .38;
 % Call Dynamic Thresholding
@@ -81,10 +83,6 @@ detection_threshold = .38;
 savVars = whos; % Identifies all variables in the workspace
 compVars = {'subjectID','detection_threshold','new_threshold',...
     'output_array_PEST','output_array','tactile_task'}; % Identifies the variables of interest
-
-% Function that compares all variables in the workspace to the variables of
-% interest and places them into cell 'varsToSave'.
-varsToSave = saveData(savVars, compVars);
 
 % Creates the path to save data based upon the kind of meditation training
 % determined in the EEG_Master_Script.
@@ -98,26 +96,8 @@ elseif medTraining == 3
     saveDir = fullfile(testing,strcat('Participant_',num2str(subjectID)));
 end
 
-% Saves the variables in the appropriate location
-save(saveDir,varsToSave{:})
-%{
-if medTraining == 0
-    saveDir = strcat(premed,'/Participant_',num2str(subjectID));
-    save(fullfile(saveDir),'subjectID','detection_threshold',...
-        'new_threshold','output_array_PEST','output_array','tactile_task')
-elseif medTraining == 1
-    saveDir = strcat(postmed,'/Participant_',subjectID);
-    save(fullfile(saveDir),'subjectID','detection_threshold',...
-        'new_threshold','output_array_PEST','output_array','tactile_task')
-elseif medTraining == 2
-    saveDir = strcat(medit,'/Participant_',subjectID);
-    save(fullfile(saveDir),'subjectID','detection_threshold',...
-        'new_threshold','output_array_PEST','output_array','tactile_task')
-elseif medTraining == 3
-    saveDir = strcat(testing,'/Participant_',subjectID);
-    save(fullfile(saveDir),'subjectID','detection_threshold',...
-        'new_threshold','output_array_PEST','output_array','tactile_task')
-end
-%}
+% Function that compares all variables in the workspace to the variables of
+% interest and places them into cell 'varsToSave'.
+saveData(savVars, compVars, saveDir);
 
 

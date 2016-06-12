@@ -29,7 +29,6 @@ global left_arrow_screen
 global right_arrow_screen
 global square_screen
 global yes
-global no
 global esc
 
 subject_quit = false;
@@ -104,8 +103,8 @@ left_threshold_changing = left_intensity(2);
 right_threshold_changing = right_intensity(2);
 
 t = trialtime - fixation_time;
-left(trials_per_hand) = struct('trial', [], 'reaction_time', [], 'delay_time', [], 'stimulus', [], 'response', []);
-right(trials_per_hand) = struct('trial', [], 'reaction_time', [], 'delay_time', [], 'stimulus', [], 'response', []);
+left(trials_per_hand) = struct('trial', [], 'time',[], 'delay_time', [], 'stimulus', [], 'response', [], 'runtime', [], 'reaction',[]);
+right(trials_per_hand) = struct('trial', [], 'time',[], 'delay_time', [], 'stimulus', [], 'response', [], 'runtime', [], 'reaction',[]);
 if square_trials > 0
     square(square_trials) = struct('trial', [], 'stimulus', []);
 end
@@ -334,16 +333,16 @@ for i = 1:total_trials
         fprintf('There is an error in determining trial validity. The value of the trial validity in question is neither real or both');
     end
     %Output data appropriately
-    data = [i, RunTime, delay_time, which_hand, stimulus, key, t1];
+    data = [i, RunTime, delay_time, which_hand, stimulus, key, t1, reaction_time];
     output_array = cat(1,output_array,data);
     
     %Output data
     if strcmp(which_hand, 'Left')
-        left(i) = struct('trial', i, 'reaction_time', reaction_time, 'delay_time', data(3), 'stimulus', data(5), 'response',data(6));
+        left(i) = struct('trial', i, 'time', t1, 'delay_time', data(3), 'stimulus', data(5), 'response', data(6), 'runtime', t1, 'reaction', reaction_time);
     elseif strcmp(which_hand, 'Right')
-        right(i) = struct('trial', i, 'reaction_time', reaction_time, 'delay_time', data(3), 'stimulus', data(5), 'response',data(6));
+        right(i) =  struct('trial', i, 'time', t1, 'delay_time', data(3), 'stimulus', data(5), 'response', data(6), 'runtime', t1, 'reaction', reaction_time);
     else
-        square(i) = struct('trial', i, 'stimulus', which_hand);
+        square(i) = struct('trial', i, 'stimulus', data(5));
     end
     displayResponses(output_array)
 end

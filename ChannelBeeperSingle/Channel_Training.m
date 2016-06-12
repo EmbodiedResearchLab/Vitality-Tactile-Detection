@@ -15,6 +15,8 @@ global solid_black_screen
 global green_cross_screen
 global white_cross_screen
 global delay_times
+global yes
+global esc
 
 if train == 1
     trialtime = trialtime + .5;
@@ -71,6 +73,7 @@ while ~isempty(stimulus_initial_values)
     delay_time = delay_times(rand_position_delay);
 
     %% Delivering Stimuli
+    time = GetSecs();
     Screen('DrawTexture', windowPtr, white_cross_screen);
     Screen(windowPtr,'Flip');
     
@@ -86,18 +89,23 @@ while ~isempty(stimulus_initial_values)
     
     % Waits for a keyPress for up to seconds.
     [rt, keyCode, ~] = KbWait(-3, 2, GetSecs()+t);
-    WaitSecs(trialtime - (rt-time_stim));
+    key = find(keyCode, 1);
+    if isempty(key)
+        key = 0;
+    end
     
-    rt = rt - t0;
+    WaitSecs(trialtime - (rt-time));
+    
+    reaction_time = rt-time_stim;
     t1 = toc(t0);
     
     %% Evaluating Response
     %keyCode(30) is up arrow)
-    if or((stimulus == intensity(1) && keyCode(30) == 1), (stimulus == intensity(2) && keyCode(30) == 0))
+    if or((stimulus == intensity(1) && key == yes), (stimulus == intensity(2) && key ~= yes))
         Error_Count = Error_Count + 1;
     end
         %46 is equals
-    if (keyCode(46) == 1)
+    if key == esc
         subject_quit = true;
         fprintf('The subject indicated they wanted to quit at Training Block %1.0f.', train);
         %When flushed, as part of its exit sequence, Screen closes all its
@@ -110,7 +118,7 @@ while ~isempty(stimulus_initial_values)
     
     %Output data appropriately
     count = count + 1;
-    data = [count, RunTime, delay_time, stimulus, keyCode(30), t1, Error_Count];
+    data = [count, RunTime, delay_time, stimulus, keyCode(30), t1, reaction_time, Error_Count];
     
     if Error_Count >= 3
         error_screen = true;
