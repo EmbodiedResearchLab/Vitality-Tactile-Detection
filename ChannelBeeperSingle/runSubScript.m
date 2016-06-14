@@ -98,6 +98,8 @@ end
 
 % Function that compares all variables in the workspace to the variables of
 % interest and places them into cell 'varsToSave'.
-saveData(savVars, compVars, saveDir);
+varsToSave = saveData(savVars, compVars, saveDir);
+save(saveDir,varsToSave{:})
+
 
 
