@@ -115,7 +115,7 @@ for i = 1:total_trials
         
         % 4) display the white crosshair to wait for incoming stimulus
         time = GetSecs();
-        %nidaqTriggerInterface('on');
+        nidaqTriggerInterface('on');
         Screen('DrawTexture',windowPtr,white_cross_screen);
         Screen(windowPtr,'Flip');
         nidaqTriggerInterface('off');
@@ -127,9 +127,9 @@ for i = 1:total_trials
         % 6) deliver 10ms stimulus and wait duration of fixation time
         % before changing screens
         time_stim = GetSecs(); %- initial_time;
-        nidaqTriggerInterface('on')
+        nidaqTriggerInterface('on');
         ChannelBeeperTrigger(100,stimulus,.01, 'Left');
-        nidaqTriggerInterface('off')
+        nidaqTriggerInterface('off');
         %ChannelBeeper(100,stimulus,.01,'Left');
         
         % 7) Wait until fixation_time has elapsed.

@@ -32,7 +32,7 @@ end
 
 %% Triggering On
 
-nidaqTriggerInterface('on',channelDirection, fVolume)
+nidaqTriggerInterface('on',channelDirection, fVolume);
 %% Play Sound by Channel
 sound = MakeBeep(frequency, durationSec,[]) * fVolume; %creates a sound for 10 ms
 
@@ -53,7 +53,7 @@ else
 end
 
 %% Trigger Off
-nidaqTriggerInterface('off')
+nidaqTriggerInterface('off');
 
 
 end

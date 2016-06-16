@@ -62,14 +62,14 @@ end
 
 % Changes the trigger by its status
 if strcmpi(status, 'on')
-    outputSingleScan(s, dec2binvec(trig,8))
+    outputSingleScan(s, dec2binvec(trig,8));
     % Immediately preceding or following a stimulus, set a non-zero value on
     % the 8 bit range from bit 0 through 7.  This sets the length of the
     % produced vector to 8, which is required.  Here, the values immediately following dec2binvec can be any
     % integer from 1 to 255.
     
 elseif strcmpi(status,'off')
-    outputSingleScan(s, zeros(1,8))
+    outputSingleScan(s, zeros(1,8));
     % Reset port to zero.  This should be done within (1000/<EEG Sampling rate>
     % +2 milliseconds to ensure the port is ready for the next event (the code
     % should not be too long), and to ensure that codes are not missed (code
