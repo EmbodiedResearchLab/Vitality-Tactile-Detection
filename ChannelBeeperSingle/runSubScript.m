@@ -68,7 +68,7 @@ while not_understand_task
     end
     
     if subject_quit_training_1
-        return
+        break;
     end
 end
 %}
