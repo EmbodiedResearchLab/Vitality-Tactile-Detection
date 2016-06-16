@@ -27,6 +27,9 @@ global right_arrow_screen
 global white_cross_screen
 global green_cross_screen
 global solid_black_screen
+global yes
+global no
+global esc
 
 %% 1) Setting up Psych Toolbox Audio and Visual
 
@@ -57,8 +60,6 @@ detection_threshold = 1;
 %Variable to keep track of repeated trials (bc if repeated too many times
 %then want to restart)
 repeat_num = 0;
-repeat_111 = 0;
-repeat_000 = 0;
 
 t = trialtime - fixation_time;
 %Index to keep track of loop
@@ -70,6 +71,7 @@ output_array = [];
 
 %% 5) For loop of actual task
 while threshold_not_reached
+    t0 = tic;
     % 1) Present red crosshair
     % 2) Deliver stimulus with variable time delay
     % 3) Present green crosshair
@@ -98,6 +100,7 @@ while threshold_not_reached
     
     %Max stimulus
     time_1 = GetSecs() - initial_time;
+    time_stim_max = GetSecs();
     ChannelBeeper(100, max_stim, .01, PEST_hand);
     WaitSecs(fixation_time - delay_time_1 - .01)
     
@@ -105,8 +108,9 @@ while threshold_not_reached
     Screen('DrawTexture',windowPtr,green_cross_screen);
     Screen(windowPtr,'Flip');
     [s_max, keyCode_max, ~] = KbWait(-3, 2, GetSecs()+t);
+    reaction_time_max = s_max - time_stim_max;
     WaitSecs(t - s_max);
-    
+    t_max = toc(t0);
     %% Delivery of Mid stimulus
     
     % Generate variable delay time
@@ -120,15 +124,17 @@ while threshold_not_reached
     
     %Mid stimulus
     time_2 = GetSecs() - initial_time;
+    time_stim_mid = GetSecs();
     ChannelBeeper(100, mid_stim, .01, PEST_hand);
     WaitSecs(fixation_time - delay_time_2 - .01)
     
     %Draw green crosshair
     Screen('DrawTexture',windowPtr,green_cross_screen);
     Screen(windowPtr,'Flip');
-    [s_mid, keyCode_mid, delta_mid] = KbWait(-3, 2, GetSecs()+t);
+    [s_mid, keyCode_mid, ~] = KbWait(-3, 2, GetSecs()+t);
+    reaction_time_mid = s_mid - time_stim_mid;
     WaitSecs(t - s_mid);
-    
+    t_mid = toc(t0);
     %% Delivery of Min stimulus
     
     % Generate variable delay time
@@ -142,6 +148,7 @@ while threshold_not_reached
     
     %Min stimulus
     time_3 = GetSecs() - initial_time;
+    time_stim_min = GetSecs();
     ChannelBeeper(100, min_stim, .01, PEST_hand);
     WaitSecs(fixation_time - delay_time_3 - .01)
     
@@ -149,8 +156,9 @@ while threshold_not_reached
     Screen('DrawTexture',windowPtr,green_cross_screen);
     Screen(windowPtr,'Flip');
     [s_min, keyCode_min, ~] = KbWait(-3, 2, GetSecs()+t);
+    reaction_time_min = s_min - time_stim_min;
     WaitSecs(t - s_min);
-    
+    t_min = toc(t0);
     %% Adjustment of weights
     % Keeps track of participant's response (1 is 30, 2 is 31)
     max_detected = keyCode_max(30);
@@ -160,9 +168,9 @@ while threshold_not_reached
     %Store trial information in array to output
     count = count + 3;
     
-    max_data = [(count - 2), time_1, delay_time_1, max_stim, max_detected];
-    mid_data = [(count - 1), time_2, delay_time_2, mid_stim, mid_detected];
-    min_data = [(count), time_3, delay_time_3, min_stim, min_detected];
+    max_data = [(count - 2), time_1, delay_time_1, max_stim, max_detected, t_max, reaction_time_max];
+    mid_data = [(count - 1), time_2, delay_time_2, mid_stim, mid_detected, t_mid, reaction_time_mid];
+    min_data = [(count), time_3, delay_time_3, min_stim, min_detected, t_mid, reaction_time_min];
     
     output_array = cat(1,output_array,max_data,mid_data,min_data);
     %Output each trial's results

@@ -2,7 +2,7 @@
 % Script runs after you deciding one stimulator will be used.
 
 %% 2) Display Instructions + Training Block 1 (expected time: 4 minutes)
-%{
+%
 fprintf('==========\nDisplay Instructions and Training Block\n==========\n')
 not_understand_task = true;
 
@@ -36,7 +36,7 @@ display_instructions(windowPtr,3.5);
 
 %% 3) PEST Convergence Procedure
 % PEST is done on the left hand first
-%{
+%
 fprintf('==========\nPEST Convergence Procedure on LEFT Hand\n==========\n')
 detection_threshold = 1;
 
@@ -74,7 +74,7 @@ end
 %}
 
 %% 4) Tactile Detection Protocol
-detection_threshold = .38;
+%detection_threshold = .38;
 % Call Dynamic Thresholding
 [output_array, subject_quit_tactile_detection, new_threshold, tactile_task] = Channel_Dynamic_Thresholding(windowPtr, detection_threshold);
 
@@ -86,19 +86,20 @@ compVars = {'subjectID','detection_threshold','new_threshold',...
 
 % Creates the path to save data based upon the kind of meditation training
 % determined in the EEG_Master_Script.
+naming = strcat('Participant_',num2str(subjectID),'_',datestr(date,'mmddyyyy'),'_Behavioral');
 if medTraining == 0
-    saveDir = fullfile(premed,strcat('Participant_',num2str(subjectID)));
+    saveDir = fullfile(premed,naming);
 elseif medTraining == 1
-    saveDir = fullfile(postmed,strcat('Participant_',num2str(subjectID)));
+    saveDir = fullfile(postmed,naming);
 elseif medTraining == 2
-    saveDir = fullfile(medit,strcat('Participant_',num2str(subjectID)));
+    saveDir = fullfile(medit,naming);
 elseif medTraining == 3
-    saveDir = fullfile(testing,strcat('Participant_',num2str(subjectID)));
+    saveDir = fullfile(testing,naming);
 end
 
 % Function that compares all variables in the workspace to the variables of
 % interest and places them into cell 'varsToSave'.
-varsToSave = saveData(savVars, compVars, saveDir);
+varsToSave = saveData(savVars, compVars);
 save(saveDir,varsToSave{:})
 
 

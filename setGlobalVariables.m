@@ -60,8 +60,8 @@ function [windowPtr, rect] = setGlobalVariables()
     
     % Determine responses
     %[yes, no, esc] = checkKeyResponses();
-    yes = 97;
-    no = 98;
-    esc = 109;
+    yes = 49;
+    no = 50;
+    esc = 13 ;
     
 end
