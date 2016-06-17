@@ -1,4 +1,4 @@
-function [output_array,error_screen,subject_quit] = Channel_Training(windowPtr, train)
+function [output_array,error_screen,subject_quit] = Channel_Training(windowPtr, train, varargin)
 %{
 %For timings add .5 s before each of the delay_times as well as .5 s after,
 so there is a total of 1s more of the red cross. Also add 1 more second for
@@ -19,7 +19,12 @@ global yes
 global esc
 
 if train == 1
-    trialtime = trialtime + .5;
+    trialtime = trialtime + .5;%
+    % Initialize variables to store stimulus values
+    % 0 is a blank stimulus
+    intensity = [0 1]; %whatever 350 um is
+elseif train == 2
+    intensity = [0 varargin{1}];
 end
 
 subject_quit = false;
@@ -30,10 +35,6 @@ Screen('DrawTexture',windowPtr,solid_black_screen);
 Screen(windowPtr,'Flip');
 
 %% 3) Initialize necessary variables - NUM_TRIALS IS HERE!!
-
-%Initialize variables to store stimulus values
-% 0 is a blank stimulus
-intensity = [0 1]; %whatever 350 um is
 
 %array with num_trials of each stimulus (for a total of 3*num_trials trials)
 stimulus_initial_values = [repmat(intensity(1),1,2),repmat(intensity(2),1,8)];
@@ -118,7 +119,7 @@ while ~isempty(stimulus_initial_values)
     
     %Output data appropriately
     count = count + 1;
-    data = [count, RunTime, delay_time, stimulus, keyCode(30), t1, reaction_time, Error_Count];
+    data = [count, RunTime, delay_time, stimulus, key, t1, reaction_time, Error_Count];
     
     if Error_Count >= 3
         error_screen = true;

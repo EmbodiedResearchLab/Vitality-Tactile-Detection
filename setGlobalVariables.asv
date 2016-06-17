@@ -1,5 +1,5 @@
 function [windowPtr, rect] = setGlobalVariables()
-      addpath('Stimuli/Old') % Folder contains images of instructions, cues, etc.
+     addpath('Stimuli/Old') % Folder contains images of instructions, cues, etc.
     %addpath('Stimuli/New')
 	global initial_time
     global screens

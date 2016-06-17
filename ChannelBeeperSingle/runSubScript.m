@@ -58,7 +58,7 @@ not_understand_task = true;
 while not_understand_task
     
     % does the second block of training
-    [output_array_training_2, error_2, subject_quit_training_1] = Channel_Training(windowPtr,2);
+    [output_array_training_2, error_2, subject_quit_training_1] = Channel_Training(windowPtr,2, detection_threshold);
     
     if error_1
         fprintf('Repeat Training 2');
