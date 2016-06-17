@@ -24,7 +24,7 @@ if train == 1
     % 0 is a blank stimulus
     intensity = [0 1]; %whatever 350 um is
 elseif train == 2
-    intensity = [0 varargin{1}];
+    intensity = [0 2*varargin{1}];
 end
 
 subject_quit = false;
