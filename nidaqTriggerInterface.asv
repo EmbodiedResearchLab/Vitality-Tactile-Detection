@@ -63,7 +63,7 @@ if nargin == 5 % Determining Response
         trig = trig + 20;
     elseif varargin{2} == 0; % null trial
         trig = trig + 10;
-    elseif varargin{2} == 2*varargin{2} % suprathreshold
+    elseif varargin{2} == 2*varargin{3} % suprathreshold
         trig = trig + 30;
     else
         trig = trig + 50; % This will identify any mishaps

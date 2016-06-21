@@ -129,7 +129,7 @@ for i = 1:total_trials
         % 6) deliver 10ms stimulus and wait duration of fixation time
         % before changing screens
         time_stim = GetSecs(); %- initial_time;
-        ChannelBeeperTrigger(100,stimulus,.01, 'Left', threshold_changing);
+        ChannelBeeperTrigger(100,stimulus,.01, 'Left');
         %ChannelBeeper(100,stimulus,.01,'Left');
         
         % 7) Wait until fixation_time has elapsed.
@@ -146,7 +146,7 @@ for i = 1:total_trials
         if isempty(key);
             key = 0;
         end
-        nidaqTriggerInterface('on','white',threshold_changing, stimulus,key);
+        nidaqTriggerInterface('on','white',stimulus,key);
         nidaqTriggerInterface('off');
         WaitSecs(trialtime - (rt-time)); % This is each trial is standardized to length of the trial
         

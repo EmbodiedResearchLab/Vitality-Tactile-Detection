@@ -2,7 +2,7 @@
 % Script runs after you deciding one stimulator will be used.
 
 %% 2) Display Instructions + Training Block 1 (expected time: 4 minutes)
-%
+%{
 fprintf('==========\nDisplay Instructions and Training Block\n==========\n')
 not_understand_task = true;
 
@@ -54,6 +54,7 @@ end
 %}
 
 %% Training Block 2 | Is slightly quicker than training task 1
+%{
 not_understand_task = true;
 while not_understand_task
     
@@ -74,7 +75,7 @@ end
 %}
 
 %% 4) Tactile Detection Protocol
-%detection_threshold = .38;
+detection_threshold = .38;
 % Call Dynamic Thresholding
 [output_array, subject_quit_tactile_detection, new_threshold, tactile_task] = Channel_Dynamic_Thresholding(windowPtr, detection_threshold);
 

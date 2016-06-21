@@ -55,8 +55,8 @@ function [windowPtr, rect] = setGlobalVariables()
     
     % Trial Parameters
     trialtime = 3; % The length of time for each trial
-    fixation_time = 1.5; % Cross if 1 stimulator; Arrow if 2 stimulators.  Amount of time that cue/fixation is on the screen.  Consistent for every trial
-    delay_times = 1.0:0.1:1.4;
+    fixation_time = 1.6; % Cross if 1 stimulator; Arrow if 2 stimulators.  Amount of time that cue/fixation is on the screen.  Consistent for every trial
+    delay_times = 1.1:0.1:1.5;
     
     % Determine responses
     %[yes, no, esc] = checkKeyResponses();

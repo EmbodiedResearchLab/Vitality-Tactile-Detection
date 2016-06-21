@@ -1,4 +1,4 @@
-function ChannelBeeperTrigger(frequency, fVolume, durationSec, channelDirection)
+function ChannelBeeperTrigger(frequency, fVolume, durationSec, channelDirection, threshold)
 % this function right here takes in the frequency, volume, duration, and 
 % which channel the beeper should go to.  Then it follows the directions.
 
@@ -32,7 +32,7 @@ end
 
 %% Triggering On
 
-nidaqTriggerInterface('on',channelDirection, fVolume);
+nidaqTriggerInterface('on',channelDirection, threshold, fVolume);
 %% Play Sound by Channel
 sound = MakeBeep(frequency, durationSec,[]) * fVolume; %creates a sound for 10 ms
 
