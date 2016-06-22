@@ -72,7 +72,7 @@ count_threshold = 0; %number of threshold stimuli
 change = .01;
 
 %value to store the changing threshold
-threshold_changing = intensity(2);
+updated_threshold = intensity(2);
 stim(stim_trials) = struct('trial',[],'time',[],'delay_time',[],'stimulus',[],'response',[],'runtime',[],'reaction',[]);
 %% 4) Actual presentation of stimuli and input of participant response
 for i = 1:total_trials
@@ -108,9 +108,9 @@ for i = 1:total_trials
         %initialize the stimulus variable
         stim_values_random = randi([1 size(stim_values,2)]);
         if stim_values(stim_values_random) == intensity(2) % if this is a threshold trial
-            stimulus = threshold_changing;
+            stimulus = updated_threshold;
         elseif stim_values(stim_values_random == intensity(3)) % if this is a suprathreshold trial
-            stimulus = threshold_changing*2;
+            stimulus = updated_threshold*2;
         else % if this is a nullthreshold trial
             stimulus = stim_values(stim_values_random);
         end
@@ -130,7 +130,7 @@ for i = 1:total_trials
         % 6) deliver 10ms stimulus and wait duration of fixation time
         % before changing screens
         time_stim = GetSecs(); %- initial_time;
-        ChannelBeeperTrigger(100,stimulus,.01, 'Left', threshold_changing);
+        ChannelBeeperTrigger(100,stimulus,.01, 'Left', updated_threshold);
         %ChannelBeeper(100,stimulus,.01,'Left');
         
         % 7) Wait until fixation_time has elapsed.
@@ -147,7 +147,7 @@ for i = 1:total_trials
         if isempty(key);
             key = 0;
         end
-        nidaqTriggerInterface('on','white',threshold_changing, stimulus,key)
+        nidaqTriggerInterface('on','white',updated_threshold, stimulus,key)
         nidaqTriggerInterface('off');
         WaitSecs(trialtime - (rt-time)); % This is each trial is standardized to length of the trial
         
@@ -155,7 +155,7 @@ for i = 1:total_trials
         t1 = toc(t0);
         %% dynamic thresholding
         
-        if stimulus == threshold_changing
+        if stimulus == updated_threshold
             threshold_output_array = cat(1,threshold_output_array,[key,-1]);
             count_threshold = count_threshold + 1;
             
@@ -168,7 +168,7 @@ for i = 1:total_trials
                     % so many possibilites of null pointer issues in the line
                     % below
                     if (threshold_output_array(count_threshold-1) == yes)
-                        threshold_changing = threshold_changing - change;
+                        updated_threshold = updated_threshold - change;
                         threshold_output_array = [];
                         count_threshold = 0;
                     end
@@ -181,7 +181,7 @@ for i = 1:total_trials
                     % so many possibilites of null pointer issues in the line
                     % below
                     if (threshold_output_array(count_threshold-1) == no && threshold_output_array(count_threshold-2) == no)
-                        threshold_changing = threshold_changing + change;
+                        updated_threshold = updated_threshold + change;
                         threshold_output_array = [];
                         count_threshold = 0;
                     end
@@ -223,7 +223,7 @@ for i = 1:total_trials
 end
 
 % allowing the variables to be returned
-new_threshold = threshold_changing;
+new_threshold = updated_threshold;
 displayResponses(output_array, 'All')
 
 end

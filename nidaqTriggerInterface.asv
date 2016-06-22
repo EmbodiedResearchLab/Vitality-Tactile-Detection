@@ -1,6 +1,6 @@
 function trig = nidaqTriggerInterface(status, varargin)
 % Creates a digital pulse to act as a trigger when collecting data.
-% trig = nidaqTriggerInterface(status, cue, updated_threshold, intensity, response)
+% trig = nidaqTriggerInterface(status, cue, threshold, intensity, response)
 % trig = 50;
 % trig = 100; if left
 % trig = 200; if right

@@ -2,7 +2,7 @@
 % Script runs after you deciding one stimulator will be used.
 
 %% 2) Display Instructions + Training Block 1 (expected time: 4 minutes)
-%{
+%
 fprintf('==========\nDisplay Instructions and Training Block\n==========\n')
 not_understand_task = true;
 
