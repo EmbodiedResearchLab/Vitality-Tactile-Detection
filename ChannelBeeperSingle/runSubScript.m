@@ -75,7 +75,7 @@ end
 %}
 
 %% 4) Tactile Detection Protocol
-detection_threshold = .38;
+%detection_threshold = .38;
 % Call Dynamic Thresholding
 [output_array, subject_quit_tactile_detection, new_threshold, tactile_task] = Channel_Dynamic_Thresholding_Single(windowPtr, detection_threshold);
 
