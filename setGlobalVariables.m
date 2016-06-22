@@ -46,9 +46,9 @@ function [windowPtr, rect] = setGlobalVariables()
     % Initializes PsychSounds as there is some issue with calling
     % ChannelBeeper on the very first trial.
     ChannelBeeper(440,0,.1); % Avoids a delay later on
-    %nidaqTriggerInterface('on')
+    nidaqTriggerInterface('on')
     WaitSecs(2);
-    %nidaqTriggerInterface('off')
+    nidaqTriggerInterface('off')
     
     % Get initial time for the experiment
 	initial_time = GetSecs();

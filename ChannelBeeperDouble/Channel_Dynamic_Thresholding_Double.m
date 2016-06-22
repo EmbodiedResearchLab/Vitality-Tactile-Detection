@@ -1,4 +1,4 @@
-function [output_array,subject_quit,new_left_threshold, new_right_threshold, left, right] = Channel_Dynamic_Thresholding(windowPtr,left_threshold,right_threshold)
+function [output_array,subject_quit,new_left_threshold, new_right_threshold, left, right] = Channel_Dynamic_Thresholding_Double(windowPtr,left_threshold,right_threshold)
 %{
 
 This is a script to perform the dynamic thresholding procedure as described
@@ -29,6 +29,7 @@ global left_arrow_screen
 global right_arrow_screen
 global square_screen
 global yes
+global no
 global esc
 
 subject_quit = false;
@@ -283,7 +284,7 @@ for i = 1:total_trials
                     if (count_threshold > 1)
                         % so many possibilites of null pointer issues in the line
                         % below
-                        if (threshold_output_array(count_threshold-1) == 1)
+                        if (threshold_output_array(count_threshold-1) == yes)
                             right_threshold_changing = right_threshold_changing - change;
                             threshold_output_array = [];
                             count_threshold = 0;
@@ -296,7 +297,7 @@ for i = 1:total_trials
                     if (count_threshold > 2)
                         % so many possibilites of null pointer issues in the line
                         % below
-                        if (threshold_output_array(count_threshold-1) == 0 && threshold_output_array(count_threshold-2) == 0)
+                        if (threshold_output_array(count_threshold-1) == no && threshold_output_array(count_threshold-2) == no)
                             right_threshold_changing = right_threshold_changing + change;
                             threshold_output_array = [];
                             count_threshold = 0;

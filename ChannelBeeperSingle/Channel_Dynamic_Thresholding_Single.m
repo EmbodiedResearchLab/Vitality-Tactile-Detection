@@ -1,4 +1,4 @@
-function [output_array,subject_quit, new_threshold, stim] = Channel_Dynamic_Thresholding(windowPtr,threshold)
+function [output_array,subject_quit, new_threshold, stim] = Channel_Dynamic_Thresholding_Single(windowPtr,threshold)
 %{
 
 This is a script to perform the dynamic thresholding procedure as described
@@ -25,6 +25,7 @@ global red_cross_screen
 global green_cross_screen
 global solid_black_screen
 global yes
+global no
 global esc
 subject_quit = false;
 
@@ -117,7 +118,7 @@ for i = 1:total_trials
         
         % 4) display the white crosshair to wait for incoming stimulus
         time = GetSecs();
-        nidaqTriggerInterface('on','white');
+        nidaqTriggerInterface('on','white')
         Screen('DrawTexture',windowPtr,white_cross_screen);
         Screen(windowPtr,'Flip');
         nidaqTriggerInterface('off');
@@ -146,7 +147,7 @@ for i = 1:total_trials
         if isempty(key);
             key = 0;
         end
-        nidaqTriggerInterface('on','white',threshold_changing, stimulus,key);
+        nidaqTriggerInterface('on','white',threshold_changing, stimulus,key)
         nidaqTriggerInterface('off');
         WaitSecs(trialtime - (rt-time)); % This is each trial is standardized to length of the trial
         
@@ -166,7 +167,7 @@ for i = 1:total_trials
                 if (count_threshold > 1)
                     % so many possibilites of null pointer issues in the line
                     % below
-                    if (threshold_output_array(count_threshold-1) == 1)
+                    if (threshold_output_array(count_threshold-1) == yes)
                         threshold_changing = threshold_changing - change;
                         threshold_output_array = [];
                         count_threshold = 0;
@@ -179,7 +180,7 @@ for i = 1:total_trials
                 if (count_threshold > 2)
                     % so many possibilites of null pointer issues in the line
                     % below
-                    if (threshold_output_array(count_threshold-1) == 0 && threshold_output_array(count_threshold-2) == 0)
+                    if (threshold_output_array(count_threshold-1) == no && threshold_output_array(count_threshold-2) == no)
                         threshold_changing = threshold_changing + change;
                         threshold_output_array = [];
                         count_threshold = 0;

@@ -34,18 +34,7 @@ end
 
 % Determine trigger value by cue type.
 % Floor(trig/100)
-
-
-
-
-if nargin == 2
-    if strcmpi(varargin{1}, 'Left') || strcmpi(varargin{1}, 'White')
-        trig = 100;
-    else
-        trig = 200;
-    end
-    
-elseif nargin == 4 % Calling ChannelBeeperTrigger
+if nargin == 4 % Calling ChannelBeeperTrigger
     if strcmpi(varargin{1}, 'Left') || strcmpi(varargin{1}, 'White')
         trig = 100;
     elseif strcmpi(varargin{1},'Right')
@@ -56,12 +45,14 @@ elseif nargin == 4 % Calling ChannelBeeperTrigger
         trig = trig + 20;
     elseif varargin{3} == 0; % null trial
         trig = trig + 10;
-    elseif varargin{3} == (2*varargin{2}) % suprathreshold
+    elseif varargin{3} == 2*varargin{2} % suprathreshold
         trig = trig + 30;
     else
         trig = trig + 50; % This will identify any mishaps
     end
-elseif nargin == 5 % Determining Response
+end
+
+if nargin == 5 % Determining Response
     if strcmpi(varargin{1}, 'Left') || strcmpi(varargin{1}, 'White')
         trig = 100;
     elseif strcmpi(varargin{1},'Right')
@@ -72,7 +63,7 @@ elseif nargin == 5 % Determining Response
         trig = trig + 20;
     elseif varargin{3} == 0; % null trial
         trig = trig + 10;
-    elseif varargin{3} == (2*varargin{2}) % suprathreshold
+    elseif varargin{3} == 2*varargin{2} % suprathreshold
         trig = trig + 30;
     else
         trig = trig + 50; % This will identify any mishaps
@@ -85,10 +76,15 @@ elseif nargin == 5 % Determining Response
     elseif varargin{4} == 0
         trig = trig+3;
     end
-else
-    trig = 50;
 end
 
+if nargin == 2
+    if strcmpi(varargin{1}, 'Left') || strcmpi(varargin{1}, 'White')
+        trig = 100;
+    else
+        trig = 200;
+    end
+end
 %{
 trig = 50;
 if nargin > 1
