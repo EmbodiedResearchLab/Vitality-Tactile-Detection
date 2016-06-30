@@ -45,7 +45,7 @@ WaitSecs(3);
 % out of these trials, .45 will go to each hand, and .1 will be specified as NOTHING (square)
 % when something is directed to a hand, 70% will be as expected (@ threshold), 20% will be null, and 10% will be double threshold
 % according to the math, there will be 800 total trials, leading to 252 alpha-modulated data points for each hand
-total_trials = round(100/.7); % Cathy wanted 100 trials at threshold
+total_trials = 2*round(100/.7); % Cathy wanted 100 trials at threshold
 
 square_trials = round(total_trials*0);
 stim_trials = round(total_trials*1);
@@ -96,16 +96,20 @@ output_array = []; %overall output
 threshold_output_array = []; %array that only stores responses from threshold stimuli
 count_threshold = 0; %number of threshold stimuli
 
+% CONSIDER CHANGING count_threshold TO left_count_threshold and
+% right_count_threshold
+
 %The equivalent of .005 V (to increase or decrease the threshold by)
 change = .01;
 
 %value to store the changing threshold
-left_threshold_changing = left_intensity(2);
-right_threshold_changing = right_intensity(2);
+updated_left_threshold = left_intensity(2);
+updated_right_threshold = right_intensity(2);
 
 t = trialtime - fixation_time;
 left(trials_per_hand) = struct('trial', [], 'time',[], 'delay_time', [], 'stimulus', [], 'response', [], 'runtime', [], 'reaction',[]);
 right(trials_per_hand) = struct('trial', [], 'time',[], 'delay_time', [], 'stimulus', [], 'response', [], 'runtime', [], 'reaction',[]);
+
 if square_trials > 0
     square(square_trials) = struct('trial', [], 'stimulus', []);
 end
@@ -125,8 +129,6 @@ for i = 1:total_trials
     10) Checks to see if the threshold needs to be changed and does so
     11) Outputs array of data
 %}    
-    t0 = tic;
-    RunTime = GetSecs() - initial_time;
     % 1) choose whether it's a real trial or a both (fake) trial
     trial_validity_random = randi([1 size(trial_type_values,2)]);
     trial_validity = trial_type_values(trial_validity_random);
@@ -135,26 +137,30 @@ for i = 1:total_trials
     
     % if the trial is a null trial, I just need to wait 3 seconds
     if trial_validity == is_real
-
+        t0 = tic;
+        RunTime = GetSecs() - initial_time;
+    
         % Choose which hand trial stimulates and deletes element from
         % randomization array.
         which_hand_random = randi([1 numel(which_hand_values)]);
         which_hand = which_hand_values(which_hand_random);
         which_hand_values(which_hand_random) = [];
         
-        % 2) Choose the random delay time (from 1000 to 1400 ms in 100ms increments)
+        % 2) Choose the random delay time (from 1100 to 1500 ms in 100ms increments)
         rand_position_delay = randi([1 numel(delay_times)]);
         delay_time = delay_times(rand_position_delay);
         
-        time = GetSecs();
         if strcmp(which_hand,'Left');
             % 3) choose weighted random stimulus intensity for the
             % stimulated hand.
             stim_values_random = randi([1 size(left_stim_values,2)]);
             %rand_stimulus_position = randi([1 size(left_initial_values,2)]);
-            if left_stim_values(stim_values_random) == left_intensity(2)
-                stimulus = left_threshold_changing;
-            else
+            updated_threshold = updated_left_threshold;
+            if left_stim_values(stim_values_random) == left_intensity(2) % For Threshold Trials
+                stimulus = updated_left_threshold;
+            elseif stim_values(stim_values_random == intensity(3)) % For Suprathreshold Trials
+                stimulus = updated_left_threshold*2;
+            else % For Null Trials
                 stimulus = left_stim_values(stim_values_random);
             end
             %{    
@@ -170,6 +176,7 @@ for i = 1:total_trials
             left_stim_values(stim_values_random) = [];
             
             % 4) Display the left or right arrow picture to direct which hand to modulate attention to
+            time = GetSecs();
             nidaqTriggerInterface('on','Left'); % Turns on the square wave for digital trigger
             Screen('DrawTexture',windowPtr,left_arrow_screen);
             Screen(windowPtr,'Flip');
@@ -179,8 +186,11 @@ for i = 1:total_trials
             % stimulated hand.
             %rand_stimulus_position = randi([1 size(right_initial_values,2)]);
             stim_values_random = randi([1 size(right_stim_values,2)]);
+            updated_threshold = updated_right_threshold;
             if right_stim_values(stim_values_random) == right_intensity(2)
-                stimulus = right_threshold_changing;
+                stimulus = updated_right_threshold;
+            elseif rightr_stim_values(stim_values_random == right_intensity(3))
+                stimulus = updated_right_threshold*2;
             else
                 stimulus = right_stim_values(stim_values_random);
             end
@@ -210,10 +220,9 @@ for i = 1:total_trials
         
         % 5) Wait the chosen delay time
         WaitSecs(delay_time);
-        
         % 6) Deliver 10ms stimulus
         time_stim = GetSecs();
-        ChannelBeeperTrigger(100,stimulus,.01, which_hand);
+        ChannelBeeperTrigger(100,stimulus,.01, which_hand,updated_threshold);
         %ChannelBeeper(100,stimulus,.01,which_hand);
         
         % 7) Wait 2-delayTime-.01 (so that there has been a total of 2 s since cue)
@@ -224,14 +233,12 @@ for i = 1:total_trials
         Screen(windowPtr,'Flip');
         
         % 8) give user up to t seconds for response y or n
-        
-        % Checks for detection, gives
         [rt, keyCode, ~] = KbWait(-3, 2, GetSecs()+t);
         key = find(keyCode, 1);
         if isempty(key)
             key = 0;
         end
-        nidaqTriggerInterface('on',which_hand,stimulus,key);
+        nidaqTriggerInterface('on',which_hand,updated_threshold,stimulus,key);
         nidaqTriggerInterface('off');
         WaitSecs(trialtime - (rt-time));
         
@@ -241,7 +248,7 @@ for i = 1:total_trials
 
         % Left Side
         if (strcmp(which_hand,'Left'))
-            if (stimulus == left_threshold_changing)
+            if (stimulus == updated_left_threshold)
                 threshold_output_array = cat(1,threshold_output_array,[keyCode(30),-1]);
                 count_threshold = count_threshold + 1;
                 
@@ -252,7 +259,7 @@ for i = 1:total_trials
                         % so many possibilites of null pointer issues in the line
                         % below
                         if (threshold_output_array(count_threshold-1) == 1)
-                            left_threshold_changing = left_threshold_changing - change;
+                            updated_left_threshold = updated_left_threshold - change;
                             threshold_output_array = [];
                             count_threshold = 0;
                         end
@@ -265,7 +272,7 @@ for i = 1:total_trials
                         % so many possibilites of null pointer issues in the line
                         % below
                         if (threshold_output_array(count_threshold-1) == 0 && threshold_output_array(count_threshold-2) == 0)
-                            left_threshold_changing = left_threshold_changing + change;
+                            updated_left_threshold = updated_left_threshold + change;
                             threshold_output_array = [];
                             count_threshold = 0;
                         end
@@ -274,7 +281,7 @@ for i = 1:total_trials
             end
             %right side
         elseif (strcmp(which_hand, 'Right'))
-            if (stimulus == right_threshold_changing)
+            if (stimulus == updated_right_threshold)
                 threshold_output_array = cat(1,threshold_output_array,[-1,keyCode(30)]);
                 count_threshold = count_threshold + 1;
                 
@@ -285,7 +292,7 @@ for i = 1:total_trials
                         % so many possibilites of null pointer issues in the line
                         % below
                         if (threshold_output_array(count_threshold-1) == yes)
-                            right_threshold_changing = right_threshold_changing - change;
+                            updated_right_threshold = updated_right_threshold - change;
                             threshold_output_array = [];
                             count_threshold = 0;
                         end
@@ -298,7 +305,7 @@ for i = 1:total_trials
                         % so many possibilites of null pointer issues in the line
                         % below
                         if (threshold_output_array(count_threshold-1) == no && threshold_output_array(count_threshold-2) == no)
-                            right_threshold_changing = right_threshold_changing + change;
+                            updated_right_threshold = updated_right_threshold + change;
                             threshold_output_array = [];
                             count_threshold = 0;
                         end
@@ -349,7 +356,7 @@ for i = 1:total_trials
 end
 
 % allowing the variables to be returned
-new_right_threshold = right_threshold_changing;
-new_left_threshold = left_threshold_changing;
+new_right_threshold = updated_right_threshold;
+new_left_threshold = updated_left_threshold;
 displayResponses(output_array, 'All')
 end

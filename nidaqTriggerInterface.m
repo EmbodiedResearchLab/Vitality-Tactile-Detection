@@ -56,7 +56,7 @@ elseif nargin == 4 % Calling ChannelBeeperTrigger
         trig = trig + 20;
     elseif varargin{3} == 0; % null trial
         trig = trig + 10;
-    elseif varargin{3} > (2*varargin{2}) % suprathreshold
+    elseif varargin{3} > varargin{2} % suprathreshold
         trig = trig + 30;
     else
         trig = trig + 50; % This will identify any mishaps

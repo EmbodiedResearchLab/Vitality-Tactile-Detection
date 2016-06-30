@@ -2,7 +2,7 @@
 % Runs subscript after deciding two stimulators will be used.
 
 %% 2) Display Instructions + Training Block (expected time: 4 minutes)
-%{
+%
 fprintf('==========\nDisplay Instructions and Training Block\n==========\n')
 not_understand_task = true;
 
@@ -34,7 +34,7 @@ display_instructions(windowPtr,3);
 display_instructions(windowPtr,3.5);
 
 %% 3) PEST Convergence Procedure
-%{
+%
 % Pest Directed to one hand and then the other hand.
 fprintf('==========\nPEST Convergence Procedure on LEFT Hand\n==========\n')
 detection_threshold_left = 1;
@@ -83,8 +83,8 @@ while not_understand_task
 end
 %}
 %% 4) Tactile Detection Protocol
-left_threshold = .38;
-right_threshold = .38;
+%left_threshold = .38;
+%right_threshold = .38;
 [output_array, subject_quit, new_left_threshold, new_right_threshold, left, right] = Channel_Dynamic_Thresholding_Double(windowPtr, left_threshold, right_threshold);
 
 %% 5) Saving Protocol

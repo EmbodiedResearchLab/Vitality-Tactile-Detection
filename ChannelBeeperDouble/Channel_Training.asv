@@ -113,7 +113,7 @@ for i = 1:num_intensities*num_trials
     % with the above line of code, keypress is standardized to 2 seconds
     WaitSecs(trialtime - (rt-time));
     
-    %NEED TO DEFINE REACTION TIME (6.29.16 BC); e.g. "reaction_time = rt-time_stim;" (from Channel_Training.m for single hand) 
+    reaction_time = rt-time_stim;
     t1 = toc(t0);
     
     %% Output data appropriately
