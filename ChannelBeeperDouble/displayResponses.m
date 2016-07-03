@@ -21,7 +21,7 @@ if nargin == 1
         Intensity = output_array(end-2:end, 5);
         Response = output_array(end-2:end, 6);
         Trialtime = output_array(end-2:end, 7);
-        ReactionTime = output_array(end,8);
+        ReactionTime = output_array(end-2:end,8);
     end
     table(Trial, RunTime, Delay, Hand, Intensity, Response, ReactionTime, Trialtime)
 elseif nargin == 2
@@ -34,7 +34,7 @@ elseif nargin == 2
         Intensity = output_array(:, 5);
         Response = output_array(:, 6);
         Trialtime = output_array(:, 7);
-        ReactionTime = output_array(end,8);
+        ReactionTime = output_array(:,8);
         table(Trial, RunTime, Delay, Hand, Intensity, Response, Trialtime, ReactionTime)
         
     elseif strcmp(varargin{1}, 'Threes')
@@ -45,7 +45,7 @@ elseif nargin == 2
         Intensity = output_array(end-2:end, 5);
         Response = output_array(end-2:end, 6);
         Trialtime = output_array(end-2:end, 7);
-        ReactionTime = output_array(end,8);
+        ReactionTime = output_array(end-2:end,8);
         table(Trial, RunTime, Delay, Hand, Intensity, Response, Trialtime, ReactionTime)
     elseif strcmp(varargin{1}, 'Error')
         if size(output_array,1) < 3
@@ -67,7 +67,7 @@ elseif nargin == 2
             Intensity = output_array(end-2:end,5);
             Response = output_array(end-2:end,6);
             Trialtime = output_array(end-2:end,7);
-            ReactionTime = output_array(end,8);
+            ReactionTime = output_array(end-2:end,8);
             ErrorCount = output_array(end-2:end,9);
         end
         table(Trial, RunTime, Delay, Hand, Intensity, Response, Trialtime, ReactionTime, ErrorCount)

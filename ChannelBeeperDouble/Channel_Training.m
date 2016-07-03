@@ -52,6 +52,7 @@ error_screen = false;
 %% 4) Actual presentation of stimuli and input of participant response
 for i = 1:num_intensities*num_trials
     t0 = tic;
+    RunTime = GetSecs() - initial_time;
     % 1) choose random stimulus intensity
     % 2) choose random delay time (from 500 ms to 1500 ms)
     % 3) choose which hand
@@ -80,25 +81,27 @@ for i = 1:num_intensities*num_trials
 
     % Left Hand
     if strcmp(which_hand, 'Left')
+        time_pres = GetSecs();
         Screen('DrawTexture',windowPtr,left_arrow_screen);
         Screen(windowPtr,'Flip');
         WaitSecs(delay_time);
         
         %Deliver Stimulus
-        time = GetSecs() - initial_time;
+        time_stim = GetSecs();
         ChannelBeeper(100,stimulus,.01,'Left');
     % right hand
     elseif strcmp(which_hand, 'Right')
+        time_pres = GetSecs();
         Screen('DrawTexture',windowPtr,right_arrow_screen);
         Screen(windowPtr,'Flip');
         WaitSecs(delay_time);
         
         %Deliver Stimulus
-        time = GetSecs() - initial_time;
+        time_stim = GetSecs();
         ChannelBeeper(100,stimulus,.01,'Right');
     end
     % Ensure that the fixation screen is present for 'fixation_time' secs
-    WaitSecs(fixation_time - delay_time - .01)
+    WaitSecs(fixation_time - delay_time - .01);
     
     %Draw green crosshair
     Screen('DrawTexture',windowPtr,green_cross_screen);
@@ -111,9 +114,9 @@ for i = 1:num_intensities*num_trials
             key = 0;
         end
     % with the above line of code, keypress is standardized to 2 seconds
-    WaitSecs(trialtime - (rt-time));
+    WaitSecs(trialtime - (rt-time_pres));
     
-    %NEED TO DEFINE REACTION TIME (6.29.16 BC); e.g. "reaction_time = rt-time_stim;" (from Channel_Training.m for single hand) 
+    reaction_time = rt - time_stim;
     t1 = toc(t0);
     
     %% Output data appropriately
@@ -122,7 +125,7 @@ for i = 1:num_intensities*num_trials
     end
     
     count = count + 1;
-    data = [count, time, delay_time, which_hand, stimulus, keyCode(30), t1,reaction_time, error_count];
+    data = [count, RunTime, delay_time, which_hand, stimulus, keyCode(30), t1, reaction_time, error_count];
     
     %46 is equals
     if key == esc
@@ -143,7 +146,7 @@ for i = 1:num_intensities*num_trials
     output_array = cat(1,output_array,data);
     
     %Output data
-    displayResponses(output_array, 'Error') 
+    displayResponses(output_array, 'Error');
 
 end
 
@@ -151,6 +154,6 @@ if error_screen
     fprintf('Training %1.0f was incorrectly done.  Check connections, Power Supply, and Volume Settings.\n',train);
 end
 
-displayResponses(output_array,'All')
+displayResponses(output_array,'All');
 
 end

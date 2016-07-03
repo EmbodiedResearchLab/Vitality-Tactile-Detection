@@ -4,6 +4,7 @@ function ChannelBeeper(frequency, fVolume, durationSec, channelDirection)
 
 global SoundHandle
 
+% Makes sure that SoundHandle is called once and won't crash the script.
 if isempty(SoundHandle)
     InitializePsychSound(1);
     SamplingFreq = 44100;

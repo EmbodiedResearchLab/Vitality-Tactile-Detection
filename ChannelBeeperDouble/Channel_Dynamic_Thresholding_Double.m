@@ -176,7 +176,7 @@ for i = 1:total_trials
             left_stim_values(stim_values_random) = [];
             
             % 4) Display the left or right arrow picture to direct which hand to modulate attention to
-            time = GetSecs();
+            time_cue = GetSecs();
             nidaqTriggerInterface('on','Left'); % Turns on the square wave for digital trigger
             Screen('DrawTexture',windowPtr,left_arrow_screen);
             Screen(windowPtr,'Flip');
@@ -240,7 +240,7 @@ for i = 1:total_trials
         end
         nidaqTriggerInterface('on',which_hand,updated_threshold,stimulus,key);
         nidaqTriggerInterface('off');
-        WaitSecs(trialtime - (rt-time));
+        WaitSecs(trialtime - (rt-time_cue));
         
         reaction_time = rt-time_stim;
         t1 = toc(t0);
@@ -271,7 +271,7 @@ for i = 1:total_trials
                     if (count_threshold > 2)
                         % so many possibilites of null pointer issues in the line
                         % below
-                        if (threshold_output_array(count_threshold-1) == 0 && threshold_output_array(count_threshold-2) == 0)
+                        if (threshold_output_array(count_threshold-1) == no && threshold_output_array(count_threshold-2) == no)
                             updated_left_threshold = updated_left_threshold + change;
                             threshold_output_array = [];
                             count_threshold = 0;

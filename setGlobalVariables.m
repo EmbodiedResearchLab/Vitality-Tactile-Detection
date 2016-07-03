@@ -1,5 +1,5 @@
 function [windowPtr, rect] = setGlobalVariables()
-      addpath('Stimuli/Old') % Folder contains images of instructions, cues, etc.
+    addpath('Stimuli/Old') % Folder contains images of instructions, cues, etc.
     %addpath('Stimuli/New')
 	global initial_time
     global screens
@@ -33,7 +33,7 @@ function [windowPtr, rect] = setGlobalVariables()
     solid_black = imread('solid_black.png');
     left_arrow = imread('left_arrow.png');
     right_arrow = imread('right_arrow.png');
-    square = imread('square.png');
+    %square = imread('square.png');
     white_cross_screen = Screen('MakeTexture',windowPtr, white_cross);
     green_cross_screen = Screen('MakeTexture',windowPtr, green_cross);
     red_cross_screen = Screen('MakeTexture',windowPtr, red_cross);
@@ -46,9 +46,9 @@ function [windowPtr, rect] = setGlobalVariables()
     % Initializes PsychSounds as there is some issue with calling
     % ChannelBeeper on the very first trial.
     ChannelBeeper(440,0,.1); % Avoids a delay later on
-    nidaqTriggerInterface('on')
+    nidaqTriggerInterface('on');
     WaitSecs(2);
-    nidaqTriggerInterface('off')
+    nidaqTriggerInterface('off');
     
     % Get initial time for the experiment
 	initial_time = GetSecs();
