@@ -1,4 +1,4 @@
-function [output_array,error_screen,subject_quit] = Channel_Training(windowPtr,train)
+function [output_array,error_screen,subject_quit] = Channel_Training(windowPtr,train,varargin)
 %{
 %For timings add .5 s before each of the delay_times as well as .5 s after,
 so there is a total of 1s more of the red cross. Also add 1 more second for
@@ -18,6 +18,9 @@ global esc
 
 if train == 1
     trialtime = trialtime + .5;
+    intensity = [0 1];
+else
+    intensity = [0 2*varargin{1}];
 end
 
 subject_quit = false;
@@ -34,7 +37,6 @@ num_trials = 5;
 %% I believe that this would be different when we 
 num_intensities = 2;
 % 0 is a blank stimulus
-intensity = [0 1];
 
 %array with num_trials of each stimulus (for a total of 3*num_trials trials)
 stimulus_initial_values = [repmat(intensity(1),1,num_trials),repmat(intensity(2),1,num_trials)];
