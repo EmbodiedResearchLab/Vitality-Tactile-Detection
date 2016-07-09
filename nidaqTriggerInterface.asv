@@ -1,4 +1,4 @@
-function trig = nidaqTriggerInterface(varargin)
+function trig = nidaqTriggerInterface(status, varargin)
 % Creates a digital pulse to act as a trigger when collecting data.
 % trig = nidaqTriggerInterface(cue, updated_threshold, intensity, response)
 % trig = 50;
@@ -38,14 +38,16 @@ if nargin == 2-1
     if strcmpi(varargin{1},'initial')
         trig = 50;
     elseif strcmpi(varargin{1},'end')
-        trig = 55;
+        trig = 250;
     elseif strcmpi(varargin{1}, 'Left') || strcmpi(varargin{1}, 'White')
         trig = 100;
+    elseif strcmpi(varargin{1}, 'initial')
+        trig = 50;
     else
         trig = 200;
     end
     
-elseif nargin == 4-1 % Calling ChannelBeeperTrigger
+elseif nargin == 4 % Calling ChannelBeeperTrigger
     if strcmpi(varargin{1}, 'Left') || strcmpi(varargin{1}, 'White')
         trig = 100;
     elseif strcmpi(varargin{1},'Right')
@@ -61,7 +63,7 @@ elseif nargin == 4-1 % Calling ChannelBeeperTrigger
     else
         trig = trig + 50; % This will identify any mishaps
     end
-elseif nargin == 5-1 % Determining Response
+elseif nargin == 5 % Determining Response
     if strcmpi(varargin{1}, 'Left') || strcmpi(varargin{1}, 'White')
         trig = 100;
     elseif strcmpi(varargin{1},'Right')

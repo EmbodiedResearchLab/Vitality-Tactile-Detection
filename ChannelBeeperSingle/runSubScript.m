@@ -1,5 +1,6 @@
 %% runSubScript
 % Script runs after you deciding one stimulator will be used.
+nidaqTriggerInterface('initial');
 
 %% 2) Display Instructions + Training Block 1 (expected time: 4 minutes)
 %{
@@ -33,7 +34,7 @@ display_instructions(windowPtr,3);
 
 
 display_instructions(windowPtr,3.5);
-
+%}
 %% 3) PEST Convergence Procedure
 % PEST is done on the left hand first
 %
@@ -79,6 +80,7 @@ detection_threshold = .38;
 % Call Dynamic Thresholding
 [output_array, subject_quit_tactile_detection, new_threshold, tactile_task] = Channel_Dynamic_Thresholding_Single(windowPtr, detection_threshold);
 
+nidaqTriggerInterface('end');
 %% 5) Saving Protocol
 
 savVars = whos; % Identifies all variables in the workspace

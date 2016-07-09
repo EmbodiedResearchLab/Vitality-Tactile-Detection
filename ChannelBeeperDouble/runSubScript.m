@@ -32,7 +32,7 @@ end
 display_instructions(windowPtr,3);
 
 display_instructions(windowPtr,3.5);
-
+%}
 %% 3) PEST Convergence Procedure
 %
 % Pest Directed to one hand and then the other hand.

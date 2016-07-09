@@ -80,8 +80,8 @@ while threshold_not_reached
     % 6) Update stimulation intensities
     
     % Generate variable delay time
-    rand_position_1 = randi([1 size(delay_times,2)]);
-    delay_time_1 = delay_times(rand_position_1);
+    rand_position = randi([1 size(delay_times,2)],[1 3]);
+    delay_time = delay_times(rand_position);
     
     % Toggles presentation screen to arrows or white_cross_screen whether
     % white is true or false.
@@ -93,84 +93,104 @@ while threshold_not_reached
         stim_screen = right_arrow_screen;
     end
     %% Delivery of Max stimulus
-    %Draw Stimulation Screen
+    %Draw Cue Screen Screen
+    time_cue_max = GetSecs();
     Screen('DrawTexture',windowPtr,stim_screen);
     Screen(windowPtr,'Flip');
-    WaitSecs(delay_time_1);
+    WaitSecs(delay_time(1));
     
     %Max stimulus
     time_1 = GetSecs() - initial_time;
     time_stim_max = GetSecs();
     ChannelBeeper(100, max_stim, .01, PEST_hand);
-    WaitSecs(fixation_time - delay_time_1 - .01)
+    
+    % Wait until fixation_time has elapsed.
+    WaitSecs(fixation_time - delay_time(1) - .01);
     
     %Draw green crosshair
     Screen('DrawTexture',windowPtr,green_cross_screen);
     Screen(windowPtr,'Flip');
-    [s_max, keyCode_max, ~] = KbWait(-3, 2, GetSecs()+t);
+    
+    % Give participant up to t s for response y or n
+    % Checks for detection, gives
+    [s_max, keyCode, ~] = KbWait(-3, 2, GetSecs()+t);
+    keyMax = find(keyCode);
+    if isempty(keyMax)
+        keyMax = 0;
+    end
+    
+    WaitSecs(trialtime - (s_max - time_cue_max));
     reaction_time_max = s_max - time_stim_max;
-    WaitSecs(t - s_max);
     t_max = toc(t0);
-    %% Delivery of Mid stimulus
-    
-    % Generate variable delay time
-    rand_position_2 = randi([1 size(delay_times,2)]);
-    delay_time_2 = delay_times(rand_position_2);
-    
-    %Draw Stimulation Screen
+ %% Delivery of Mid stimulus
+    %Draw Cue Screen Screen
+    time_cue_mid = GetSecs();
     Screen('DrawTexture',windowPtr,stim_screen);
     Screen(windowPtr,'Flip');
-    WaitSecs(delay_time_2);
+    WaitSecs(delay_time(2));
     
-    %Mid stimulus
+    %Max stimulus
     time_2 = GetSecs() - initial_time;
     time_stim_mid = GetSecs();
     ChannelBeeper(100, mid_stim, .01, PEST_hand);
-    WaitSecs(fixation_time - delay_time_2 - .01)
+    
+    % Wait until fixation_time has elapsed.
+    WaitSecs(fixation_time - delay_time(2) - .01);
     
     %Draw green crosshair
     Screen('DrawTexture',windowPtr,green_cross_screen);
     Screen(windowPtr,'Flip');
-    [s_mid, keyCode_mid, ~] = KbWait(-3, 2, GetSecs()+t);
+    
+    % Give participant up to t s for response y or n
+    % Checks for detection, gives
+    [s_mid, keyCode, ~] = KbWait(-3, 2, GetSecs()+t);
+    keyMid = find(keyCode);
+    if isempty(keyMid)
+        keyMid = 0;
+    end
+    
+    WaitSecs(trialtime - (s_mid - time_cue_mid));
     reaction_time_mid = s_mid - time_stim_mid;
-    WaitSecs(t - s_mid);
-    t_mid = toc(t0);
+    t_mid = toc(t0);    
     %% Delivery of Min stimulus
-    
-    % Generate variable delay time
-    rand_position_3 = randi([1 size(delay_times,2)]);
-    delay_time_3 = delay_times(rand_position_3);
-    
-    %Draw Stimulation Screen
+    %Draw Cue Screen Screen
+    time_cue_min = GetSecs();
     Screen('DrawTexture',windowPtr,stim_screen);
     Screen(windowPtr,'Flip');
-    WaitSecs(delay_time_3);
+    WaitSecs(delay_time(3));
     
-    %Min stimulus
+    %Max stimulus
     time_3 = GetSecs() - initial_time;
     time_stim_min = GetSecs();
     ChannelBeeper(100, min_stim, .01, PEST_hand);
-    WaitSecs(fixation_time - delay_time_3 - .01)
+    
+    % Wait until fixation_time has elapsed.
+    WaitSecs(fixation_time - delay_time(3) - .01);
     
     %Draw green crosshair
     Screen('DrawTexture',windowPtr,green_cross_screen);
     Screen(windowPtr,'Flip');
-    [s_min, keyCode_min, ~] = KbWait(-3, 2, GetSecs()+t);
+    
+    % Give participant up to t s for response y or n
+    % Checks for detection, gives
+    [s_min, keyCode, ~] = KbWait(-3, 2, GetSecs()+t);
+    keyMin = find(keyCode);
+    if isempty(keyMin)
+        keyMin = 0;
+    end
+    
+    WaitSecs(trialtime - (s_min - time_cue_min));
     reaction_time_min = s_min - time_stim_min;
-    WaitSecs(t - s_min);
     t_min = toc(t0);
     %% Adjustment of weights
     % Keeps track of participant's response (1 is 30, 2 is 31)
-    max_detected = keyCode_max(30);
-    mid_detected = keyCode_mid(30);
-    min_detected = keyCode_min(30);
-    
+   
     %Store trial information in array to output
     count = count + 3;
     
-    max_data = [(count - 2), time_1, delay_time_1, max_stim, max_detected, t_max, reaction_time_max];
-    mid_data = [(count - 1), time_2, delay_time_2, mid_stim, mid_detected, t_mid, reaction_time_mid];
-    min_data = [(count), time_3, delay_time_3, min_stim, min_detected, t_mid, reaction_time_min];
+    max_data = {(count - 2), time_1, delay_time(1), PEST_hand, max_stim, keyMax, t_max, reaction_time_max};
+    mid_data = {(count - 1), time_2, delay_time(2), PEST_hand, mid_stim, keyMid, t_mid, reaction_time_mid};
+    min_data = {(count), time_3, delay_time(3), PEST_hand, min_stim, keyMin, t_min, reaction_time_min};
     
     output_array = cat(1,output_array,max_data,mid_data,min_data);
     %Output each trial's results
@@ -178,7 +198,7 @@ while threshold_not_reached
     
     %% Changing Intensities
     % If max,mid,min = 0,0,0 then repeat trials up to 5 times, then quit
-    if (max_detected == 0 && mid_detected == 0 && min_detected == 0)
+    if (keyMax == no && keyMid == no && keyMin == no)
         if repeat_num >= 5
             %Screen('CloseAll')
             threshold_not_reached = false;
@@ -191,7 +211,7 @@ while threshold_not_reached
     end
     
     % Check to see if threshold reached
-    if (max_detected == 1 && (mid_stim - min_stim) <= delta_threshold)
+    if (keyMax == yes && (mid_stim - min_stim) <= delta_threshold)
         detection_threshold = mid_stim;
         threshold_not_reached = false;
         % display the output_array to the experimenter here
@@ -199,17 +219,17 @@ while threshold_not_reached
     end
     
     % If mid detected, move down, if not, move up
-    if (max_detected == 1 && mid_detected == 1)
+    if (keyMax == yes && keyMid == yes)
         max_stim = mid_stim;
         mid_stim = (min_stim + mid_stim)/2;
-    elseif (max_detected == 1 && mid_detected == 0 && min_detected == 0)
+    elseif (keyMax == yes && keyMid == no && keyMid == no)
         min_stim = mid_stim;
         mid_stim = (max_stim + min_stim)/2;
     end
     
-    if (keyCode_max(46) == 1 || keyCode_mid(46) == 1 || keyCode_min(46) == 1)
+    if (keyMax == esc || keyMid == esc || keyMin == esc)
         subject_quit = true;
-        fprintf('The subject indicated they wanted to quit during PEST.');
+        fprintf('The participant indicated they wanted to quit during PEST.');
         Screen('CloseAll')
         break;
     end

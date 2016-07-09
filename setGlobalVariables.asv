@@ -47,6 +47,8 @@ function [windowPtr, rect] = setGlobalVariables()
     % ChannelBeeper on the very first trial.
     ChannelBeeper(440,0,.1); % Avoids a delay later on
     
+    nidaqTriggerInterface('initial');
+    
     % Get initial time for the experiment
 	initial_time = GetSecs();
     
