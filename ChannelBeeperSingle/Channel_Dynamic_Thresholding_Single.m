@@ -118,7 +118,7 @@ for i = 1:total_trials
         
         % 4) display the white crosshair to wait for incoming stimulus
         time_cue = GetSecs();
-        nidaqTriggerInterface('on','white')
+        nidaqTriggerInterface('on','white');
         Screen('DrawTexture',windowPtr,white_cross_screen);
         Screen(windowPtr,'Flip');
         nidaqTriggerInterface('off');
@@ -149,7 +149,7 @@ for i = 1:total_trials
         end
         %nidaqTriggerInterface('on','white',updated_threshold, stimulus,key)
         %nidaqTriggerInterface('off');
-        nidaqTriggerInterfaceDraft('white',updated_threshold,stimulus,key)
+        nidaqTriggerInterface('on','white',updated_threshold,stimulus,key);
         WaitSecs(trialtime - (rt-time_cue)); % This is each trial is standardized to length of the trial
         
         reaction_time = rt-time_stim;

@@ -50,9 +50,9 @@ total_trials = 2*round(100/.7); % Cathy wanted 100 trials at threshold
 square_trials = round(total_trials*0);
 stim_trials = round(total_trials*1);
 
-left_thresh_trials = round(stim_trials*.7)/2;
-left_null_trials = round(stim_trials*.2)/2;
-left_supra_trials = round(stim_trials*.1)/2;
+left_thresh_trials = round(stim_trials*.7/2);
+left_null_trials = round(stim_trials*.2/2);
+left_supra_trials = round(stim_trials*.1/2);
 
 right_thresh_trials = left_thresh_trials;
 right_null_trials = left_null_trials;
@@ -93,8 +93,10 @@ which_hand_values = [repmat({'Left'},1,trials_per_hand),repmat({'Right'},1,trial
 output_array = []; %overall output
 % this is a X by 2 array, with the first column = left + second column = right
 % whichever column is not being used will have a -1
-threshold_output_array = []; %array that only stores responses from threshold stimuli
-count_threshold = 0; %number of threshold stimuli
+left_threshold_output_array = []; %array that only stores responses from threshold stimuli
+left_count_threshold = 0; %number of threshold stimuli
+right_threshold_output_array = [];
+right_count_threshold = 0;
 
 % CONSIDER CHANGING count_threshold TO left_count_threshold and
 % right_count_threshold
@@ -158,7 +160,7 @@ for i = 1:total_trials
             updated_threshold = updated_left_threshold;
             if left_stim_values(stim_values_random) == left_intensity(2) % For Threshold Trials
                 stimulus = updated_left_threshold;
-            elseif stim_values(stim_values_random == intensity(3)) % For Suprathreshold Trials
+            elseif left_stim_values(stim_values_random == left_intensity(3)) % For Suprathreshold Trials
                 stimulus = updated_left_threshold*2;
             else % For Null Trials
                 stimulus = left_stim_values(stim_values_random);
@@ -189,7 +191,7 @@ for i = 1:total_trials
             updated_threshold = updated_right_threshold;
             if right_stim_values(stim_values_random) == right_intensity(2)
                 stimulus = updated_right_threshold;
-            elseif rightr_stim_values(stim_values_random == right_intensity(3))
+            elseif right_stim_values(stim_values_random == right_intensity(3))
                 stimulus = updated_right_threshold*2;
             else
                 stimulus = right_stim_values(stim_values_random);
@@ -208,6 +210,7 @@ for i = 1:total_trials
             %}
             
             % 4) Display the left or right arrow picture to direct which hand to modulate attention to
+            time_cue = GetSecs();
             nidaqTriggerInterface('on','Right'); % Turns on the square wave for digital trigger
             Screen('DrawTexture',windowPtr,right_arrow_screen);
             Screen(windowPtr,'Flip');
@@ -249,32 +252,32 @@ for i = 1:total_trials
         % Left Side
         if (strcmp(which_hand,'Left'))
             if (stimulus == updated_left_threshold)
-                threshold_output_array = cat(1,threshold_output_array,[keyCode(30),-1]);
-                count_threshold = count_threshold + 1;
+                left_threshold_output_array = cat(1,left_threshold_output_array,[key,-1]);
+                left_count_threshold = left_count_threshold + 1;
                 
                 % And if it is detected, and previous threshold stimulus was
                 % detected, then reduce threshold
                 if key == yes
-                    if (count_threshold > 1)
+                    if (left_count_threshold > 1)
                         % so many possibilites of null pointer issues in the line
                         % below
-                        if (threshold_output_array(count_threshold-1) == 1)
+                        if (left_threshold_output_array(left_count_threshold-1) == yes)
                             updated_left_threshold = updated_left_threshold - change;
-                            threshold_output_array = [];
-                            count_threshold = 0;
+                            left_threshold_output_array = [];
+                            left_count_threshold = 0;
                         end
                     end
                     
                     % If it wasn't detected, and previous two threshold stimuli weren't
                     % detected, then increase threshold
                 else
-                    if (count_threshold > 2)
+                    if (left_count_threshold > 2)
                         % so many possibilites of null pointer issues in the line
                         % below
-                        if (threshold_output_array(count_threshold-1) == no && threshold_output_array(count_threshold-2) == no)
+                        if (left_threshold_output_array(left_count_threshold-1) == no && left_threshold_output_array(left_count_threshold-2) == no)
                             updated_left_threshold = updated_left_threshold + change;
-                            threshold_output_array = [];
-                            count_threshold = 0;
+                            left_threshold_output_array = [];
+                            left_count_threshold = 0;
                         end
                     end
                 end
@@ -282,32 +285,32 @@ for i = 1:total_trials
             %right side
         elseif (strcmp(which_hand, 'Right'))
             if (stimulus == updated_right_threshold)
-                threshold_output_array = cat(1,threshold_output_array,[-1,keyCode(30)]);
-                count_threshold = count_threshold + 1;
+                right_threshold_output_array = cat(1,right_threshold_output_array,[key,-1]);
+                right_count_threshold = right_count_threshold + 1;
                 
                 % And if it is detected, and previous threshold stimulus was
                 % detected, then reduce threshold
                 if key == yes
-                    if (count_threshold > 1)
+                    if (right_count_threshold > 1)
                         % so many possibilites of null pointer issues in the line
                         % below
-                        if (threshold_output_array(count_threshold-1) == yes)
+                        if (right_threshold_output_array(right_count_threshold-1) == yes)
                             updated_right_threshold = updated_right_threshold - change;
-                            threshold_output_array = [];
-                            count_threshold = 0;
+                            right_threshold_output_array = [];
+                            right_count_threshold = 0;
                         end
                     end
                     
                     % If it wasn't detected, and previous two threshold stimuli weren't
                     % detected, then increase threshold
                 else
-                    if (count_threshold > 2)
+                    if (right_count_threshold > 2)
                         % so many possibilites of null pointer issues in the line
                         % below
-                        if (threshold_output_array(count_threshold-1) == no && threshold_output_array(count_threshold-2) == no)
+                        if (right_threshold_output_array(right_count_threshold-1) == no && right_threshold_output_array(right_count_threshold-2) == no)
                             updated_right_threshold = updated_right_threshold + change;
-                            threshold_output_array = [];
-                            count_threshold = 0;
+                            right_threshold_output_array = [];
+                            right_count_threshold = 0;
                         end
                     end
                 end
