@@ -1,4 +1,4 @@
- %% EEG Group Master Script w/ Stimulator Toggle
+%% EEG Group Master Script w/ Stimulator Toggle
 
 % This script will contain the following procedure:
 

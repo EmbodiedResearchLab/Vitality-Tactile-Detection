@@ -23,10 +23,9 @@ if train == 1
     % Initialize variables to store stimulus values
     % 0 is a blank stimulus
     left_intensity = [0 1]; %whatever 350 um is
-    right_intensity = left_intensity;
 elseif train == 2
+    
     left_intensity = [0 2*varargin{1}];
-    right_intensity = [0 2*varargin{2}];
 end
 
 subject_quit = false;

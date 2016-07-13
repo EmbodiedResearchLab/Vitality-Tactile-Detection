@@ -154,7 +154,7 @@ for i = 1:total_trials
     end
     
 %% Evaluating Response
-    if or(or(stimulus == left_intensity(1), stimulus == right_intensity(1)) && or(key == yes, key == 0), or(stimulus == left_intensity(2), stimulus == right_intensity(2)) && key ~= yes)
+    if or(or(stimulus == left_intensity(1), stimulus == right_intensity(1)) && key == yes, or(stimulus == left_intensity(2), stimulus == right_intensity(2)) && key ~= yes)
         Error_Count = Error_Count+1;
     end
     
@@ -167,7 +167,7 @@ for i = 1:total_trials
     
     data = [i, RunTime, delay_time, which_hand, stimulus, key, t1, reaction_time, Error_Count];
     
-    if Error_Count >= 5
+    if Error_Count >= 3
         error_screen = true;
     end
     
