@@ -34,16 +34,16 @@ display_instructions(windowPtr,3);
 display_instructions(windowPtr,3.5);
 %}
 %% 3) PEST Convergence Procedure
-%{
+%
 % Pest Directed to one hand and then the other hand.
 fprintf('==========\nPEST Convergence Procedure on LEFT Hand\n==========\n')
-detection_threshold_left = 1;
-detection_threshold_right = 1;
+left_threshold = 1;
+right_threshold = 1;
 
 % Call PEST on the Left Hand
-while detection_threshold_left >= 1
-    [detection_threshold_left,output_array_PEST_left,subject_quit_PEST_left] = PEST_Convergence_Procedure(windowPtr, 'Left');
-    if detection_threshold_left >=1
+while left_threshold >= 1
+    [left_threshold,output_array_PEST_left,subject_quit_PEST_left] = PEST_Convergence_Procedure(windowPtr, 'Left');
+    if left_threshold >=1
         fprintf('-----\nThreshold >= 1.  Returning to PEST.  Press any key to continue.-----\n')
         KbWait([], 2, GetSecs()+600)
     elseif subject_quit_PEST_left
@@ -52,49 +52,48 @@ while detection_threshold_left >= 1
 end
 
 % Call PEST on the Right Hand
-while detection_threshold_right >= 1
-    [detection_threshold_right,output_array_PEST_right,subject_quit_PEST_right] = PEST_Convergence_Procedure(windowPtr, 'Right');
-    if detection_threshold_right >=1
+while right_threshold >= 1
+    [right_threshold,output_array_PEST_right,subject_quit_PEST_right] = PEST_Convergence_Procedure(windowPtr, 'Right');
+    if right_threshold >=1
         fprintf('-----\nThreshold >= 1.  Returning to PEST.  Press any key to continue.-----\n')
         KbWait([], 2, GetSecs()+600)
     elseif subject_quit_PEST_right
         return        
     end
 end
-%}
+
 
 %% Training Block 2 | Is slightly quicker than training task 1
 not_understand_task = true;
 while not_understand_task
     
     % does the second block of training
-    [output_array_training_2, error_2, subject_quit_training_1] = Channel_Training_Double(windowPtr,2,left_threshold,right_threshold);
+    [output_array_training_2, error_2, subject_quit_training_2] = Channel_Training_Double(windowPtr,2,left_threshold,right_threshold);
     
-    if error_1
+    if error_2
         fprintf('Repeat Training 2');
         display_instructions(windowPtr,4)
     else
         not_understand_task = false;
     end
     
-    if subject_quit_training_1
+    if subject_quit_training_2
         return
     end
 end
 %}
 %% 4) Tactile Detection Protocol
-left_threshold = .38;
-right_threshold = .38;
+%left_threshold = .38;
+%right_threshold = .38;
 [output_array, subject_quit, new_left_threshold, new_right_threshold, left, right] = Channel_Dynamic_Thresholding_Double(windowPtr, left_threshold, right_threshold);
 
-%% 5) Saving Protocol
 %% 5) Saving Protocol
 
 savVars = whos; % Identifies all variables in the workspace
 
 % Identifies the variables of interest
-compVars = {'subjectID','detection_threshold_left',...
-    'detection_threshold_right','output_array_PEST_left'...
+compVars = {'subjectID','left_threshold',...
+    'right_threshold','output_array_PEST_left'...
     'output_array_PEST_right','new_left_threshold','new_right_threshold',...
     'output_array_PEST','output_array','left','right'}; 
 
@@ -112,7 +111,7 @@ end
 
 % Function that compares all variables in the workspace to the variables of
 % interest and places them into cell 'varsToSave'.
-varsToSave = saveData(savVars, compVars, saveDir);
+varsToSave = saveData(savVars, compVars);
 save(saveDir,varsToSave{:})
 
 
