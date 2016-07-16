@@ -36,6 +36,7 @@ subject_quit = false;
 
 Screen('DrawTexture',windowPtr,solid_black_screen);
 Screen(windowPtr,'Flip');
+
 WaitSecs(3);
 
 %% 3) Initialize necessary variables - NUM_TRIALS IS HERE!!
@@ -226,14 +227,14 @@ for i = 1:total_trials
         time_stim = GetSecs();
         ChannelBeeperTrigger(100,stimulus,.01, which_hand,updated_threshold);
         %ChannelBeeper(100,stimulus,.01,which_hand);
-
+        
         % 7) Wait 2-delayTime-.01 (so that there has been a total of 2 s since cue)
         WaitSecs(fixation_time - delay_time - .01);
         
         % Draw green crosshair
         Screen('DrawTexture',windowPtr,green_cross_screen);
         Screen(windowPtr,'Flip');
-
+        
         % 8) give user up to t seconds for response y or n
         [rt, keyCode, ~] = KbWait(-3, 2, GetSecs()+t);
         key = find(keyCode, 1);
