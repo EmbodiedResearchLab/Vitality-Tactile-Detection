@@ -40,7 +40,6 @@ function [windowPtr, rect] = setGlobalVariables()
     solid_black_screen = Screen('MakeTexture',windowPtr, solid_black);
     left_arrow_screen = Screen('MakeTexture',windowPtr, left_arrow);
     right_arrow_screen = Screen('MakeTexture',windowPtr, right_arrow);
-    %square_screen = Screen('MakeTexture', windowPtr, square);
     square_screen = 1; % Debugging.  Need to make a black screen with a white square.
     
     % Initializes PsychSounds as there is some issue with calling

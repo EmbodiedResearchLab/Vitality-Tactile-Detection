@@ -4,7 +4,6 @@ function [yes, no, esc] = checkKeyResponses
 % [yes, no, esc] = checkKeyResponses()
 
 fprintf('Press the button that will code "yes" responses: \n')
-[~, keyCode, ~] = KbWait(-3, 2, GetSecs()+600);
 yes = find(keyCode);
 
 fprintf('Press the button that will code "no" responses: \n')

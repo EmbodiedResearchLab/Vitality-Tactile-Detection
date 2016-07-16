@@ -8,8 +8,9 @@ not_understand_task = true;
 
 % Whenever display_instructions is called, the screen will display an image
 % that has the instrcutions on it.
-display_instructions(windowPtr,1);
-display_instructions(windowPtr,2);
+%display_instructions(windowPtr,1);
+%display_instructions(windowPtr,2);
+display_instructions_New(windowPtr,1);
 
 % Training Block 1
 while not_understand_task
@@ -19,7 +20,7 @@ while not_understand_task
     
     if error_1
         fprintf('Repeat Training 1');
-        display_instructions(windowPtr,4);
+        display_instructions(windowPtr,'error1');
     else
         not_understand_task = false;
     end
