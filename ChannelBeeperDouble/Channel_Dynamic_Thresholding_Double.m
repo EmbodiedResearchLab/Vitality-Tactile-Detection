@@ -323,7 +323,7 @@ for i = 1:total_trials
         
         % Add a break every third of the task
         if i == round(total_trials/3) || i == 2*round(total_trials/3)
-            display_instructions_New(windowPtr,'break');
+            display_instructions_NEW(windowPtr,'break');
         end
         
         %Check for quitting (= is to quit)
