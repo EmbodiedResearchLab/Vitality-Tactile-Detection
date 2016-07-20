@@ -178,7 +178,7 @@ for i = 1:total_trials
             
             % 4) Display the left or right arrow picture to direct which hand to modulate attention to
             time_cue = GetSecs();
-            nidaqTriggerInterface('Left'); % Turns on the square wave for digital trigger
+            nidaqTriggerInterface('on','Left'); % Turns on the square wave for digital trigger
             Screen('DrawTexture',windowPtr,left_arrow_screen);
             Screen(windowPtr,'Flip');
             
@@ -218,7 +218,8 @@ for i = 1:total_trials
             fprintf('which_hand_values: %d',which_hand_random)
             fprintf('which_hand: %s', which_hand)
         end
-                
+        
+        
         % 5) Wait the chosen delay time
         WaitSecs(delay_time);
         % 6) Deliver 10ms stimulus
@@ -239,7 +240,8 @@ for i = 1:total_trials
         if isempty(key)
             key = 0;
         end
-        nidaqTriggerInterface(which_hand,updated_threshold,stimulus,key);
+        nidaqTriggerInterface('on',which_hand,updated_threshold,stimulus,key);
+        nidaqTriggerInterface('off');
         WaitSecs(trialtime - (rt-time_cue));
         
         reaction_time = rt-time_stim;
