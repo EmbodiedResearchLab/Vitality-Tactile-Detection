@@ -24,3 +24,6 @@ gNautilus = struct('Acceleration',EEGData(18:20,:),'Counter',EEGData(21,:),...
     EEGData(24,:),'Valid',EEGData(25,:),'NetworkChannel',EEGData(26,:));
 
 end
+
+function detectTriggers(trigger)
+end
