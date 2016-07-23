@@ -12,7 +12,7 @@ valid_Triggers = [100 110 120 130 111 112 112 121 122 123 131 132 133,...
 
 trig_del = 0;
 for i = 1:length(trigger)
-    trigCheck = (trigger(i) == valid_trigger);
+    trigCheck = (trigger(i) == valid_Triggers);
     if isempty(trigCheck(trigCheck>0))
         trigger(i) = 0;
         trig_del = trig_del+1;
