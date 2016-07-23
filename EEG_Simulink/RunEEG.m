@@ -10,30 +10,55 @@ y(24,:) = Digital Inputs
 y(25,:) = Valid
 y(26,:) = Network Channels
 %}
-saveDir = pwd; % Change this to the path where participant data can be secured.
+clear all
+saveFile = pwd; % Change this to the path where participant data can be secured.
 
-SubjectID = input('SubjectID: ');
-saveData = strcat('Participant',num2str(SubjectID),'_',datestr(date,'mmddyyyy'),'_EEG'); %Participantxx_mmddyyyy_EEG
+SubjectID = input('SubjectID: ','s');
 medTraining = input('0 - Premeditation Training.\n1 - PostMeditation Training.\n2 - Meditators.\n3 - Debugging: '); % If this is cross-sectional, just use "0".
-saveDir = fullfile(saveDir,saveData);
+if medTraining == 1, time = 'Pre'; elseif medTraining == 2, time = 'Post'; elseif medTraining == 3, time = 'Meditator'; else time = 'Test'; end
+saveData = strcat(SubjectID,'_',datestr(date,'mmddyyyy'),'_EEG_',time); %Participantxx_mmddyyyy_EEG
+saveFile = fullfile(saveFile,saveData);
 
 model = 'TactileStimEEG';
 openGUI = {'g.Nautilus','g.SCOPE', 'g.Nautilus Impedance Check','DIN'};
 
-nautCom = strcat(model,'/',openGUI{1});
+nautCom = strcat(model,'/',openGUI{1}); % g.Nautilus Parameters
 scopeCom = strcat(model,'/',openGUI{2}); % g.SC ersfind the mask parametOPE is a mask. 
-impCom = strcat(model,'/',openGUI{3});
-trigCom = strcat(model,'/',openGUI{4});
+impCom = strcat(model,'/',openGUI{3}); % Impedence check
+trigCom = strcat(model,'/',openGUI{4}); % Digital Input for Triggers
 
 openCom = {nautCom, scopeCom, impCom};
 
+%% Set parameters
+set_param('TactileStimEEG/To File','FileName',saveData) % Save File Name
 load_system(model)
-%open_system(openCom); % Opens both g.SCOPE and Impedance Check
-open_system(nautCom);
-%open_system(scopeCom,'DialogParameters'); % Opens the g.SCOPE
+if input(' Check g.Nautilus parameters? ') == 1
+    open_system(nautCom);
+end
 open_system(scopeCom);
-open_system(impCom); % Opens the Impedance Check
 
-eeglabdata = [y(2:17,:); y(24,:)];
-saveVars = {'yout','SubjectID','eeglabdata'}; % Specify variables of interest to save later
-save(saveData,saveVars{:});
+set_param(model,'SimulationCommand','start')
+trig = [];
+trig_val = 0;
+WaitSecs(3);
+while isempty(trig)
+    trig = get_param('TactileStimEEG/6','RunTimeObject');
+end
+
+WaitSecs(3)
+while trig_val ~= 55 || trig_val == 0
+    x = get(trig.OutputPort(1));
+    trig_val = x.Data;
+end
+set_param(model,'SimulationCommand','stop')
+
+%open_system(impCom); % Opens the Impedance Check
+
+%% Saving
+saveDir = {'I:\Users\ENL\Desktop\Vitality_Project_EEG_Data\PreMeditation',...
+    'I:\Users\ENL\Desktop\Vitality_Project_EEG_Data\PostMeditation',...
+    'I:\Users\ENL\Desktop\Vitality_Project_EEG_Data\Meditator',...
+    'I:\Users\ENL\Desktop\Vitality_Project_EEG_Data\Testing'};
+
+workingDir = 'I:\Users\ENL\Documents\GitHub\Vitality-Tactile-Detection\EEG_Simulink\';
+movefile(strcat(saveFile,'.mat'),saveDir{medTraining})
