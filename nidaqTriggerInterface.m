@@ -35,9 +35,9 @@ end
 % Determine trigger value by cue type.
 % Floor(trig/100)
 if nargin == 2-1
-    if strcmpi(varargin{1},'initial')
+    if strcmpi(varargin{1},'Initial')
         trig = 50;
-    elseif strcmpi(varargin{1},'end')
+    elseif strcmpi(varargin{1},'End')
         trig = 55;
     elseif strcmpi(varargin{1}, 'Left') || strcmpi(varargin{1}, 'White')
         trig = 100;

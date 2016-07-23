@@ -81,13 +81,12 @@ while ~isempty(stimulus_initial_values)
     
     % Deliver Stimulus
     WaitSecs(delay_time); % Wait randomized delay_time
-    time_stim = GetSecs();
     ChannelBeeper(100,stimulus,.01,'Left');
     WaitSecs(fixation_time-delay_time-.01); % White_cross_screen displayed for length of fixation_time
     
     %Draw green crosshair
     Screen('DrawTexture', windowPtr, green_cross_screen);
-    Screen(windowPtr,'Flip');
+    time_green = Screen(windowPtr,'Flip');
     
     % Waits for a keyPress for up to seconds.
     [rt, keyCode, ~] = KbWait(-3, 2, GetSecs()+t);
@@ -98,7 +97,7 @@ while ~isempty(stimulus_initial_values)
     
     WaitSecs(trialtime - (rt-time));
     
-    reaction_time = rt-time_stim;
+    reaction_time = rt-time_green;
     t1 = toc(t0);
     
     %% Evaluating Response

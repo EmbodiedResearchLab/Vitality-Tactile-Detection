@@ -1,6 +1,6 @@
 %% runSubScript
 % Script runs after you deciding one stimulator will be used.
-nidaqTriggerInterface('initial');
+nidaqTriggerInterface('Initial');
 
 %% 2) Display Instructions + Training Block 1 (expected time: 4 minutes)
 %{
@@ -80,7 +80,7 @@ detection_threshold = .38;
 % Call Dynamic Thresholding
 [output_array, subject_quit_tactile_detection, new_threshold, tactile_task] = Channel_Dynamic_Thresholding_Single(windowPtr, detection_threshold);
 
-nidaqTriggerInterface('end');
+nidaqTriggerInterface('End');
 %% 5) Saving Protocol
 
 savVars = whos; % Identifies all variables in the workspace

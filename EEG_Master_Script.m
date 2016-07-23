@@ -73,7 +73,7 @@ end
 
 %% Script breaks into it's respective parts by how many stimulators are present...
 run('runSubScript.m')
-display_instructions(windowPtr,7);
+display_instructions_NEW(windowPtr,7);
 
 t_elapsed_subject = toc(t_start_subject);
 min = floor(t_elapsed_subject/60);

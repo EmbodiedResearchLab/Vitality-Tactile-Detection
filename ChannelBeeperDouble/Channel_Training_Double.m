@@ -130,7 +130,6 @@ for i = 1:total_trials
         % 5) Wait the chosen delay time
         WaitSecs(delay_time);
         % 6) Deliver 10ms stimulus
-        time_stim = GetSecs();
         ChannelBeeper(100,stimulus,.01, which_hand);
         %ChannelBeeper(100,stimulus,.01,which_hand);
         
@@ -139,7 +138,7 @@ for i = 1:total_trials
         
         % Draw green crosshair
         Screen('DrawTexture',windowPtr,green_cross_screen);
-        Screen(windowPtr,'Flip');
+        time_green = Screen(windowPtr,'Flip');
         
         % 8) give user up to t seconds for response y or n
         [rt, keyCode, ~] = KbWait(-3, 2, GetSecs()+t);
@@ -149,7 +148,7 @@ for i = 1:total_trials
         end
         WaitSecs(trialtime - (rt-time_cue));
         
-        reaction_time = rt-time_stim;
+        reaction_time = rt-time_green;
         t1 = toc(t0);
     end
     
