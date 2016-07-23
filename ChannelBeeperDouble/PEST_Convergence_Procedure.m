@@ -101,7 +101,6 @@ while threshold_not_reached
     
     %Max stimulus
     time_1 = GetSecs() - initial_time;
-    time_stim_max = GetSecs();
     ChannelBeeper(100, max_stim, .01, PEST_hand);
     
     % Wait until fixation_time has elapsed.
@@ -109,8 +108,8 @@ while threshold_not_reached
     
     %Draw green crosshair
     Screen('DrawTexture',windowPtr,green_cross_screen);
-    Screen(windowPtr,'Flip');
-    
+    time_green_max = Screen(windowPtr,'Flip');
+   
     % Give participant up to t s for response y or n
     % Checks for detection, gives
     [s_max, keyCode, ~] = KbWait(-3, 2, GetSecs()+t);
@@ -120,7 +119,7 @@ while threshold_not_reached
     end
     
     WaitSecs(trialtime - (s_max - time_cue_max));
-    reaction_time_max = s_max - time_stim_max;
+    reaction_time_max = s_max - time_green_max;
     t_max = toc(t0);
  %% Delivery of Mid stimulus
     %Draw Cue Screen Screen
@@ -131,7 +130,6 @@ while threshold_not_reached
     
     %Max stimulus
     time_2 = GetSecs() - initial_time;
-    time_stim_mid = GetSecs();
     ChannelBeeper(100, mid_stim, .01, PEST_hand);
     
     % Wait until fixation_time has elapsed.
@@ -139,8 +137,8 @@ while threshold_not_reached
     
     %Draw green crosshair
     Screen('DrawTexture',windowPtr,green_cross_screen);
-    Screen(windowPtr,'Flip');
-    
+    time_green_mid = Screen(windowPtr,'Flip');
+
     % Give participant up to t s for response y or n
     % Checks for detection, gives
     [s_mid, keyCode, ~] = KbWait(-3, 2, GetSecs()+t);
@@ -150,7 +148,7 @@ while threshold_not_reached
     end
     
     WaitSecs(trialtime - (s_mid - time_cue_mid));
-    reaction_time_mid = s_mid - time_stim_mid;
+    reaction_time_mid = s_mid - time_green_mid;
     t_mid = toc(t0);    
     %% Delivery of Min stimulus
     %Draw Cue Screen Screen
@@ -161,7 +159,6 @@ while threshold_not_reached
     
     %Max stimulus
     time_3 = GetSecs() - initial_time;
-    time_stim_min = GetSecs();
     ChannelBeeper(100, min_stim, .01, PEST_hand);
     
     % Wait until fixation_time has elapsed.
@@ -169,7 +166,7 @@ while threshold_not_reached
     
     %Draw green crosshair
     Screen('DrawTexture',windowPtr,green_cross_screen);
-    Screen(windowPtr,'Flip');
+    time_green_min = Screen(windowPtr,'Flip');
     
     % Give participant up to t s for response y or n
     % Checks for detection, gives
@@ -180,7 +177,7 @@ while threshold_not_reached
     end
     
     WaitSecs(trialtime - (s_min - time_cue_min));
-    reaction_time_min = s_min - time_stim_min;
+    reaction_time_min = s_min - time_green_min;
     t_min = toc(t0);
     %% Adjustment of weights
     % Keeps track of participant's response (1 is 30, 2 is 31)

@@ -129,7 +129,6 @@ for i = 1:total_trials
         
         % 6) deliver 10ms stimulus and wait duration of fixation time
         % before changing screens
-        time_stim = GetSecs(); %- initial_time;
         ChannelBeeperTrigger(100,stimulus,.01, 'Left', updated_threshold);
         %ChannelBeeper(100,stimulus,.01,'Left');
         
@@ -138,7 +137,7 @@ for i = 1:total_trials
         
         % Draw green crosshair
         Screen('DrawTexture',windowPtr,green_cross_screen);
-        Screen(windowPtr,'Flip');
+        time_green = Screen(windowPtr,'Flip');
         
         % 8) give user up to t s for response y or n
         % Checks for detection, gives
@@ -151,7 +150,7 @@ for i = 1:total_trials
         nidaqTriggerInterface('white',updated_threshold,stimulus,key)
         WaitSecs(trialtime - (rt-time_cue)); % This is each trial is standardized to length of the trial
         
-        reaction_time = rt-time_stim;
+        reaction_time = rt-time_green;
         t1 = toc(t0);
         %% dynamic thresholding
         
