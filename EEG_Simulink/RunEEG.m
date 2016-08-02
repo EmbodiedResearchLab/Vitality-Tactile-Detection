@@ -30,13 +30,15 @@ trigCom = strcat(model,'/',openGUI{4}); % Digital Input for Triggers
 openCom = {nautCom, scopeCom, impCom};
 
 %% Set parameters
-set_param('TactileStimEEG/To File','FileName',saveData) % Save File Name
 load_system(model)
+set_param('TactileStimEEG/To File','FileName',saveData) % Save File Name
 if input(' Check g.Nautilus parameters? ') == 1
     open_system(nautCom);
 end
 open_system(scopeCom);
-
+ 
+%%  Start EEG
+%{
 set_param(model,'SimulationCommand','start')
 trig = [];
 trig_val = 0;
@@ -53,12 +55,4 @@ end
 set_param(model,'SimulationCommand','stop')
 
 %open_system(impCom); % Opens the Impedance Check
-
-%% Saving
-saveDir = {'I:\Users\ENL\Desktop\Vitality_Project_EEG_Data\PreMeditation',...
-    'I:\Users\ENL\Desktop\Vitality_Project_EEG_Data\PostMeditation',...
-    'I:\Users\ENL\Desktop\Vitality_Project_EEG_Data\Meditator',...
-    'I:\Users\ENL\Desktop\Vitality_Project_EEG_Data\Testing'};
-
-workingDir = 'I:\Users\ENL\Documents\GitHub\Vitality-Tactile-Detection\EEG_Simulink\';
-movefile(strcat(saveFile,'.mat'),saveDir{medTraining})
+%}
