@@ -88,8 +88,8 @@ while not_understand_task
 end
 %}
 %% 4) Tactile Detection Protocol
-%  left_threshold = .38; 
-%  right_threshold = .38;
+ left_threshold = .38; 
+ right_threshold = .38;
 display_instructions_NEW(windowPtr,5)
 [output_array, subject_quit, new_left_threshold, new_right_threshold, left, right] = Channel_Dynamic_Thresholding_Double(windowPtr, left_threshold, right_threshold);
 

@@ -17,10 +17,11 @@ global yes
 global esc
 
 if train == 1
-    trialtime = trialtime + .5;
+    trial_time = trialtime + .5;
     left_intensity = [0 1];
     right_intensity = [0 1];
 else
+    trial_time = trialtime;
     left_intensity = [0 2*varargin{1}];
     right_intensity = [0 2*varargin{2}];
 end
@@ -52,7 +53,7 @@ trials_per_hand = stim_trials/2;
 which_hand_values = [repmat({'Left'},1,trials_per_hand), repmat({'Right'},1,trials_per_hand)];
 %array with delay times (in seconds)
 
-t = trialtime - fixation_time;
+t = trial_time - fixation_time;
 
 %variables to keep track of output
 output_array = [];
@@ -146,7 +147,7 @@ for i = 1:total_trials
         if isempty(key)
             key = 0;
         end
-        WaitSecs(trialtime - (rt-time_cue));
+        WaitSecs(trial_time - (rt-time_cue));
         
         reaction_time = rt-time_green;
         t1 = toc(t0);
