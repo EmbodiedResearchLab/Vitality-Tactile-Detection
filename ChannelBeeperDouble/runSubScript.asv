@@ -48,10 +48,6 @@ right_threshold = 1;
 
 % Call PEST on the Left Hand
 while left_threshold >= 1
-    if quit_task
-        break;
-    end
-    
     [left_threshold,output_array_PEST_left,subject_quit_PEST_left] = PEST_Convergence_Procedure(windowPtr, 'Left');
     if left_threshold >=1
         fprintf('-----\nThreshold >= 1.  Returning to PEST.  Press any key to continue.-----\n')
@@ -60,16 +56,14 @@ while left_threshold >= 1
         quit_task = true;
         break;
         %return
+    elseif quit_task
+        break;
     end
 end
 
 % Call PEST on the Right Hand
 display_instructions_NEW(windowPtr,3)
 while right_threshold >= 1
-    if quit_task
-        break;
-    end
-    
     [right_threshold,output_array_PEST_right,subject_quit_PEST_right] = PEST_Convergence_Procedure(windowPtr, 'Right');
     if right_threshold >=1
         fprintf('-----\nThreshold >= 1.  Returning to PEST.  Press any key to continue.-----\n')
@@ -78,6 +72,8 @@ while right_threshold >= 1
         quit_task = true;
         break;
         %return;
+    elseif quit_task 
+        break;
     end
 end
 
@@ -86,9 +82,7 @@ end
 not_understand_task = true;
 display_instructions_NEW(windowPtr,4)
 while not_understand_task
-    if quit_task
-        break;
-    end
+    
     % does the second block of training
     [output_array_training_2, error_2, subject_quit_training_2] = Channel_Training_Double(windowPtr,2,left_threshold,right_threshold);
     
@@ -109,10 +103,9 @@ end
 %% 4) Tactile Detection Protocol
 %  left_threshold = .38; 
 %  right_threshold = .38;
-if ~quit_task
-    display_instructions_NEW(windowPtr,5)
-    [output_array, subject_quit, new_left_threshold, new_right_threshold, left, right] = Channel_Dynamic_Thresholding_Double(windowPtr, left_threshold, right_threshold);
-end
+display_instructions_NEW(windowPtr,5)
+[output_array, subject_quit, new_left_threshold, new_right_threshold, left, right] = Channel_Dynamic_Thresholding_Double(windowPtr, left_threshold, right_threshold);
+
 nidaqTriggerInterface('End')
 %% 5) Saving Protocol
 display_instructions_NEW(windowPtr,6)

@@ -227,7 +227,7 @@ while threshold_not_reached
     if (keyMax == esc || keyMid == esc || keyMin == esc)
         subject_quit = true;
         fprintf('The participant indicated they wanted to quit during PEST.');
-        Screen('CloseAll')
+        %Screen('CloseAll')
         break;
     end
 

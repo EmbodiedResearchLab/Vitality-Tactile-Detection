@@ -327,7 +327,7 @@ for i = 1:total_trials
         if key == esc
             subject_quit = true;
             fprintf('The subject indicated they wanted to quit at Dynamic Thresholding.');
-            Screen('CloseAll')
+            %Screen('CloseAll')
             break;
         end
         

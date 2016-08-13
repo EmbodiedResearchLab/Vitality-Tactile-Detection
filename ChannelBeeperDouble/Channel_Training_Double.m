@@ -161,7 +161,7 @@ for i = 1:total_trials
     if key == esc
         subject_quit = true;
         fprintf('The subject indicated they wanted to quit at Training Block %1.0f.', train);
-        sca
+        %sca
         break;
     end
     
