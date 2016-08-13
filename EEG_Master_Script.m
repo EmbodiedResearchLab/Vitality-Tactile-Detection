@@ -138,6 +138,7 @@ else
     rmpath('ChannelBeeperDouble')
 end
 
-fprintf('Ready for next participant!\n')
+quit;
+%fprintf('Ready for next participant!\n')
 
  
