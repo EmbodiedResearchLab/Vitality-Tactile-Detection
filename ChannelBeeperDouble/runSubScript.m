@@ -1,7 +1,7 @@
 %% runSubScript
 % Runs subscript after deciding two stimulators will be used.
 nidaqTriggerInterface('Initial')
-
+quit_task = false;
 %% 2) Display Instructions + Training Block (expected time: 4 minutes)
 %
 fprintf('==========\nDisplay Instructions and Training Block\n==========\n')
@@ -14,6 +14,7 @@ not_understand_task = true;
 display_instructions_NEW(windowPtr,1);
 
 % Training Block 1
+%{
 while not_understand_task
         
     % does the first block of training, which tests d
@@ -28,7 +29,9 @@ while not_understand_task
     
     % Subject Quit breaks out of loop.
     if subject_quit_training_1
-        return
+        quit_task = true;
+        break;
+        %return
     end
 end
 %display_instructions(windowPtr,3);
@@ -50,7 +53,11 @@ while left_threshold >= 1
         fprintf('-----\nThreshold >= 1.  Returning to PEST.  Press any key to continue.-----\n')
         KbWait([], 2, GetSecs()+600)
     elseif subject_quit_PEST_left
-        return        
+        quit_task = true;
+        break;
+        %return
+    elseif quit_task
+        break;
     end
 end
 
@@ -62,7 +69,11 @@ while right_threshold >= 1
         fprintf('-----\nThreshold >= 1.  Returning to PEST.  Press any key to continue.-----\n')
         KbWait([], 2, GetSecs()+600)
     elseif subject_quit_PEST_right
-        return        
+        quit_task = true;
+        break;
+        %return;
+    elseif quit_task 
+        break;
     end
 end
 
@@ -83,13 +94,15 @@ while not_understand_task
     end
     
     if subject_quit_training_2
-        return
+        quit_task = 1;
+        break;
+        %return
     end
 end
 %}
 %% 4) Tactile Detection Protocol
- left_threshold = .38; 
- right_threshold = .38;
+%  left_threshold = .38; 
+%  right_threshold = .38;
 display_instructions_NEW(windowPtr,5)
 [output_array, subject_quit, new_left_threshold, new_right_threshold, left, right] = Channel_Dynamic_Thresholding_Double(windowPtr, left_threshold, right_threshold);
 
