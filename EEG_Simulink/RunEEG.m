@@ -14,7 +14,7 @@ clear all
 saveFile = pwd; % Change this to the path where participant data can be secured.
 
 SubjectID = input('SubjectID: ','s');
-medTraining = input('0 - Premeditation Training.\n1 - PostMeditation Training.\n2 - Meditators.\n3 - Debugging: '); % If this is cross-sectional, just use "0".
+medTraining = input('1 - Premeditation Training.\n2 - PostMeditation Training.\n3 - Meditators.\n4 - Debugging: '); % If this is cross-sectional, just use "0".
 if medTraining == 1, time = 'Pre'; elseif medTraining == 2, time = 'Post'; elseif medTraining == 3, time = 'Meditator'; else time = 'Test'; end
 saveData = strcat(SubjectID,'_',datestr(date,'mmddyyyy'),'_EEG_',time); %Participantxx_mmddyyyy_EEG
 saveFile = fullfile(saveFile,saveData);
