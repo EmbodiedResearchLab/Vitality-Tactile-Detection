@@ -44,7 +44,7 @@ WaitSecs(3);
 % out of these trials, .45 will go to each hand, and .1 will be specified as NOTHING (square)
 % when something is directed to a hand, 70% will be as expected (@ threshold), 20% will be null, and 10% will be double threshold
 % according to the math, there will be 800 total trials, leading to 252 alpha-modulated data points for each hand
-total_trials = 2*round(125/.7); % Cathy wanted 100 trials at threshold
+total_trials = 2*round(105/.7); % Cathy wanted 100 trials at threshold
 
 square_trials = round(total_trials*0);
 stim_trials = round(total_trials*1);
